@@ -5,25 +5,28 @@ export function AboutSection() {
         <h2 className="text-3xl md:text-4xl font-bold text-neutral-800 mb-12">About Me</h2>
         <div className="space-y-6 text-lg text-neutral-700">
           <p>
-            Hey there! I'm a senior at the University of Colorado, set to graduate in May 2025. 
-            Originally from Boston, I've found my way to the beautiful Rocky Mountains, where I've 
-            been pursuing my passion for web development and design.
+            Hey, I am Drew Boynton. I have had a passion for almost everything tech
+            since I was a kid. I can remember playing video games with my friends and
+            then looking up YouTube videos and reading about how the tech world worked.
           </p>
           <p>
-            My journey in tech started with simple HTML websites, but I quickly fell in love with 
-            the endless possibilities of modern web development. Now, I specialize in creating 
-            responsive, user-friendly applications using React and Next.js.
+            In middle school, I was always on the computer. I would create 3D models for my
+            minecraft character and make graphics that, at the time, I thought were pretty cool.
           </p>
           <p>
-            When I'm not coding, you might find me hiking in the Flatirons, experimenting with 
-            new web technologies, or collaborating with fellow developers on campus. I'm particularly 
-            interested in the intersection of design and functionality, always striving to create 
-            experiences that are both beautiful and intuitive.
+            In high school, I started to learn how to code. I remember watching a YouTube series
+            about creating a game in Unity. Then, I took some start classes in high school, and realized
+            that I loved it. You could create anything and everything, and make an impact on the world.
           </p>
           <p>
-            As I approach graduation, I'm excited about the opportunities ahead and am always open 
-            to connecting with others in the tech community. Whether it's a potential collaboration 
-            or just a chat about the latest in web development, I'd love to hear from you.
+            At this point, I've taken a multitude of classes in college. I've designed and developed a couple
+            of websites, and I've worked on a few projects. I've also taken a lot of classes in AI and machine learning.
+            I've learned a lot about the tech world, and I'm excited to see where it takes me.
+          </p>
+          <p>
+            As I approach graduation, I'm excited about the oppurtunities ahead and the future of the tech world. 
+            This website showcases some of the projects I've worked on, and some of the things I've learned. My contact
+            information is at the bottom of the page, so feel free to reach out to me!
           </p>
         </div>
       </div>

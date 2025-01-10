@@ -19,41 +19,29 @@ export function ContactSection() {
 
         <div className="grid gap-8 mb-16">
           <a
-            href="mailto:your.email@example.com"
+            href="mailto:dmboynton6@gmail.com"
             className="inline-flex px-6 py-3 rounded-full border border-neutral-700 text-neutral-300 hover:text-white hover:border-neutral-600 transition-colors w-fit"
           >
-            your.email@example.com
+            dmboynton6@gmail.com
           </a>
           <a
-            href="tel:+1234567890"
+            href="tel:9788866947"
             className="inline-flex px-6 py-3 rounded-full border border-neutral-700 text-neutral-300 hover:text-white hover:border-neutral-600 transition-colors w-fit"
           >
-            +1 (234) 567-890
+            +1 (978) 886-6947
           </a>
         </div>
-
-        <Button
-          size="lg"
-          className="rounded-full bg-blue-600 hover:bg-blue-700 text-white px-8 h-32 w-32"
-        >
-          Get in touch
-        </Button>
 
         <footer className="mt-32 flex flex-wrap gap-8 justify-between text-sm text-neutral-500">
           <div className="space-y-2">
             <p>VERSION</p>
-            <p>2024 © Edition</p>
-          </div>
-          <div className="space-y-2">
-            <p>LOCAL TIME</p>
-            <p>{new Date().toLocaleTimeString('en-US', { timeZone: 'UTC', timeZoneName: 'short' })}</p>
+            <p>2025 © Edition</p>
           </div>
           <div className="space-y-2">
             <p>SOCIALS</p>
             <div className="flex gap-4">
-              <a href="#" className="hover:text-white transition-colors">Instagram</a>
-              <a href="#" className="hover:text-white transition-colors">Twitter</a>
-              <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
+              <a href="https://www.linkedin.com/in/drew-boynton-1bba16180/" className="hover:text-white transition-colors">LinkedIn</a>
+              <a href="https://github.com/dmboynton56" className="hover:text-white transition-colors">GitHub</a>
             </div>
           </div>
         </footer>
