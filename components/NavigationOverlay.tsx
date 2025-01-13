@@ -31,9 +31,9 @@ export function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
   }
 
   const menuItems = [
-    { name: 'Home', id: 'home' },
-    { name: 'Work', id: 'work' },
+    { name: 'Home', id: 'profile' },
     { name: 'About', id: 'about' },
+    { name: 'Work', id: 'work' },
     { name: 'Contact', id: 'contact' },
   ]
 

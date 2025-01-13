@@ -19,8 +19,11 @@ npm run dev
 ├── components/            // Reusable UI components
 ├── hooks/                // Custom React hooks
 ├── lib/                  // Utility functions and shared logic
-├── public/               // Static assets
-├── styles/               // Global styles and CSS modules
+├── public/              // Static assets
+│   ├── images/         // Project images and screenshots
+│   │   ├── projects/  // Project-specific images
+│   │   └── general/   // General website images
+├── styles/              // Global styles and CSS modules
 ```
 
 ## Tech Stack

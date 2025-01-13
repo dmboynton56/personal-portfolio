@@ -1,7 +1,8 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import Image from 'next/image'
+import { ImageCarousel } from './ImageCarousel'
 
 interface Project {
   id: string
@@ -18,21 +19,23 @@ const mockProjects: Project[] = [
     title: 'E-commerce Dashboard',
     description: 'A comprehensive dashboard for managing online stores, featuring real-time analytics, inventory management, and customer insights. Built with a focus on usability and performance.',
     type: 'desktop',
-    image: '/placeholder.svg',
+    image: '/images/projects/dashboard-preview.png',
     technologies: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS']
   },
   {
-    id: 'project2',
-    title: 'Fitness Tracking App',
-    description: 'A mobile-first application for tracking workouts and nutrition, with customizable workout plans and progress visualization. Emphasizes clean design and intuitive user experience.',
+    id: 'simplefitness',
+    title: 'Simple Fitness (Tracking App!)',
+    description: 'A simple fitness tracking app for logging strength training and cardio workouts. Built natively on iOS, which makes this my actual go to app for tracking my workouts.',
     type: 'mobile',
-    image: '/placeholder.svg',
-    technologies: ['React Native', 'Firebase', 'Redux']
+    image: '/images/projects/simplefitness-1.png',
+    technologies: ['Xcode', 'Swift', 'CoreData']
   }
 ]
 
 export function WorkSection() {
   const observerRefs = useRef<(HTMLDivElement | null)[]>([])
+  const [carouselOpen, setCarouselOpen] = useState(false)
+  const [currentImages, setCurrentImages] = useState<string[]>([])
 
   useEffect(() => {
     const observers = mockProjects.map((_, index) => {
@@ -63,6 +66,19 @@ export function WorkSection() {
     }
   }, [])
 
+  const handleImageClick = (projectId: string) => {
+    if (projectId === 'simplefitness') {
+      const images = [
+        `/images/projects/${projectId}-1.png`,
+        `/images/projects/${projectId}-2.png`,
+        `/images/projects/${projectId}-3.png`,
+        `/images/projects/${projectId}-4.png`,
+      ]
+      setCurrentImages(images)
+      setCarouselOpen(true)
+    }
+  }
+
   return (
     <section id="work" className="min-h-screen bg-white py-24">
       <div className="max-w-6xl mx-auto px-4 md:px-8">
@@ -72,7 +88,9 @@ export function WorkSection() {
           {mockProjects.map((project, index) => (
             <div
               key={project.id}
-              ref={el => observerRefs.current[index] = el}
+              ref={el => {
+                observerRefs.current[index] = el
+              }}
               className="opacity-0 translate-y-10 transition-all duration-1000 ease-out"
             >
               <div className={`grid ${
@@ -80,16 +98,35 @@ export function WorkSection() {
                   ? 'grid-cols-1' 
                   : 'md:grid-cols-2 gap-8 items-center'
               }`}>
-                <div className={`relative ${
-                  project.type === 'desktop'
-                    ? 'aspect-[16/9] mb-8'
-                    : 'aspect-[9/16] max-w-[300px] mx-auto md:mx-0'
-                }`}>
+                <div
+                  className={`relative ${
+                    project.type === 'desktop'
+                      ? 'aspect-[16/9] mb-8'
+                      : 'h-[600px] w-[300px] mx-auto md:mx-0'
+                  }`}
+                  onClick={() => handleImageClick(project.id)}
+                >
+                  {project.type === 'mobile' && (
+                    <>
+                      {/* iPhone-style frame */}
+                      <div className="absolute inset-0 bg-[#1A1A1A] rounded-[3rem] shadow-xl" />
+                      {/* Screen bezel */}
+                      <div className="absolute inset-[0px] bg-black rounded-[2.5rem]" />
+                      {/* Notch */}
+                      <div className="absolute top-2 left-1/2 -translate-x-1/2 h-6 w-40 bg-black rounded-b-3xl" />
+                      {/* Dynamic Island */}
+                      <div className="absolute top-4 left-1/2 -translate-x-1/2 h-[25px] w-[90px] bg-black rounded-full" />
+                    </>
+                  )}
                   <Image
                     src={project.image}
                     alt={project.title}
                     fill
-                    className="object-cover rounded-lg shadow-xl"
+                    className={`${
+                      project.type === 'mobile' 
+                        ? 'object-contain p-[8px] rounded-[2.5rem]'
+                        : 'object-cover rounded-lg'
+                    }`}
                   />
                 </div>
                 
@@ -116,6 +153,10 @@ export function WorkSection() {
           ))}
         </div>
       </div>
+
+      {carouselOpen && (
+        <ImageCarousel images={currentImages} onClose={() => setCarouselOpen(false)} />
+      )}
     </section>
   )
 }
