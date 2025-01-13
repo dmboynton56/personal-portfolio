@@ -36,6 +36,7 @@ export function WorkSection() {
   const observerRefs = useRef<(HTMLDivElement | null)[]>([])
   const [carouselOpen, setCarouselOpen] = useState(false)
   const [currentImages, setCurrentImages] = useState<string[]>([])
+  const [currentType, setCurrentType] = useState<'desktop' | 'mobile'>('desktop')
 
   useEffect(() => {
     const observers = mockProjects.map((_, index) => {
@@ -66,7 +67,7 @@ export function WorkSection() {
     }
   }, [])
 
-  const handleImageClick = (projectId: string) => {
+  const handleImageClick = (projectId: string, type: 'desktop' | 'mobile') => {
     if (projectId === 'simplefitness') {
       const images = [
         `/images/projects/${projectId}-1.png`,
@@ -75,6 +76,7 @@ export function WorkSection() {
         `/images/projects/${projectId}-4.png`,
       ]
       setCurrentImages(images)
+      setCurrentType(type)
       setCarouselOpen(true)
     }
   }
@@ -104,7 +106,7 @@ export function WorkSection() {
                       ? 'aspect-[16/9] mb-8'
                       : 'h-[600px] w-[300px] mx-auto md:mx-0'
                   }`}
-                  onClick={() => handleImageClick(project.id)}
+                  onClick={() => handleImageClick(project.id, project.type)}
                 >
                   {project.type === 'mobile' && (
                     <>
@@ -155,7 +157,11 @@ export function WorkSection() {
       </div>
 
       {carouselOpen && (
-        <ImageCarousel images={currentImages} onClose={() => setCarouselOpen(false)} />
+        <ImageCarousel 
+          images={currentImages} 
+          onClose={() => setCarouselOpen(false)} 
+          type={currentType}
+        />
       )}
     </section>
   )
