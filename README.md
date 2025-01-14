@@ -4,26 +4,32 @@
 
 To run the website, use the following commands:
 
-bash
-
+```bash
 npm install
-
 npm run dev
+```
 
 # Project Structure and Design System Documentation
 
 ## Project Structure
 ```typescript
 .
-├── app/                    // Next.js app directory (pages and routes)
+├── app/                    // Next.js app directory
+│   ├── layout.tsx         // Root layout component
+│   ├── page.tsx           // Home page
+│   └── globals.css        // Global styles
 ├── components/            // Reusable UI components
+│   ├── ui/               // Base UI components
+│   ├── ProfileSection.tsx // Profile/Hero section
+│   ├── WorkSection.tsx    // Projects showcase
+│   ├── Header.tsx        // Navigation header
+│   └── NavigationOverlay.tsx // Mobile navigation
 ├── hooks/                // Custom React hooks
-├── lib/                  // Utility functions and shared logic
+├── lib/                  // Utility functions
 ├── public/              // Static assets
-│   ├── images/         // Project images and screenshots
-│   │   ├── projects/  // Project-specific images
-│   │   └── general/   // General website images
-├── styles/              // Global styles and CSS modules
+│   └── images/         // Project images
+│       ├── projects/  // Project-specific images
+│       └── general/   // General website images
 ```
 
 ## Tech Stack
@@ -31,94 +37,42 @@ npm run dev
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS with custom configuration
 - **UI Components**: Radix UI primitives
-- **Form Handling**: React Hook Form with Zod validation
 - **Animations**: Framer Motion
-- **State Management**: React Hooks
 
 ## Design System
 
 ### Colors
-We use HSL color variables for consistent theming:
-- `--background`: Main background color
-- `--foreground`: Main text color
-- `--primary`: Primary brand color
-- `--secondary`: Secondary brand color
-- `--muted`: Subtle background color
-- `--accent`: Accent color for highlights
-- `--destructive`: Error and warning colors
-- `--border`: Border colors
-- `--ring`: Focus ring color
+We use a warm, eye-friendly color scheme:
+- `#F5F1EA`: Main background (warm beige)
+- `#E8E2D7`: Secondary background (lighter beige)
+- `#2C2C2C`: Primary text
+- `#4A4A4A`: Secondary text
+- `#111111`: Navigation background
 
 ### Components
-1. **Base Components** (from Radix UI):
-   - Accordion
-   - Alert Dialog
-   - Avatar
+1. **Layout Components**:
+   - Header
+   - Navigation Overlay
+   - Profile Section
+   - Work Section
+
+2. **UI Components**:
    - Button
-   - Checkbox
-   - Dialog
-   - Dropdown Menu
-   - Navigation Menu
-   - Tabs
-   - Toast
-   - Tooltip
-
-2. **Form Components**:
-   - Input
-   - Select
-   - Radio Group
-   - Checkbox
-   - Switch
-   - Slider
-
-3. **Layout Components**:
-   - Aspect Ratio
-   - Collapsible
-   - Scroll Area
-   - Separator
+   - Image Display
+   - Project Card
 
 ### Typography
-- Use Tailwind's font size utilities:
-  - `text-xs`: Extra small text
-  - `text-sm`: Small text
-  - `text-base`: Base text size
-  - `text-lg`: Large text
-  - `text-xl` and up: Headings
-
-### Spacing
-Follow Tailwind's spacing scale:
-- `space-1` to `space-4`: Compact spacing
-- `space-6` to `space-8`: Default spacing
-- `space-10` and up: Large spacing
-
-### Animations
-- Use `tailwindcss-animate` utilities
-- Custom animations available:
-  - `accordion-down`
-  - `accordion-up`
-
-### Border Radius
-Three main sizes:
-- `rounded-sm`: Small radius
-- `rounded-md`: Medium radius
-- `rounded-lg`: Large radius
+- Use Inter font family
+- Font sizes:
+  - Headings: text-4xl/text-5xl
+  - Subheadings: text-2xl/text-3xl
+  - Body: text-base/text-lg
 
 ### Best Practices
-1. Use Radix UI components for accessible interactive elements
-2. Implement dark mode using the `next-themes` package
-3. Use Tailwind's utility classes for styling
-4. Implement responsive design using Tailwind breakpoints
-5. Use Framer Motion for complex animations
-6. Validate forms with Zod schemas
-7. Follow TypeScript strict mode guidelines
-
-## Development Guidelines
-1. Keep components small and focused
-2. Use TypeScript interfaces for prop definitions
-3. Implement proper error boundaries
-4. Follow accessibility best practices
-5. Write clean, maintainable code
-6. Use proper semantic HTML elements
-7. Optimize images and assets
-8. Implement proper loading states
+1. Use semantic HTML
+2. Implement responsive design
+3. Optimize images
+4. Follow accessibility guidelines
+5. Maintain consistent spacing
+6. Use proper color contrast
 ``` 
