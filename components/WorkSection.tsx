@@ -2,7 +2,6 @@
 
 import { useRef, useEffect, useState } from 'react'
 import Image from 'next/image'
-import { ImageCarousel } from './ImageCarousel'
 
 interface Project {
   id: string
@@ -34,7 +33,6 @@ const mockProjects: Project[] = [
 
 export function WorkSection() {
   const observerRefs = useRef<(HTMLDivElement | null)[]>([])
-  const [carouselOpen, setCarouselOpen] = useState(false)
   const [currentImages, setCurrentImages] = useState<string[]>([])
   const [currentType, setCurrentType] = useState<'desktop' | 'mobile'>('desktop')
 
@@ -67,24 +65,10 @@ export function WorkSection() {
     }
   }, [])
 
-  const handleImageClick = (projectId: string, type: 'desktop' | 'mobile') => {
-    if (projectId === 'simplefitness') {
-      const images = [
-        `/images/projects/${projectId}-1.png`,
-        `/images/projects/${projectId}-2.png`,
-        `/images/projects/${projectId}-3.png`,
-        `/images/projects/${projectId}-4.png`,
-      ]
-      setCurrentImages(images)
-      setCurrentType(type)
-      setCarouselOpen(true)
-    }
-  }
-
   return (
-    <section id="work" className="min-h-screen bg-white py-24">
+    <section id="work" className="min-h-screen bg-[#F5F1EA] py-24">
       <div className="max-w-6xl mx-auto px-4 md:px-8">
-        <h2 className="text-3xl md:text-4xl font-bold text-neutral-800 mb-12">Selected Work</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-[#2C2C2C] mb-12">Selected Work</h2>
         
         <div className="space-y-32">
           {mockProjects.map((project, index) => (
@@ -106,17 +90,12 @@ export function WorkSection() {
                       ? 'aspect-[16/9] mb-8'
                       : 'h-[600px] w-[300px] mx-auto md:mx-0'
                   }`}
-                  onClick={() => handleImageClick(project.id, project.type)}
                 >
                   {project.type === 'mobile' && (
                     <>
-                      {/* iPhone-style frame */}
                       <div className="absolute inset-0 bg-[#1A1A1A] rounded-[3rem] shadow-xl" />
-                      {/* Screen bezel */}
                       <div className="absolute inset-[0px] bg-black rounded-[2.5rem]" />
-                      {/* Notch */}
                       <div className="absolute top-2 left-1/2 -translate-x-1/2 h-6 w-40 bg-black rounded-b-3xl" />
-                      {/* Dynamic Island */}
                       <div className="absolute top-4 left-1/2 -translate-x-1/2 h-[25px] w-[90px] bg-black rounded-full" />
                     </>
                   )}
@@ -133,17 +112,17 @@ export function WorkSection() {
                 </div>
                 
                 <div className={`${project.type === 'mobile' ? 'md:order-first' : ''}`}>
-                  <h3 className="text-2xl font-bold text-neutral-800 mb-4">
+                  <h3 className="text-2xl font-bold text-[#2C2C2C] mb-4">
                     {project.title}
                   </h3>
-                  <p className="text-neutral-600 mb-6">
+                  <p className="text-[#4A4A4A] mb-6">
                     {project.description}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {project.technologies.map((tech) => (
                       <span
                         key={tech}
-                        className="px-3 py-1 bg-neutral-100 text-neutral-700 rounded-full text-sm"
+                        className="px-3 py-1 bg-[#E8E2D7] text-[#2C2C2C] rounded-full text-sm"
                       >
                         {tech}
                       </span>
@@ -155,14 +134,6 @@ export function WorkSection() {
           ))}
         </div>
       </div>
-
-      {carouselOpen && (
-        <ImageCarousel 
-          images={currentImages} 
-          onClose={() => setCarouselOpen(false)} 
-          type={currentType}
-        />
-      )}
     </section>
   )
 }

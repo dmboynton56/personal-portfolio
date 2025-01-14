@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 export function ProfileSection() {
   return (
-    <section id="home" className="flex flex-col items-center justify-center min-h-screen text-center px-4 bg-white">
+    <section id="home" className="flex flex-col items-center justify-center min-h-screen text-center px-4 bg-[#F5F1EA]">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8 relative w-48 h-48 mx-auto">
           <Image

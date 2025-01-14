@@ -38,9 +38,8 @@ export function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
   ]
 
   const socialLinks = [
-    { name: 'Twitter', href: 'https://twitter.com' },
     { name: 'LinkedIn', href: 'https://linkedin.com' },
-    { name: 'GitHub', href: 'https://github.com' },
+    { name: 'GitHub', href: 'https://github.com/dmboynton56' },
   ]
 
   return (
@@ -70,7 +69,7 @@ export function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
               className="absolute top-4 right-4"
               onClick={onClose}
             >
-              <X className="h-6 w-6 text-white" />
+              <X className="h-6 w-6 text-[#F5F1EA]" />
               <span className="sr-only">Close</span>
             </Button>
 
@@ -85,7 +84,7 @@ export function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
                   >
                     <button
                       onClick={() => scrollToSection(item.id)}
-                      className="text-3xl font-bold text-white hover:text-gray-300 transition-colors"
+                      className="text-3xl font-bold text-[#F5F1EA] hover:text-gray-300 transition-colors"
                     >
                       {item.name}
                     </button>
@@ -108,7 +107,7 @@ export function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-white hover:text-gray-300 transition-colors"
+                      className="text-sm text-[#F5F1EA] hover:text-gray-300 transition-colors"
                     >
                       {link.name}
                     </a>
