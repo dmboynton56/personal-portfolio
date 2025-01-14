@@ -38,7 +38,7 @@ export function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
   ]
 
   const socialLinks = [
-    { name: 'LinkedIn', href: 'https://linkedin.com' },
+    { name: 'LinkedIn', href: 'https://www.linkedin.com/in/drew-boynton-1bba16180/' },
     { name: 'GitHub', href: 'https://github.com/dmboynton56' },
   ]
 

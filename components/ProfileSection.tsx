@@ -6,10 +6,11 @@ export function ProfileSection() {
       <div className="max-w-4xl mx-auto">
         <div className="mb-8 relative w-48 h-48 mx-auto">
           <Image
-            src="/placeholder.svg"
+            src="/images/general/profile-picture.jpg"
             alt="Drew Boynton"
             fill
             className="rounded-full object-cover shadow-xl"
+            priority
           />
         </div>
         <h1 className="text-4xl md:text-5xl font-bold mb-4 text-neutral-900">Drew Boynton</h1>
