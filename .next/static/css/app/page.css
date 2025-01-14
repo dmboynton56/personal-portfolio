@@ -1,3 +1,128 @@
+/*!**********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!./styles/device-frames.css ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************/
+.marvel-device {
+  position: relative;
+  display: inline-block;
+  box-sizing: content-box !important;
+  background: black;
+  border-radius: 66px;
+  box-shadow: 0 0 0 2px #1a1a1a;
+}
+
+.marvel-device .screen {
+  width: 100%;
+  position: relative;
+  height: 100%;
+  z-index: 3;
+  background: black;
+  overflow: hidden;
+  display: block;
+  border-radius: 42px;
+}
+
+.marvel-device.iphone-x {
+  width: 375px;
+  height: 812px;
+  padding: 26px;
+  background: black;
+  border-radius: 66px;
+  margin: 0 auto;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+.marvel-device.iphone-x .inner-shadow {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  border-radius: 56px;
+  pointer-events: none;
+}
+
+.marvel-device.iphone-x:before {
+  display: none;
+}
+
+.marvel-device.iphone-x .notch {
+  position: absolute;
+  width: 210px;
+  height: 30px;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  background: black;
+  border-radius: 0 0 24px 24px;
+}
+
+.marvel-device.iphone-x .camera {
+  background: #222;
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  margin-left: -6px;
+  border-radius: 12px;
+  z-index: 5;
+}
+
+.marvel-device.iphone-x .speaker {
+  background: #222;
+  width: 70px;
+  height: 6px;
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  margin-left: -35px;
+  border-radius: 6px;
+  z-index: 5;
+}
+
+.marvel-device.iphone-x .sleep {
+  position: absolute;
+  top: 170px;
+  right: -4px;
+  width: 4px;
+  height: 58px;
+  border-radius: 4px 0 0 4px;
+  background: #222;
+}
+
+.marvel-device.iphone-x .volume {
+  position: absolute;
+  left: -4px;
+  top: 170px;
+  width: 4px;
+  height: 58px;
+  border-radius: 0 4px 4px 0;
+  background: #222;
+}
+
+.marvel-device.iphone-x .volume:before {
+  position: absolute;
+  left: 0;
+  top: -68px;
+  width: 4px;
+  height: 40px;
+  border-radius: 0 4px 4px 0;
+  background: inherit;
+  content: '';
+}
+
+.marvel-device.iphone-x .volume:after {
+  position: absolute;
+  left: 0;
+  bottom: -68px;
+  width: 4px;
+  height: 40px;
+  border-radius: 0 4px 4px 0;
+  background: inherit;
+  content: '';
+} 
 /*!****************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!./node_modules/swiper/swiper.css ***!
   \****************************************************************************************************************************************************************************************************************************************************************************/

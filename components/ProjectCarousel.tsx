@@ -5,6 +5,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, EffectCoverflow } from 'swiper/modules';
 import { X } from 'lucide-react';
 import Image from 'next/image';
+import { DeviceFrameset } from 'react-device-frameset';
+import '@/styles/device-frames.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -13,14 +15,15 @@ import 'swiper/css/effect-coverflow';
 interface ProjectCarouselProps {
   images: string[];
   onClose: () => void;
+  projectType?: 'desktop' | 'mobile';
 }
 
-export function ProjectCarousel({ images, onClose }: ProjectCarouselProps) {
-  const swiperRef = useRef<any>(null);
+export function ProjectCarousel({ images, onClose, projectType }: ProjectCarouselProps) {
+  const swiperRef = useRef(null);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-      <div className="relative w-full max-w-5xl h-[80vh] flex flex-col bg-[#F5F1EA] rounded-2xl p-8">
+      <div className="relative w-full max-w-6xl h-[85vh] flex flex-col bg-[#F5F1EA] rounded-2xl p-8">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-50 text-neutral-800 hover:text-neutral-600 transition-colors"
@@ -42,21 +45,50 @@ export function ProjectCarousel({ images, onClose }: ProjectCarouselProps) {
             modifier: 1.5,
             slideShadows: true,
           }}
-          centeredSlides={true}
-          slidesPerView={2.5}
-          loop={true}
+          centeredSlides
+          slidesPerView={1}
+          loop
+          breakpoints={{
+            768: {
+              slidesPerView: 1.5,
+            },
+            1024: {
+              slidesPerView: 2,
+            },
+            1280: {
+              slidesPerView: 2.5,
+            },
+          }}
           className="w-full h-full"
         >
-          {images.map((img, idx) => (
-            <SwiperSlide key={idx}>
-              <div className="w-full h-full relative p-4">
-                <Image
-                  src={img}
-                  alt={`Project image ${idx + 1}`}
-                  fill
-                  className="object-contain"
-                  priority={idx === 0}
-                />
+          {images.map((src, idx) => (
+            <SwiperSlide key={idx} className="flex items-center justify-center py-8">
+              <div className={`relative ${
+                projectType === 'mobile' 
+                  ? 'w-full h-full flex items-center justify-center' 
+                  : 'w-full h-full max-h-[600px]'
+              }`}>
+                {projectType === 'mobile' ? (
+                  <div className="transform scale-[0.85] origin-center">
+                    <DeviceFrameset device="iPhone X" color="black" landscape={false}>
+                      <Image
+                        src={src}
+                        alt={`Project image ${idx + 1}`}
+                        fill
+                        className="object-cover"
+                        priority={idx === 0}
+                      />
+                    </DeviceFrameset>
+                  </div>
+                ) : (
+                  <Image
+                    src={src}
+                    alt={`Project image ${idx + 1}`}
+                    fill
+                    className="rounded-lg object-contain"
+                    priority={idx === 0}
+                  />
+                )}
               </div>
             </SwiperSlide>
           ))}

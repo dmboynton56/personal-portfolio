@@ -3,6 +3,8 @@
 import { useRef, useEffect, useState } from 'react'
 import Image from 'next/image'
 import { ProjectCarousel } from './ProjectCarousel'
+import { DeviceFrameset } from 'react-device-frameset'
+import '@/styles/device-frames.css'
 
 interface Project {
   id: string
@@ -47,7 +49,7 @@ const mockProjects: Project[] = [
 export function WorkSection() {
   const observerRefs = useRef<(HTMLDivElement | null)[]>([])
   const [isCarouselOpen, setIsCarouselOpen] = useState(false)
-  const [selectedProjectImages, setSelectedProjectImages] = useState<string[]>([])
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
   useEffect(() => {
     const observers = mockProjects.map((_, index) => {
@@ -79,7 +81,7 @@ export function WorkSection() {
   }, [])
 
   const handleImageClick = (project: Project) => {
-    setSelectedProjectImages(project.images || [project.image])
+    setSelectedProject(project)
     setIsCarouselOpen(true)
   }
 
@@ -106,31 +108,32 @@ export function WorkSection() {
                   className={`relative ${
                     project.type === 'desktop'
                       ? 'aspect-[16/9] mb-8'
-                      : 'h-[600px] w-[300px] mx-auto md:mx-0'
+                      : 'h-[600px] mx-auto md:mx-0 flex items-center justify-center'
                   }`}
                 >
                   <div 
                     onClick={() => handleImageClick(project)}
-                    className="relative h-full cursor-pointer transition-transform hover:scale-[1.02]"
+                    className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center"
                   >
-                    {project.type === 'mobile' && (
-                      <>
-                        <div className="absolute inset-0 bg-[#1A1A1A] rounded-[3rem] shadow-xl" />
-                        <div className="absolute inset-[0px] bg-black rounded-[2.5rem]" />
-                        <div className="absolute top-2 left-1/2 -translate-x-1/2 h-6 w-40 bg-black rounded-b-3xl" />
-                        <div className="absolute top-4 left-1/2 -translate-x-1/2 h-[25px] w-[90px] bg-black rounded-full" />
-                      </>
+                    {project.type === 'mobile' ? (
+                      <div className="transform scale-[0.85] origin-center">
+                        <DeviceFrameset device="iPhone X" color="black" landscape={false}>
+                          <Image
+                            src={project.image}
+                            alt={project.title}
+                            fill
+                            className="object-cover"
+                          />
+                        </DeviceFrameset>
+                      </div>
+                    ) : (
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        className="object-cover rounded-lg"
+                      />
                     )}
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className={`${
-                        project.type === 'mobile' 
-                          ? 'object-contain p-[8px] rounded-[2.5rem]'
-                          : 'object-cover rounded-lg'
-                      }`}
-                    />
                   </div>
                 </div>
                 
@@ -158,10 +161,14 @@ export function WorkSection() {
         </div>
       </div>
 
-      {isCarouselOpen && (
+      {isCarouselOpen && selectedProject && (
         <ProjectCarousel
-          images={selectedProjectImages}
-          onClose={() => setIsCarouselOpen(false)}
+          images={selectedProject.images || [selectedProject.image]}
+          projectType={selectedProject.type}
+          onClose={() => {
+            setIsCarouselOpen(false)
+            setSelectedProject(null)
+          }}
         />
       )}
     </section>
