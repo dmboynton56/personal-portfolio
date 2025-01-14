@@ -22,12 +22,8 @@ const mockProjects: Project[] = [
     title: 'E-commerce Dashboard',
     description: 'A comprehensive dashboard for managing online stores, featuring real-time analytics, inventory management, and customer insights. Built with a focus on usability and performance.',
     type: 'desktop',
-    image: '/images/projects/dashboard-preview.png',
-    images: [
-      '/images/projects/dashboard-preview.png',
-      '/images/projects/dashboard-2.png',
-      '/images/projects/dashboard-3.png'
-    ],
+    image: '/images/projects/project1-1.png',
+    images: ['/images/projects/project1-1.png'],
     technologies: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS']
   },
   {
