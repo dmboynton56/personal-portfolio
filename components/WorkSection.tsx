@@ -103,13 +103,15 @@ export function WorkSection() {
                 <div
                   className={`relative ${
                     project.type === 'desktop'
-                      ? 'aspect-[16/9] mb-8'
+                      ? 'aspect-video w-full mb-8'
                       : 'h-[600px] mx-auto md:mx-0 flex items-center justify-center'
                   }`}
                 >
                   <div 
                     onClick={() => handleImageClick(project)}
-                    className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center"
+                    className={`relative cursor-pointer transition-transform hover:scale-[1.02] ${
+                      project.type === 'desktop' ? 'w-full h-full' : 'flex items-center justify-center'
+                    }`}
                   >
                     {project.type === 'mobile' ? (
                       <div className="transform scale-[0.85] origin-center">
@@ -123,12 +125,14 @@ export function WorkSection() {
                         </DeviceFrameset>
                       </div>
                     ) : (
-                      <Image
-                        src={project.image}
-                        alt={project.title}
-                        fill
-                        className="object-cover rounded-lg"
-                      />
+                      <div className="relative w-full h-full rounded-lg overflow-hidden shadow-lg">
+                        <Image
+                          src={project.image}
+                          alt={project.title}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
                     )}
                   </div>
                 </div>
