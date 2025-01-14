@@ -922,6 +922,9 @@ video {
 .h-\[600px\] {
   height: 600px;
 }
+.h-\[80vh\] {
+  height: 80vh;
+}
 .h-\[var\(--radix-navigation-menu-viewport-height\)\] {
   height: var(--radix-navigation-menu-viewport-height);
 }
@@ -1080,6 +1083,9 @@ video {
 }
 .max-w-4xl {
   max-width: 56rem;
+}
+.max-w-5xl {
+  max-width: 64rem;
 }
 .max-w-6xl {
   max-width: 72rem;
@@ -1293,6 +1299,9 @@ video {
 .break-words {
   overflow-wrap: break-word;
 }
+.rounded-2xl {
+  border-radius: 1rem;
+}
 .rounded-\[2\.5rem\] {
   border-radius: 2.5rem;
 }
@@ -1483,6 +1492,9 @@ video {
 }
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
+}
+.bg-opacity-70 {
+  --tw-bg-opacity: 0.7;
 }
 .fill-current {
   fill: currentColor;
@@ -1982,6 +1994,42 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Swiper styles */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #2C2C2C !important;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  opacity: 1;
+}
+
+.swiper-pagination-bullet {
+  background: #2C2C2C !important;
+  opacity: 0.7;
+}
+
+.swiper-pagination-bullet-active {
+  background: #2C2C2C !important;
+  opacity: 1;
+}
+
+.swiper-slide {
+  transition: transform 0.3s ease-out;
+}
+
+.swiper-slide-active {
+  transform: scale(1.05);
+}
+
+.swiper-slide-shadow-left,
+.swiper-slide-shadow-right {
+  background-image: none !important;
+}
+
 .file\:border-0::file-selector-button {
   border-width: 0px;
 }
@@ -2066,6 +2114,12 @@ body {
   z-index: 20;
 }
 
+.hover\:scale-\[1\.02\]:hover {
+  --tw-scale-x: 1.02;
+  --tw-scale-y: 1.02;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
 .hover\:border-neutral-600:hover {
   --tw-border-opacity: 1;
   border-color: rgb(82 82 82 / var(--tw-border-opacity, 1));
@@ -2130,6 +2184,11 @@ body {
 
 .hover\:text-muted-foreground:hover {
   color: hsl(var(--muted-foreground));
+}
+
+.hover\:text-neutral-600:hover {
+  --tw-text-opacity: 1;
+  color: rgb(82 82 82 / var(--tw-text-opacity, 1));
 }
 
 .hover\:text-primary-foreground:hover {

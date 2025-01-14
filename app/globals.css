@@ -12,6 +12,42 @@ body {
   }
 }
 
+/* Swiper styles */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #2C2C2C !important;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  opacity: 1;
+}
+
+.swiper-pagination-bullet {
+  background: #2C2C2C !important;
+  opacity: 0.7;
+}
+
+.swiper-pagination-bullet-active {
+  background: #2C2C2C !important;
+  opacity: 1;
+}
+
+.swiper-slide {
+  transition: transform 0.3s ease-out;
+}
+
+.swiper-slide-active {
+  transform: scale(1.05);
+}
+
+.swiper-slide-shadow-left,
+.swiper-slide-shadow-right {
+  background-image: none !important;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
