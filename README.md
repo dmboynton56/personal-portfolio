@@ -2,12 +2,14 @@
 # personal-portfolio
 
 ## Running the Website
-To run the website, use the following commands:
 ```
+
+To run the website, use the following commands:
+
 bash
 npm install
 npm run dev
-```
+
 
 This will start the development server at http://localhost:3000 (by default).
 
