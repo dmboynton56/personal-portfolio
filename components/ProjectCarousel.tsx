@@ -53,10 +53,10 @@ export function ProjectCarousel({ images, onClose, projectType }: ProjectCarouse
               slidesPerView: 1.5,
             },
             1024: {
-              slidesPerView: 2,
+              slidesPerView: 1.8,
             },
             1280: {
-              slidesPerView: 2.5,
+              slidesPerView: 2,
             },
           }}
           className="w-full h-full"
@@ -66,7 +66,7 @@ export function ProjectCarousel({ images, onClose, projectType }: ProjectCarouse
               <div className={`relative ${
                 projectType === 'mobile' 
                   ? 'w-full h-full flex items-center justify-center' 
-                  : 'w-full h-full max-h-[600px]'
+                  : 'w-full h-full flex items-center justify-center'
               }`}>
                 {projectType === 'mobile' ? (
                   <div className="transform scale-[0.85] origin-center">
@@ -81,13 +81,23 @@ export function ProjectCarousel({ images, onClose, projectType }: ProjectCarouse
                     </DeviceFrameset>
                   </div>
                 ) : (
-                  <Image
-                    src={src}
-                    alt={`Project image ${idx + 1}`}
-                    fill
-                    className="rounded-lg object-contain"
-                    priority={idx === 0}
-                  />
+                  <div className="transform scale-[0.6] origin-center">
+                    <DeviceFrameset device="MacBook Pro" color="silver">
+                      <div className="relative w-[1280px] h-[800px] bg-black">
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <Image
+                            src={src}
+                            alt={`Project image ${idx + 1}`}
+                            fill
+                            className="object-contain"
+                            style={{ padding: '2px' }}
+                            priority={idx === 0}
+                          />
+                        </div>
+                      </div>
+                      <div className="bottom-bar" />
+                    </DeviceFrameset>
+                  </div>
                 )}
               </div>
             </SwiperSlide>

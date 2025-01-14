@@ -119,4 +119,71 @@
   border-radius: 0 4px 4px 0;
   background: inherit;
   content: '';
+}
+
+/* MacBook Styles */
+.marvel-device.macbook {
+  width: 1280px;
+  height: 800px;
+  padding: 35px 25px;
+  background: #1a1a1a;
+  border-radius: 20px;
+  margin: 0 auto;
+  position: relative;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+.marvel-device.macbook .screen {
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.05);
+  background: transparent;
+  overflow: hidden;
+}
+
+.marvel-device.macbook:before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #333;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.marvel-device.macbook .bottom-bar {
+  position: absolute;
+  width: 140%;
+  height: 24px;
+  background: #1a1a1a;
+  left: -20%;
+  bottom: -24px;
+  border-radius: 0 0 20px 20px;
+  z-index: 1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.marvel-device.macbook .bottom-bar:before {
+  content: '';
+  position: absolute;
+  width: 50%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  border-radius: 0 0 10px 10px;
+}
+
+.marvel-device.macbook .camera {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #333;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
 } 

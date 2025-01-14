@@ -23,7 +23,11 @@ const mockProjects: Project[] = [
     description: 'A comprehensive dashboard for managing online stores, featuring real-time analytics, inventory management, and customer insights. Built with a focus on usability and performance.',
     type: 'desktop',
     image: '/images/projects/project1-1.png',
-    images: ['/images/projects/project1-1.png'],
+    images: [
+      '/images/projects/project1-1.png',
+      '/images/projects/project1-2.png',
+      '/images/projects/project1-1.png'
+    ],
     technologies: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS']
   },
   {
@@ -103,15 +107,13 @@ export function WorkSection() {
                 <div
                   className={`relative ${
                     project.type === 'desktop'
-                      ? 'aspect-video w-full mb-8'
+                      ? 'w-full h-[600px] mb-8'
                       : 'h-[600px] mx-auto md:mx-0 flex items-center justify-center'
                   }`}
                 >
                   <div 
                     onClick={() => handleImageClick(project)}
-                    className={`relative cursor-pointer transition-transform hover:scale-[1.02] ${
-                      project.type === 'desktop' ? 'w-full h-full' : 'flex items-center justify-center'
-                    }`}
+                    className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full"
                   >
                     {project.type === 'mobile' ? (
                       <div className="transform scale-[0.85] origin-center">
@@ -125,13 +127,21 @@ export function WorkSection() {
                         </DeviceFrameset>
                       </div>
                     ) : (
-                      <div className="relative w-full h-full rounded-lg overflow-hidden shadow-lg">
-                        <Image
-                          src={project.image}
-                          alt={project.title}
-                          fill
-                          className="object-cover"
-                        />
+                      <div className="transform scale-[0.7] origin-center">
+                        <DeviceFrameset device="MacBook Pro" color="silver">
+                          <div className="relative w-[1280px] h-[800px] bg-black">
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <Image
+                                src={project.image}
+                                alt={project.title}
+                                fill
+                                className="object-contain"
+                                style={{ padding: '2px' }}
+                              />
+                            </div>
+                          </div>
+                          <div className="bottom-bar" />
+                        </DeviceFrameset>
                       </div>
                     )}
                   </div>
