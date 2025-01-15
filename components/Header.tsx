@@ -2,23 +2,32 @@
 
 import { useState } from 'react'
 import { Menu } from 'lucide-react'
-import { Button } from "@/components/ui/button"
 import { NavigationOverlay } from './NavigationOverlay'
+import { ThemeToggle } from './ThemeToggle'
+import { Button } from './ui/button'
 
 export function Header() {
-  const [isNavOpen, setIsNavOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <>
-      <header className="fixed top-0 left-0 right-0 z-50 p-4 flex justify-between items-center bg-[#F5F1EA] shadow-sm">
-        <div className="text-xl font-bold text-neutral-900">Boynton Inc.</div>
-        <Button variant="ghost" size="icon" onClick={() => setIsNavOpen(true)}>
+    <header className="fixed top-0 left-0 right-0 z-40">
+      <div className="absolute inset-0 bg-background/75 backdrop-blur-md border-b border-border/40" />
+      <div className="relative max-w-6xl mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setIsOpen(true)}
+          className="text-foreground hover:text-foreground/80 transition-colors"
+        >
           <Menu className="h-6 w-6" />
-          <span className="sr-only">Menu</span>
+          <span className="sr-only">Open menu</span>
         </Button>
-      </header>
-      <NavigationOverlay isOpen={isNavOpen} onClose={() => setIsNavOpen(false)} />
-    </>
+      </div>
+      <NavigationOverlay isOpen={isOpen} onClose={() => setIsOpen(false)} />
+    </header>
   )
 }
 

@@ -22,11 +22,12 @@ export function ProjectCarousel({ images, onClose, projectType }: ProjectCarouse
   const swiperRef = useRef(null);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-      <div className="relative w-full max-w-6xl h-[85vh] flex flex-col bg-[#F5F1EA] rounded-2xl p-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="absolute inset-0 bg-background/90 backdrop-blur-xl" />
+      <div className="relative w-full max-w-6xl h-[85vh] flex flex-col bg-background-emphasis rounded-2xl p-8 shadow-2xl">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-50 text-neutral-800 hover:text-neutral-600 transition-colors"
+          className="absolute top-4 right-4 z-50 text-foreground hover:text-foreground/80 transition-colors"
         >
           <X className="h-6 w-6" />
           <span className="sr-only">Close</span>
@@ -83,7 +84,7 @@ export function ProjectCarousel({ images, onClose, projectType }: ProjectCarouse
                 ) : (
                   <div className="transform scale-[0.6] origin-center">
                     <DeviceFrameset device="MacBook Pro" color="silver">
-                      <div className="relative w-[1280px] h-[800px] bg-black">
+                      <div className="relative w-[1280px] h-[800px] bg-background">
                         <div className="absolute inset-0 flex items-center justify-center">
                           <Image
                             src={src}

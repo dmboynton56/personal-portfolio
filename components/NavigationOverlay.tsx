@@ -52,14 +52,14 @@ export function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
           transition={{ duration: 0.3 }}
           className={`fixed inset-0 z-50 flex items-center ${
             isMobile ? 'justify-center' : 'justify-end'
-          } bg-black bg-opacity-50`}
+          } bg-background/80 backdrop-blur-sm`}
         >
           <motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'tween', duration: 0.3 }}
-            className={`h-full bg-[#111111] ${
+            className={`h-full bg-card ${
               isMobile ? 'w-full' : 'w-[25%] min-w-[300px] max-w-[55%]'
             } p-8 flex flex-col`}
           >
@@ -69,7 +69,7 @@ export function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
               className="absolute top-4 right-4"
               onClick={onClose}
             >
-              <X className="h-6 w-6 text-[#F5F1EA]" />
+              <X className="h-6 w-6 text-foreground" />
               <span className="sr-only">Close</span>
             </Button>
 
@@ -84,7 +84,7 @@ export function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
                   >
                     <button
                       onClick={() => scrollToSection(item.id)}
-                      className="text-3xl font-bold text-[#F5F1EA] hover:text-gray-300 transition-colors"
+                      className="text-3xl font-bold text-foreground hover:text-foreground/80 transition-colors"
                     >
                       {item.name}
                     </button>
@@ -94,7 +94,7 @@ export function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
             </nav>
 
             <div className="mt-auto">
-              <div className="h-px bg-white bg-opacity-20 mb-6" />
+              <div className="h-px bg-border mb-6" />
               <ul className="flex space-x-4">
                 {socialLinks.map((link, index) => (
                   <motion.li
@@ -107,7 +107,7 @@ export function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-[#F5F1EA] hover:text-gray-300 transition-colors"
+                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                     >
                       {link.name}
                     </a>

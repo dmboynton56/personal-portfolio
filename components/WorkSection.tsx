@@ -97,9 +97,9 @@ export function WorkSection() {
   }
 
   return (
-    <section id="work" className="min-h-screen bg-[#F5F1EA] py-24">
+    <section id="work" className="min-h-screen bg-background-alt py-24">
       <div className="max-w-6xl mx-auto px-4 md:px-8">
-        <h2 className="text-3xl md:text-4xl font-bold text-[#2C2C2C] mb-12">Selected Work</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">Selected Work</h2>
         
         <div className="space-y-32">
           {mockProjects.map((project, index) => (
@@ -124,7 +124,7 @@ export function WorkSection() {
                 >
                   <div 
                     onClick={() => handleImageClick(project)}
-                    className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full"
+                    className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
                   >
                     {project.type === 'mobile' ? (
                       <div className="transform scale-[0.85] origin-center">
@@ -140,7 +140,7 @@ export function WorkSection() {
                     ) : (
                       <div className="transform scale-[0.7] origin-center">
                         <DeviceFrameset device="MacBook Pro" color="silver">
-                          <div className="relative w-[1280px] h-[800px] bg-black">
+                          <div className="relative w-[1280px] h-[800px] bg-background">
                             <div className="absolute inset-0 flex items-center justify-center">
                               <Image
                                 src={project.image}
@@ -155,21 +155,22 @@ export function WorkSection() {
                         </DeviceFrameset>
                       </div>
                     )}
+                    <div className="absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
                   </div>
                 </div>
                 
-                <div className={`${project.type === 'mobile' ? 'md:order-first' : ''}`}>
-                  <h3 className="text-2xl font-bold text-[#2C2C2C] mb-4">
+                <div className={`${project.type === 'mobile' ? 'md:order-first' : ''} bg-background-emphasis p-8 rounded-xl`}>
+                  <h3 className="text-2xl font-bold text-foreground mb-4">
                     {project.title}
                   </h3>
-                  <p className="text-[#4A4A4A] mb-6">
+                  <p className="text-muted-foreground mb-6">
                     {project.description}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {project.technologies.map((tech) => (
                       <span
                         key={tech}
-                        className="px-3 py-1 bg-[#E8E2D7] text-[#2C2C2C] rounded-full text-sm"
+                        className="px-3 py-1 bg-background text-muted-foreground rounded-full text-sm border border-border/40"
                       >
                         {tech}
                       </span>

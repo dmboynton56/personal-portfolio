@@ -1,101 +1,160 @@
-# README.md : personal-portfolio : MARKDOWN
+# Drew Boynton's Portfolio
 
-# personal-portfolio
+A modern, responsive portfolio website built with Next.js and featuring a dynamic theme system.
 
-## Running the Website
+## 🚀 Tech Stack
 
+- **Framework:** Next.js 14 (App Router)
+- **Styling:** Tailwind CSS
+- **Theme System:** Custom theme implementation with CSS variables
+- **UI Components:** shadcn/ui
+- **Animations:** 
+  - Intersection Observer for scroll animations
+  - Framer Motion for smooth transitions
+- **Device Frames:** react-device-frameset
+- **Image Carousel:** Swiper.js
+- **Icons:** Lucide Icons
 
-To run the website, use the following commands:
+## 🎨 Theme System
 
-bash
-npm install
-npm run dev
+The portfolio features a sophisticated theme system that includes:
 
+- Light theme (warm beige/tan palette)
+- Dark theme (deep gray palette)
+- Theme-aware components using CSS variables
+- Semantic color naming (background, foreground, muted, etc.)
+- Special treatments for:
+  - Alternating section backgrounds
+  - Footer-specific colors
+  - Emphasis areas
+  - Component-specific styling
 
-This will start the development server at http://localhost:3000 (by default).
+### Color Variables
 
----
+The theme system uses CSS variables for consistent styling:
 
-## Project Structure and Design System
+```css
+/* Base colors */
+--background
+--background-alt
+--background-emphasis
+--foreground
 
-### Project Structure
+/* Component colors */
+--card
+--card-foreground
+--popover
+--popover-foreground
+
+/* UI element colors */
+--primary
+--secondary
+--muted
+--accent
+
+/* Footer colors */
+--footer
+--footer-foreground
 ```
-.
-├── app/                    // Next.js app directory
-│   ├── layout.tsx         // Root layout component
-│   ├── page.tsx           // Home page
-│   └── globals.css        // Global styles and Swiper/device frames customization
-├── components/            // Reusable UI components
-│   ├── ui/                // Base UI components
-│   ├── ProfileSection.tsx // Profile/Hero section
-│   ├── WorkSection.tsx    // Projects showcase with device frames (MacBook/iPhone)
-│   ├── ProjectCarousel.tsx// 3D device frames & Swiper coverflow
-│   ├── Header.tsx         // Navigation header
-│   ├── NavigationOverlay.tsx // Mobile navigation
-│   └── MacbookFrame.tsx   // Optional custom MacBook device frame
-├── hooks/                 // Custom React hooks
-├── lib/                   // Utility functions
+
+## 📁 Project Structure
+
+```
+personal-portfolio/
+├── app/
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── globals.css
+├── components/
+│   ├── ui/            # Reusable UI components
+│   ├── Header.tsx
+│   ├── ProfileSection.tsx
+│   ├── AboutSection.tsx
+│   ├── WorkSection.tsx
+│   ├── ContactSection.tsx
+│   ├── NavigationOverlay.tsx
+│   ├── ProjectCarousel.tsx
+│   └── ThemeToggle.tsx
+├── styles/
+│   └── device-frames.css
+├── lib/
+│   └── utils.ts
 ├── public/
 │   └── images/
-│       └── projects/      // Project images
-└── styles/
-    └── device-frames.css  // Custom styles for device frames
+└── tailwind.config.ts
 ```
 
-### Tech Stack
-- **Framework**: Next.js 14 (React 18)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS  
-- **Device Frames**: react-device-frameset (iPhone X, MacBook Pro, etc.)
-- **Carousel**: Swiper with 3D coverflow effect and custom breakpoints
-- **Animations**: Framer Motion (optional for fade/slide transitions)
+## 🔥 Features
 
-### Design System
+- Responsive design for all screen sizes
+- Smooth scroll animations
+- Interactive project showcases
+- Device-specific project previews (mobile/desktop)
+- Theme-aware color system
+- Modern navigation overlay
+- Optimized images with Next.js Image component
+- Elegant transitions and hover effects
+- Accessible UI components
 
-#### Colors
-- `#F5F1EA`: Main background (warm beige)  
-- `#E8E2D7`: Secondary background (lighter beige)  
-- `#2C2C2C`: Primary text  
-- `#4A4A4A`: Secondary text  
-- `#111111`: Navigation background  
+## 🚀 Getting Started
 
-#### Components
-1. **Layout Components**  
-   - Header  
-   - Navigation Overlay  
-   - Profile Section  
-   - Work Section  
-   - Project Carousel (with 3D coverflow)  
-2. **UI Components**  
-   - Button  
-   - Image Displays  
-   - Project Cards  
-   - Swiper Carousel with react-device-frameset
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/personal-portfolio.git
+```
 
-#### Typography
-- Inter font family
-- Font sizes:
-  - Headings: text-4xl/text-5xl
-  - Subheadings: text-2xl/text-3xl
-  - Body: text-base/text-lg
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+```
 
-#### Interactive Elements
-1. **Project Carousel**  
-   - 3D coverflow effect using Swiper  
-   - Touch-enabled swipe gestures  
-   - Navigation arrows and pagination  
-   - Integrates react-device-frameset for iPhone/MacBook frames  
-   - Responsive with scalable frames  
-   - Infinite loop scrolling  
-2. **Hover Effects**  
-   - Subtle scale on images and frames for interactivity  
+3. Run the development server:
+```bash
+npm run dev
+# or
+yarn dev
+```
 
----
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Notes on Device Frames
-We’ve introduced “react-device-frameset” for consistent desktop (MacBook) and mobile (iPhone) mockups in the WorkSection and ProjectCarousel components. This replaces or complements any manually-coded frames and simplifies responsive design.
+## 🎨 Customization
 
----
+### Themes
 
-© 2025 – personal-portfolio
+The theme system can be customized in `app/globals.css`. Each theme (light/dark) defines its own set of CSS variables that control the color scheme throughout the application.
+
+### Components
+
+All components are built with theme awareness in mind and can be customized through:
+- Tailwind CSS classes
+- CSS variables
+- Component-specific props
+
+## 📱 Responsive Design
+
+The portfolio is fully responsive with breakpoints for:
+- Mobile: < 768px
+- Tablet: 768px - 1024px
+- Desktop: > 1024px
+- Large Desktop: > 1280px
+
+## 🌟 Performance
+
+- Optimized image loading with Next.js Image component
+- Lazy-loaded components
+- Efficient theme switching without flash
+- Smooth animations optimized for performance
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🤝 Contact
+
+Drew Boynton
+- Email: dmboynton6@gmail.com
+- LinkedIn: [Drew Boynton](https://www.linkedin.com/in/drew-boynton-1bba16180/)
+- GitHub: [dmboynton56](https://github.com/dmboynton56)
 ```
