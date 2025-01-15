@@ -17,18 +17,24 @@ export function ContactSection() {
           </h2>
         </div>
 
-        <div className="grid gap-8 mb-16">
+        <div className="space-y-8 mb-16">
           <a
             href="mailto:dmboynton6@gmail.com"
-            className="inline-flex px-6 py-3 rounded-full border border-footer-foreground/20 text-footer-foreground/80 hover:text-footer-foreground hover:border-footer-foreground/40 transition-colors w-fit"
+            className="inline-flex px-6 py-3 rounded-full shine-border group/shine transition-all duration-300 hover:scale-[1.02] w-fit"
+            style={{ '--shine-degree': '-45deg' } as React.CSSProperties}
           >
-            dmboynton6@gmail.com
+            <span className="relative z-10 text-footer-foreground/80 group-hover/shine:text-footer-foreground transition-colors">
+              dmboynton6@gmail.com
+            </span>
           </a>
           <a
             href="tel:9788866947"
-            className="inline-flex px-6 py-3 rounded-full border border-footer-foreground/20 text-footer-foreground/80 hover:text-footer-foreground hover:border-footer-foreground/40 transition-colors w-fit"
+            className="inline-flex px-6 py-3 rounded-full shine-border group/shine transition-all duration-300 hover:scale-[1.02] w-fit block"
+            style={{ '--shine-degree': '-45deg' } as React.CSSProperties}
           >
-            +1 (978) 886-6947
+            <span className="relative z-10 text-footer-foreground/80 group-hover/shine:text-footer-foreground transition-colors">
+              +1 (978) 886-6947
+            </span>
           </a>
         </div>
 

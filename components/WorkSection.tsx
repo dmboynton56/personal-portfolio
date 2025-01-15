@@ -101,7 +101,7 @@ export function WorkSection() {
       <div className="max-w-6xl mx-auto px-4 md:px-8">
         <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">Selected Work</h2>
         
-        <div className="space-y-32">
+        <div className="space-y-40">
           {mockProjects.map((project, index) => (
             <div
               key={project.id}
@@ -118,7 +118,7 @@ export function WorkSection() {
                 <div
                   className={`relative ${
                     project.type === 'desktop'
-                      ? 'w-full h-[600px] mb-8'
+                      ? 'w-full h-[600px] mb-16'
                       : 'h-[600px] mx-auto md:mx-0 flex items-center justify-center'
                   }`}
                 >
@@ -159,22 +159,34 @@ export function WorkSection() {
                   </div>
                 </div>
                 
-                <div className={`${project.type === 'mobile' ? 'md:order-first' : ''} bg-background-emphasis p-8 rounded-xl`}>
-                  <h3 className="text-2xl font-bold text-foreground mb-4">
-                    {project.title}
-                  </h3>
-                  <p className="text-muted-foreground mb-6">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-3 py-1 bg-background text-muted-foreground rounded-full text-sm border border-border/40"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                <div 
+                  className={`${
+                    project.type === 'mobile' ? 'md:order-first' : ''
+                  } bg-background-emphasis p-12 rounded-xl shine-border group/shine transition-all duration-300`}
+                  style={{
+                    '--shine-degree': project.type === 'mobile' ? '135deg' : '45deg'
+                  } as React.CSSProperties}
+                >
+                  <div className="relative z-10">
+                    <h3 className="text-2xl font-bold text-foreground mb-6">
+                      {project.title}
+                    </h3>
+                    <p className="text-muted-foreground mb-8">
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {project.technologies.map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-3 py-1 rounded-full shine-border group/tag transition-all duration-300 hover:scale-[1.02]"
+                          style={{ '--shine-degree': '45deg' } as React.CSSProperties}
+                        >
+                          <span className="relative z-10 text-muted-foreground group-hover/tag:text-foreground text-sm transition-colors">
+                            {tech}
+                          </span>
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
