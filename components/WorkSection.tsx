@@ -18,15 +18,26 @@ interface Project {
 
 const mockProjects: Project[] = [
   {
+    id: 'houseclusters',
+    title: 'Advanced Data Cluster Sorting',
+    description: 'Project for my Advanced Data Science class. This project was a individual effort to sort data into clusters based on their similarity. We used a variety of data structures and algorithms to achieve this.',
+    type: 'desktop',
+    image: '/images/projects/project3-1.jpg',
+    images: [
+      '/images/projects/project3-1.jpg',
+      '/images/projects/project3-2.jpg'
+    ],
+    technologies: ['Python', 'Pandas', 'Gaussian Mixture Models']
+  },
+  {
     id: 'project1',
     title: 'E-commerce Dashboard',
     description: 'A comprehensive dashboard for managing online stores, featuring real-time analytics, inventory management, and customer insights. Built with a focus on usability and performance.',
     type: 'desktop',
-    image: '/images/projects/project1-1.png',
+    image: '/images/projects/project1-1.jpg',
     images: [
-      '/images/projects/project1-1.png',
-      '/images/projects/project1-2.png',
-      '/images/projects/project1-1.png'
+      '/images/projects/project1-1.jpg',
+      '/images/projects/project1-2.jpg'
     ],
     technologies: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS']
   },
