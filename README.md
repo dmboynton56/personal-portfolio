@@ -1,19 +1,31 @@
 # Drew Boynton's Portfolio
 
-A modern, responsive portfolio website built with Next.js and featuring a dynamic theme system.
+A modern, responsive portfolio website built with Next.js, featuring dynamic themes, device frames, and interactive project showcases.
 
 ## 🚀 Tech Stack
 
 - **Framework:** Next.js 14 (App Router)
-- **Styling:** Tailwind CSS
-- **Theme System:** Custom theme implementation with CSS variables
-- **UI Components:** shadcn/ui
+- **Styling:** 
+  - Tailwind CSS
+  - CSS Variables for theming
+  - Custom device frames
+- **UI Components:** 
+  - shadcn/ui components
+  - Custom shine effects
+  - Responsive layouts
 - **Animations:** 
   - Intersection Observer for scroll animations
-  - Framer Motion for smooth transitions
-- **Device Frames:** react-device-frameset
-- **Image Carousel:** Swiper.js
+  - Framer Motion for navigation overlay
+- **Device Frames:** 
+  - react-device-frameset
+  - Custom MacBook & iPhone frames
+  - Responsive scaling
+- **Image Carousel:** 
+  - Swiper.js with 3D coverflow effect
+  - Custom responsive breakpoints
+  - Device-specific presentations
 - **Icons:** Lucide Icons
+- **Theme System:** next-themes with light/dark mode
 
 ## 🎨 Theme System
 
@@ -22,16 +34,14 @@ The portfolio features a sophisticated theme system that includes:
 - Light theme (warm beige/tan palette)
 - Dark theme (deep gray palette)
 - Theme-aware components using CSS variables
-- Semantic color naming (background, foreground, muted, etc.)
+- Semantic color naming
 - Special treatments for:
-  - Alternating section backgrounds
-  - Footer-specific colors
-  - Emphasis areas
-  - Component-specific styling
+  - Device frames
+  - Project cards
+  - Interactive elements
+  - Shine effects
 
 ### Color Variables
-
-The theme system uses CSS variables for consistent styling:
 
 ```css
 /* Base colors */
@@ -52,100 +62,77 @@ The theme system uses CSS variables for consistent styling:
 --muted
 --accent
 
+/* Container specific accent */
+--accent-container
+
 /* Footer colors */
 --footer
 --footer-foreground
 ```
 
-## 📁 Project Structure
+## 📱 Device Frames
 
-```
-personal-portfolio/
-├── app/
-│   ├── layout.tsx
-│   ├── page.tsx
-│   └── globals.css
-├── components/
-│   ├── ui/            # Reusable UI components
-│   ├── Header.tsx
-│   ├── ProfileSection.tsx
-│   ├── AboutSection.tsx
-│   ├── WorkSection.tsx
-│   ├── ContactSection.tsx
-│   ├── NavigationOverlay.tsx
-│   ├── ProjectCarousel.tsx
-│   └── ThemeToggle.tsx
-├── styles/
-│   └── device-frames.css
-├── lib/
-│   └── utils.ts
-├── public/
-│   └── images/
-└── tailwind.config.ts
-```
+### iPhone Frame Features
+- Dynamic notch design
+- Realistic buttons and camera
+- Proper screen scaling
+- Touch-friendly interface
+
+### MacBook Frame Features
+- Midnight color scheme
+- Camera and notch details
+- Screen reflections
+- Bottom bar design
 
 ## 🔥 Features
 
 - Responsive design for all screen sizes
-- Smooth scroll animations
-- Interactive project showcases
-- Device-specific project previews (mobile/desktop)
-- Theme-aware color system
+- Interactive project showcases with:
+  - Device-specific frames (MacBook/iPhone)
+  - 3D carousel navigation
+  - Smooth transitions
+  - Touch support
+- Dynamic theme system
 - Modern navigation overlay
-- Optimized images with Next.js Image component
+- Optimized images
 - Elegant transitions and hover effects
 - Accessible UI components
+- Shine effects on interactive elements
 
 ## 🚀 Getting Started
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/personal-portfolio.git
+git clone https://github.com/dmboynton56/personal-portfolio.git
 ```
 
 2. Install dependencies:
 ```bash
 npm install
-# or
-yarn install
 ```
 
 3. Run the development server:
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## 🎨 Customization
-
-### Themes
-
-The theme system can be customized in `app/globals.css`. Each theme (light/dark) defines its own set of CSS variables that control the color scheme throughout the application.
-
-### Components
-
-All components are built with theme awareness in mind and can be customized through:
-- Tailwind CSS classes
-- CSS variables
-- Component-specific props
+4. Open [http://localhost:3000](http://localhost:3000)
 
 ## 📱 Responsive Design
 
 The portfolio is fully responsive with breakpoints for:
-- Mobile: < 768px
-- Tablet: 768px - 1024px
-- Desktop: > 1024px
-- Large Desktop: > 1280px
+- Mobile: < 768px (single column, optimized frames)
+- Tablet: 768px - 1024px (dual column, 1.5-2 slides)
+- Desktop: > 1024px (dual column, 2-2.5 slides)
+- Large Desktop: > 1280px (dual column, 2.5-3 slides)
 
 ## 🌟 Performance
 
-- Optimized image loading with Next.js Image component
+- Optimized image loading with Next.js Image
 - Lazy-loaded components
-- Efficient theme switching without flash
-- Smooth animations optimized for performance
+- Efficient theme switching
+- Smooth animations
+- Responsive image scaling
 
 ## 📄 License
 
