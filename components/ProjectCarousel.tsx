@@ -43,8 +43,8 @@ export function ProjectCarousel({ images, onClose, projectType }: ProjectCarouse
             rotate: 35,
             stretch: 0,
             depth: 50,
-            modifier: 1.5,
-            slideShadows: true,
+            modifier: 1,
+            slideShadows: false,
           }}
           centeredSlides
           slidesPerView={1}
@@ -52,37 +52,45 @@ export function ProjectCarousel({ images, onClose, projectType }: ProjectCarouse
           breakpoints={{
             768: {
               slidesPerView: 1.5,
+              coverflowEffect: {
+                depth: 100,
+                modifier: 1
+              }
             },
             1024: {
               slidesPerView: 1.8,
+              coverflowEffect: {
+                depth: 150,
+                modifier: 1.2
+              }
             },
             1280: {
               slidesPerView: 2,
+              coverflowEffect: {
+                depth: 200,
+                modifier: 1.5
+              }
             },
           }}
           className="w-full h-full"
         >
           {images.map((src, idx) => (
             <SwiperSlide key={idx} className="flex items-center justify-center py-8">
-              <div className={`relative ${
-                projectType === 'mobile' 
-                  ? 'w-full h-full flex items-center justify-center' 
-                  : 'w-full h-full flex items-center justify-center'
-              }`}>
+              <div className="w-full h-full flex items-center justify-center">
                 {projectType === 'mobile' ? (
-                  <div className="transform scale-[0.85] origin-center">
+                  <div className="transform scale-[0.55] md:scale-[0.75] lg:scale-[0.85] origin-center">
                     <DeviceFrameset device="iPhone X" color="black" landscape={false}>
                       <Image
                         src={src}
                         alt={`Project image ${idx + 1}`}
                         fill
-                        className="object-cover"
+                        className="object-contain"
                         priority={idx === 0}
                       />
                     </DeviceFrameset>
                   </div>
                 ) : (
-                  <div className="transform scale-[0.6] origin-center">
+                  <div className="transform scale-[0.2] sm:scale-[0.20] md:scale-[0.4] lg:scale-[0.6] origin-center">
                     <DeviceFrameset device="MacBook Pro" color="silver">
                       <div className="relative w-[1280px] h-[800px] bg-background">
                         <div className="absolute inset-0 flex items-center justify-center">

@@ -110,59 +110,13 @@ export function WorkSection() {
               }}
               className="opacity-0 translate-y-10 transition-all duration-1000 ease-out"
             >
-              <div className={`grid ${
+              <div className={`grid grid-cols-1 gap-8 ${
                 project.type === 'desktop' 
-                  ? 'grid-cols-1' 
-                  : 'md:grid-cols-2 gap-8 items-center'
+                  ? '' 
+                  : 'md:grid-cols-2 md:items-center'
               }`}>
-                <div
-                  className={`relative ${
-                    project.type === 'desktop'
-                      ? 'w-full h-[600px] mb-16'
-                      : 'h-[600px] mx-auto md:mx-0 flex items-center justify-center'
-                  }`}
-                >
-                  <div 
-                    onClick={() => handleImageClick(project)}
-                    className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
-                  >
-                    {project.type === 'mobile' ? (
-                      <div className="transform scale-[0.85] origin-center">
-                        <DeviceFrameset device="iPhone X" color="black" landscape={false}>
-                          <Image
-                            src={project.image}
-                            alt={project.title}
-                            fill
-                            className="object-cover"
-                          />
-                        </DeviceFrameset>
-                      </div>
-                    ) : (
-                      <div className="transform scale-[0.7] origin-center">
-                        <DeviceFrameset device="MacBook Pro" color="silver">
-                          <div className="relative w-[1280px] h-[800px] bg-background">
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <Image
-                                src={project.image}
-                                alt={project.title}
-                                fill
-                                className="object-contain"
-                                style={{ padding: '2px' }}
-                              />
-                            </div>
-                          </div>
-                          <div className="bottom-bar" />
-                        </DeviceFrameset>
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
-                  </div>
-                </div>
-                
                 <div 
-                  className={`${
-                    project.type === 'mobile' ? 'md:order-first' : ''
-                  } bg-background-emphasis p-12 rounded-xl shine-border group/shine transition-all duration-300`}
+                  className={`bg-background-emphasis p-12 rounded-xl shine-border group/shine transition-all duration-300`}
                   style={{
                     '--shine-degree': project.type === 'mobile' ? '135deg' : '45deg'
                   } as React.CSSProperties}
@@ -187,6 +141,50 @@ export function WorkSection() {
                         </span>
                       ))}
                     </div>
+                  </div>
+                </div>
+
+                <div
+                  className={`relative mx-auto w-full ${
+                    project.type === 'desktop'
+                      ? 'h-[500px] mt-8'
+                      : 'h-[600px] flex items-center justify-center'
+                  }`}
+                >
+                  <div 
+                    onClick={() => handleImageClick(project)}
+                    className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
+                  >
+                    {project.type === 'mobile' ? (
+                      <div className="transform scale-[0.65] md:scale-[0.85] origin-center">
+                        <DeviceFrameset device="iPhone X" color="black" landscape={false}>
+                          <Image
+                            src={project.image}
+                            alt={project.title}
+                            fill
+                            className="object-contain"
+                          />
+                        </DeviceFrameset>
+                      </div>
+                    ) : (
+                      <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
+                        <DeviceFrameset device="MacBook Pro" color="silver">
+                          <div className="relative w-[1280px] h-[800px] bg-background">
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <Image
+                                src={project.image}
+                                alt={project.title}
+                                fill
+                                className="object-contain"
+                                style={{ padding: '2px' }}
+                              />
+                            </div>
+                          </div>
+                          <div className="bottom-bar" />
+                        </DeviceFrameset>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
                   </div>
                 </div>
               </div>
