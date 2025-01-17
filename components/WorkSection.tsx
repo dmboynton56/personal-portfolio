@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { ProjectCarousel } from './ProjectCarousel'
 import { DeviceFrameset } from 'react-device-frameset'
 import '@/styles/device-frames.css'
+import { BorderBeam } from '@/components/ui/border-beam'
 
 interface Project {
   id: string
@@ -101,7 +102,7 @@ export function WorkSection() {
       <div className="max-w-6xl mx-auto px-4 md:px-8">
         <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">Selected Work</h2>
         
-        <div className="space-y-40">
+        <div className="space-y-64">
           {mockProjects.map((project, index) => (
             <div
               key={project.id}
@@ -110,36 +111,42 @@ export function WorkSection() {
               }}
               className="opacity-0 translate-y-10 transition-all duration-1000 ease-out"
             >
-              <div className={`grid grid-cols-1 gap-8 ${
+              <div className={`grid grid-cols-1 gap-16 ${
                 project.type === 'desktop' 
                   ? '' 
                   : 'md:grid-cols-2 md:items-center'
               }`}>
-                <div 
-                  className={`bg-background-emphasis p-12 rounded-xl shine-border group/shine transition-all duration-300`}
-                  style={{
-                    '--shine-degree': project.type === 'mobile' ? '135deg' : '45deg'
-                  } as React.CSSProperties}
-                >
-                  <div className="relative z-10">
-                    <h3 className="text-2xl font-bold text-foreground mb-6">
-                      {project.title}
-                    </h3>
-                    <p className="text-muted-foreground mb-8">
-                      {project.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {project.technologies.map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-3 py-1 rounded-full shine-border group/tag transition-all duration-300 hover:scale-[1.02]"
-                          style={{ '--shine-degree': '45deg' } as React.CSSProperties}
-                        >
-                          <span className="relative z-10 text-muted-foreground group-hover/tag:text-foreground text-sm transition-colors">
-                            {tech}
+                <div className="relative rounded-xl p-[2px] bg-gradient-to-r from-accent/80 via-accent/60 to-accent/80 shadow-[0_0_25px_rgba(0,0,0,0.25)] hover:shadow-[0_0_30px_rgba(0,0,0,0.3)] transition-shadow">
+                  <div 
+                    className={`bg-background-emphasis p-12 rounded-xl relative overflow-hidden group`}
+                  >
+                    <BorderBeam 
+                      colorFrom="hsl(var(--accent))"
+                      colorTo="hsl(var(--accent))"
+                      duration={4}
+                      size={100}
+                      borderWidth={1}
+                    />
+                    <div className="relative z-10">
+                      <h3 className="text-2xl font-bold text-foreground mb-6">
+                        {project.title}
+                      </h3>
+                      <p className="text-muted-foreground mb-8">
+                        {project.description}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {project.technologies.map((tech) => (
+                          <span
+                            key={tech}
+                            className="px-3 py-1 rounded-full shine-border group/tag transition-all duration-300 hover:scale-[1.02]"
+                            style={{ '--shine-degree': '45deg' } as React.CSSProperties}
+                          >
+                            <span className="relative z-10 text-muted-foreground group-hover/tag:text-foreground text-sm transition-colors">
+                              {tech}
+                            </span>
                           </span>
-                        </span>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>

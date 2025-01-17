@@ -238,6 +238,16 @@ body {
     --input: 40 20% 85%;
     --ring: 40 40% 20%;
     --radius: 0.5rem;
+    
+    /* Aurora variables */
+    --white: #ffffff;
+    --black: #000000;
+    --transparent: transparent;
+    --blue-300: #93c5fd;
+    --blue-400: #60a5fa;
+    --blue-500: #3b82f6;
+    --indigo-300: #a5b4fc;
+    --violet-200: #ddd6fe;
   }
 
   .dark {
