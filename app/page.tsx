@@ -1,5 +1,6 @@
 import { Header } from '@/components/Header'
 import { ProfileSection } from '@/components/ProfileSection'
+import { AboutSection } from '@/components/AboutSection'
 import { WorkSection } from '@/components/WorkSection'
 import { ContactSection } from '@/components/ContactSection'
 import { AuroraBackground } from '@/components/ui/aurora-background'
@@ -17,6 +18,7 @@ export default function Page() {
           </div>
         </AuroraBackground>
       </div>
+      <AboutSection />
       <WorkSection />
       <ContactSection />
     </main>

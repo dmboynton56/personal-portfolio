@@ -186,4 +186,24 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 5;
+}
+
+/* Dark mode overrides for device frames */
+.dark .marvel-device.iphone-x {
+  background: #535353;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.dark .marvel-device.iphone-x .notch {
+  background: #535353;
+}
+
+.dark .marvel-device.macbook {
+  background: #535353;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.dark .marvel-device.macbook .bottom-bar {
+  background: #535353;
+  box-shadow: none;
 } 

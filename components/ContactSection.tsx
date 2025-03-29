@@ -20,7 +20,7 @@ export function ContactSection() {
         <div className="space-y-8 mb-16">
           <a
             href="mailto:dmboynton6@gmail.com"
-            className="inline-flex px-6 py-3 rounded-full shine-border group/shine transition-all duration-300 hover:scale-[1.02] w-fit"
+            className="flex flex-col px-6 py-3 rounded-full shine-border group/shine transition-all duration-300 hover:scale-[1.02] w-fit"
             style={{ '--shine-degree': '-45deg' } as React.CSSProperties}
           >
             <span className="relative z-10 text-footer-foreground/80 group-hover/shine:text-footer-foreground transition-colors">
@@ -29,7 +29,7 @@ export function ContactSection() {
           </a>
           <a
             href="tel:9788866947"
-            className="inline-flex px-6 py-3 rounded-full shine-border group/shine transition-all duration-300 hover:scale-[1.02] w-fit block"
+            className="flex flex-col px-6 py-3 rounded-full shine-border group/shine transition-all duration-300 hover:scale-[1.02] w-fit block"
             style={{ '--shine-degree': '-45deg' } as React.CSSProperties}
           >
             <span className="relative z-10 text-footer-foreground/80 group-hover/shine:text-footer-foreground transition-colors">

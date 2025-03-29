@@ -13,9 +13,9 @@ export function ProfileSection() {
             priority
           />
         </div>
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">Drew Boynton</h1>
-        <p className="text-xl md:text-2xl text-white/80 mb-6">Software Engineer</p>
-        <p className="max-w-lg mx-auto text-white/70">
+        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">Drew Boynton</h1>
+        <p className="text-xl md:text-2xl text-foreground/80 mb-6">Software Engineer</p>
+        <p className="max-w-lg mx-auto text-foreground/70">
           I am a full stack developer with an interest in AI and machine learning.
         </p>
       </div>
