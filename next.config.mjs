@@ -1,3 +1,5 @@
+const isProd = process.env.NODE_ENV === 'production';
+
 let userConfig = undefined
 try {
   userConfig = await import('./v0-user-next.config')
@@ -20,6 +22,12 @@ const nextConfig = {
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
+  },
+  output: 'export',
+  basePath: isProd ? '/personal-portfolio' : '',
+  assetPrefix: isProd ? '/personal-portfolio/' : '',
+  images: {
+    unoptimized: true,
   },
 }
 
