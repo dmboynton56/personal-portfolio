@@ -12,10 +12,6 @@ The portfolio is designed to provide a glimpse into my capabilities as a develop
 
 This project itself is an example of my work, built using Next.js, TypeScript, and Tailwind CSS, demonstrating attention to detail in UI development and modern web practices.
 
-## Purpose
-
-The primary audience for this repository is potential employers, collaborators, or anyone interested in understanding my technical background and the quality of my work. While the code demonstrates specific implementation techniques, the focus should be on the final products showcased on the live portfolio site and the skills they represent.
-
 ## Contact
 
 If you'd like to discuss potential opportunities or collaborations, feel free to reach out:
