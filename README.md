@@ -1,147 +1,28 @@
-# Drew Boynton's Portfolio
+# Drew Boynton's Portfolio Repository
 
-A modern, responsive portfolio website built with Next.js, featuring dynamic themes, device frames, and interactive project showcases.
+This repository contains the source code for my personal portfolio website. The site serves as a central hub to showcase my projects, skills, and experience in web development.
 
-## 🚀 Tech Stack
+## Overview
 
-- **Framework:** Next.js 14 (App Router)
-- **Styling:** 
-  - Tailwind CSS
-  - CSS Variables for theming
-  - Custom device frames
-- **UI Components:** 
-  - shadcn/ui components
-  - Custom shine effects
-  - Responsive layouts
-- **Animations:** 
-  - Intersection Observer for scroll animations
-  - Framer Motion for navigation overlay
-- **Device Frames:** 
-  - react-device-frameset
-  - Custom MacBook & iPhone frames
-  - Responsive scaling
-- **Image Carousel:** 
-  - Swiper.js with 3D coverflow effect
-  - Custom responsive breakpoints
-  - Device-specific presentations
-- **Icons:** Lucide Icons
-- **Theme System:** next-themes with light/dark mode
+The portfolio is designed to provide a glimpse into my capabilities as a developer, highlighting:
 
-## 🎨 Theme System
+*   **Project Showcase:** Demonstrations of web applications and projects I have built, illustrating my technical skills and problem-solving abilities. *(Feel free to add 1-2 sentences here mentioning specific types of projects or key achievements if you like)*
+*   **Technical Skills:** Proficiency in modern web technologies, primarily focused on front-end development with frameworks like React and Next.js, along with responsive design principles and UI/UX considerations. *(Adjust this list based on the skills you want to emphasize)*
+*   **Design Implementation:** Ability to translate design concepts into functional, aesthetically pleasing, and user-friendly web interfaces.
 
-The portfolio features a sophisticated theme system that includes:
+This project itself is an example of my work, built using Next.js, TypeScript, and Tailwind CSS, demonstrating attention to detail in UI development and modern web practices.
 
-- Light theme (warm beige/tan palette)
-- Dark theme (deep gray palette)
-- Theme-aware components using CSS variables
-- Semantic color naming
-- Special treatments for:
-  - Device frames
-  - Project cards
-  - Interactive elements
-  - Shine effects
+## Purpose
 
-### Color Variables
+The primary audience for this repository is potential employers, collaborators, or anyone interested in understanding my technical background and the quality of my work. While the code demonstrates specific implementation techniques, the focus should be on the final products showcased on the live portfolio site and the skills they represent.
 
-```css
-/* Base colors */
---background
---background-alt
---background-emphasis
---foreground
+*(Optional: Add a link to your live portfolio website here if you have one)*
+*   **Live Portfolio:** [Your Live Portfolio URL]
 
-/* Component colors */
---card
---card-foreground
---popover
---popover-foreground
+## Contact
 
-/* UI element colors */
---primary
---secondary
---muted
---accent
+If you'd like to discuss potential opportunities or collaborations, feel free to reach out:
 
-/* Container specific accent */
---accent-container
-
-/* Footer colors */
---footer
---footer-foreground
-```
-
-## 📱 Device Frames
-
-### iPhone Frame Features
-- Dynamic notch design
-- Realistic buttons and camera
-- Proper screen scaling
-- Touch-friendly interface
-
-### MacBook Frame Features
-- Midnight color scheme
-- Camera and notch details
-- Screen reflections
-- Bottom bar design
-
-## 🔥 Features
-
-- Responsive design for all screen sizes
-- Interactive project showcases with:
-  - Device-specific frames (MacBook/iPhone)
-  - 3D carousel navigation
-  - Smooth transitions
-  - Touch support
-- Dynamic theme system
-- Modern navigation overlay
-- Optimized images
-- Elegant transitions and hover effects
-- Accessible UI components
-- Shine effects on interactive elements
-
-## 🚀 Getting Started
-
-1. Clone the repository:
-```bash
-git clone https://github.com/dmboynton56/personal-portfolio.git
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Run the development server:
-```bash
-npm run dev
-```
-
-4. Open [http://localhost:3000](http://localhost:3000)
-
-## 📱 Responsive Design
-
-The portfolio is fully responsive with breakpoints for:
-- Mobile: < 768px (single column, optimized frames)
-- Tablet: 768px - 1024px (dual column, 1.5-2 slides)
-- Desktop: > 1024px (dual column, 2-2.5 slides)
-- Large Desktop: > 1280px (dual column, 2.5-3 slides)
-
-## 🌟 Performance
-
-- Optimized image loading with Next.js Image
-- Lazy-loaded components
-- Efficient theme switching
-- Smooth animations
-- Responsive image scaling
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🤝 Contact
-
-Drew Boynton
-- Email: dmboynton6@gmail.com
-- LinkedIn: [Drew Boynton](https://www.linkedin.com/in/drew-boynton-1bba16180/)
-- GitHub: [dmboynton56](https://github.com/dmboynton56)
-```
+*   **Email:** dmboynton6@gmail.com
+*   **LinkedIn:** [Drew Boynton](https://www.linkedin.com/in/drew-boynton-1bba16180/)
+*   **GitHub:** [dmboynton56](https://github.com/dmboynton56)
