@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button"
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
 export function ContactSection() {
   return (
     <section id="contact" className="min-h-screen bg-footer text-footer-foreground flex flex-col justify-center px-4 md:px-8 lg:px-16">
@@ -7,7 +9,7 @@ export function ContactSection() {
         <div className="flex items-center gap-6 mb-16">
           <div className="w-16 h-16 rounded-full overflow-hidden bg-background-emphasis/10">
             <img
-              src="/images/general/profile-picture.jpg"
+              src={`${basePath}/images/general/profile-picture.jpg`}
               alt="Profile"
               className="w-full h-full object-cover"
             />
