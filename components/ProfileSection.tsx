@@ -1,14 +1,12 @@
 import Image from 'next/image'
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
-
 export function ProfileSection() {
   return (
     <section id="home" className="flex flex-col items-center justify-center min-h-screen text-center px-4">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8 relative w-48 h-48 mx-auto">
           <Image
-            src={`${basePath}/images/general/profile-picture.jpg`}
+            src="/images/general/profile-picture.jpg"
             alt="Drew Boynton"
             fill
             className="rounded-full object-cover shadow-xl"
