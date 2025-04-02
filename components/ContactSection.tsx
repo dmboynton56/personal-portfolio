@@ -1,15 +1,18 @@
 import { Button } from "@/components/ui/button"
+import Image from 'next/image'
 
 export function ContactSection() {
   return (
     <section id="contact" className="min-h-screen bg-footer text-footer-foreground flex flex-col justify-center px-4 md:px-8 lg:px-16">
       <div className="max-w-6xl mx-auto w-full">
         <div className="flex items-center gap-6 mb-16">
-          <div className="w-16 h-16 rounded-full overflow-hidden bg-background-emphasis/10">
-            <img
+          <div className="relative w-16 h-16 rounded-full overflow-hidden bg-background-emphasis/10">
+            <Image
               src="/images/general/profile-picture.jpg"
               alt="Profile"
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              unoptimized
             />
           </div>
           <h2 className="text-4xl md:text-6xl lg:text-7xl text-footer-foreground font-light">

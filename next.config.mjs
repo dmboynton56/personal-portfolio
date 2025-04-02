@@ -26,6 +26,7 @@ const nextConfig = {
   output: 'export',
   basePath: isProd ? '/personal-portfolio' : '',
   assetPrefix: isProd ? '/personal-portfolio/' : '',
+  trailingSlash: true,
 }
 
 mergeConfig(nextConfig, userConfig)
