@@ -6,7 +6,7 @@ export function ProfileSection() {
       <div className="max-w-4xl mx-auto">
         <div className="mb-8 relative w-48 h-48 mx-auto">
           <Image
-            src="/images/general/profile-picture.jpg"
+            src="/personal-portfolio/images/general/profile-picture.jpg"
             alt="Drew Boynton"
             fill
             className="rounded-full object-cover shadow-xl"

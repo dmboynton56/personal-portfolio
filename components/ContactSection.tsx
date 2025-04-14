@@ -8,7 +8,7 @@ export function ContactSection() {
         <div className="flex items-center gap-6 mb-16">
           <div className="relative w-16 h-16 rounded-full overflow-hidden bg-background-emphasis/10">
             <Image
-              src="/images/general/profile-picture.jpg"
+              src="/personal-portfolio/images/general/profile-picture.jpg"
               alt="Profile"
               fill
               className="object-cover"

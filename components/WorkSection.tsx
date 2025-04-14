@@ -23,10 +23,10 @@ const mockProjects: Project[] = [
     title: 'Advanced Data Cluster Sorting',
     description: 'Project for my Advanced Data Science class. This project was a individual effort to sort data into clusters based on their similarity. We used a variety of data structures and algorithms to achieve this.',
     type: 'desktop',
-    image: '/images/projects/project3-1.jpg',
+    image: '/personal-portfolio/images/projects/project3-1.jpg',
     images: [
-      '/images/projects/project3-1.jpg',
-      '/images/projects/project3-2.jpg'
+      '/personal-portfolio/images/projects/project3-1.jpg',
+      '/personal-portfolio/images/projects/project3-2.jpg'
     ],
     technologies: ['Python', 'Pandas', 'Gaussian Mixture Models']
   },
@@ -35,10 +35,10 @@ const mockProjects: Project[] = [
     title: 'E-commerce Dashboard',
     description: 'A comprehensive dashboard for managing online stores, featuring real-time analytics, inventory management, and customer insights. Built with a focus on usability and performance.',
     type: 'desktop',
-    image: '/images/projects/project1-1.jpg',
+    image: '/personal-portfolio/images/projects/project1-1.jpg',
     images: [
-      '/images/projects/project1-1.jpg',
-      '/images/projects/project1-2.jpg'
+      '/personal-portfolio/images/projects/project1-1.jpg',
+      '/personal-portfolio/images/projects/project1-2.jpg'
     ],
     technologies: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS']
   },
@@ -47,12 +47,12 @@ const mockProjects: Project[] = [
     title: 'Simple Fitness (Tracking App!)',
     description: 'A simple fitness tracking app for logging strength training and cardio workouts. Built natively on iOS, which makes this my actual go to app for tracking my workouts.',
     type: 'mobile',
-    image: '/images/projects/simplefitness-1.png',
+    image: '/personal-portfolio/images/projects/simplefitness-1.png',
     images: [
-      '/images/projects/simplefitness-1.png',
-      '/images/projects/simplefitness-2.png',
-      '/images/projects/simplefitness-3.png',
-      '/images/projects/simplefitness-4.png'
+      '/personal-portfolio/images/projects/simplefitness-1.png',
+      '/personal-portfolio/images/projects/simplefitness-2.png',
+      '/personal-portfolio/images/projects/simplefitness-3.png',
+      '/personal-portfolio/images/projects/simplefitness-4.png'
     ],
     technologies: ['Xcode', 'Swift', 'CoreData']
   }
