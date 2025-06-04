@@ -33,8 +33,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
         
-      - name: Build
+      - name: Build with custom domain
         run: npm run build
+        env:
+          CUSTOM_DOMAIN: 'true'
+        
+      - name: Copy CNAME file
+        run: |
+          if [ -f "CNAME" ]; then
+            cp CNAME ./out/CNAME
+          fi
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

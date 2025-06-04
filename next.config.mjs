@@ -1,4 +1,5 @@
 const isProd = process.env.NODE_ENV === 'production';
+const isCustomDomain = process.env.CUSTOM_DOMAIN === 'true';
 
 let userConfig = undefined
 try {
@@ -24,8 +25,8 @@ const nextConfig = {
     parallelServerCompiles: true,
   },
   output: 'export',
-  basePath: isProd ? '/personal-portfolio' : '',
-  assetPrefix: isProd ? '/personal-portfolio/' : '',
+  basePath: (isProd && !isCustomDomain) ? '/personal-portfolio' : '',
+  assetPrefix: (isProd && !isCustomDomain) ? '/personal-portfolio/' : '',
   trailingSlash: true,
 }
 
