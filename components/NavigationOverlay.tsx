@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 import { Button } from "@/components/ui/button"
+import { Logo } from './Logo'
 
 interface NavigationOverlayProps {
   isOpen: boolean
@@ -95,7 +96,7 @@ export function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
 
             <div className="mt-auto">
               <div className="h-px bg-border mb-6" />
-              <ul className="flex space-x-4">
+              <ul className="flex space-x-4 items-center">
                 {socialLinks.map((link, index) => (
                   <motion.li
                     key={link.name}
@@ -113,6 +114,22 @@ export function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
                     </a>
                   </motion.li>
                 ))}
+                <motion.li
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <Logo 
+                    size={28} 
+                    clickable 
+                    onClick={() => {
+                      onClose()
+                      setTimeout(() => {
+                        window.scrollTo({ top: 0, behavior: 'smooth' })
+                      }, 100)
+                    }}
+                  />
+                </motion.li>
               </ul>
             </div>
           </motion.div>

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import Image from 'next/image'
+import { Logo } from './Logo'
 
 export function ContactSection() {
   return (
@@ -48,9 +49,10 @@ export function ContactSection() {
           </div>
           <div className="space-y-2">
             <p>SOCIALS</p>
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-center">
               <a href="https://www.linkedin.com/in/drew-boynton-1bba16180/" className="hover:text-footer-foreground transition-colors">LinkedIn</a>
               <a href="https://github.com/dmboynton56" className="hover:text-footer-foreground transition-colors">GitHub</a>
+              <Logo size={24} clickable alwaysWhite className="ml-2" />
             </div>
           </div>
         </footer>

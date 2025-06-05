@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Menu } from 'lucide-react'
 import { NavigationOverlay } from './NavigationOverlay'
 import { ThemeToggle } from './ThemeToggle'
+import { Logo } from './Logo'
 import { Button } from './ui/button'
 
 export function Header() {
@@ -15,6 +16,7 @@ export function Header() {
       <div className="relative max-w-6xl mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <ThemeToggle />
+          <Logo size={36} clickable className="ml-2" />
         </div>
         <Button
           variant="ghost"
