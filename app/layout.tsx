@@ -9,13 +9,13 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Drew Boynton - Portfolio',
+  title: 'Drew Boynton',
   description: 'Web Developer & Designer Portfolio',
   icons: {
     icon: [
       {
-        url: '/icon.png',
-        href: '/icon.png',
+        url: '/images/general/favicon.png',
+        href: '/images/general/favicon.png',
       },
     ],
     apple: [
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
         type: 'image/png',
       },
     ],
-    shortcut: ['/icon.png'],
+    shortcut: ['/images/general/favicon.png'],
   },
 }
 
