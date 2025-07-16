@@ -2,9 +2,8 @@ name: Update Daily Bias Predictions
 
 on:
   schedule:
-    # Runs daily at 9:30 AM EST (14:30 UTC during EST, 13:30 UTC during EDT)
-    - cron: '30 14 * * 1-5'  # Weekdays only during EST (Nov-Mar)
-    - cron: '30 13 * * 1-5'  # Weekdays only during EDT (Mar-Nov)
+    # Runs daily at 2:30 PM UTC (9:30 AM EST / 10:30 AM EDT) on weekdays
+    - cron: '30 14 * * 1-5'
   workflow_dispatch: # Allow manual trigger
 
 jobs:
