@@ -1,8 +1,8 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, EffectCoverflow } from 'swiper/modules';
+import { Navigation, Pagination } from 'swiper/modules';
 import { X } from 'lucide-react';
 import Image from 'next/image';
 import { DeviceFrameset } from 'react-device-frameset';
@@ -10,16 +10,23 @@ import '@/styles/device-frames.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import 'swiper/css/effect-coverflow';
 
 interface ProjectCarouselProps {
   images: string[];
   onClose: () => void;
   projectType?: 'desktop' | 'mobile';
+  initialImage?: string; // Add prop to specify which image to start on
 }
 
-export function ProjectCarousel({ images, onClose, projectType }: ProjectCarouselProps) {
+export function ProjectCarousel({ images, onClose, projectType, initialImage }: ProjectCarouselProps) {
   const swiperRef = useRef(null);
+
+  // Calculate which slide to start on based on initialImage
+  const getInitialSlide = () => {
+    if (!initialImage) return 0;
+    const index = images.findIndex(img => img === initialImage);
+    return index >= 0 ? index : 0;
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -35,43 +42,14 @@ export function ProjectCarousel({ images, onClose, projectType }: ProjectCarouse
 
         <Swiper
           ref={swiperRef}
-          modules={[Navigation, Pagination, EffectCoverflow]}
+          modules={[Navigation, Pagination]}
           navigation
           pagination={{ clickable: true }}
-          effect="coverflow"
-          coverflowEffect={{
-            rotate: 35,
-            stretch: 0,
-            depth: 50,
-            modifier: 1,
-            slideShadows: false,
-          }}
-          centeredSlides
+          centeredSlides={true}
           slidesPerView={1}
-          loop
-          breakpoints={{
-            768: {
-              slidesPerView: 1.5,
-              coverflowEffect: {
-                depth: 100,
-                modifier: 1
-              }
-            },
-            1024: {
-              slidesPerView: 1.8,
-              coverflowEffect: {
-                depth: 150,
-                modifier: 1.2
-              }
-            },
-            1280: {
-              slidesPerView: 2,
-              coverflowEffect: {
-                depth: 200,
-                modifier: 1.5
-              }
-            },
-          }}
+          initialSlide={getInitialSlide()}
+          loop={images.length > 1} // Only enable loop if we have multiple images
+          spaceBetween={30}
           className="w-full h-full"
         >
           {images.map((src, idx) => (
@@ -85,7 +63,7 @@ export function ProjectCarousel({ images, onClose, projectType }: ProjectCarouse
                         alt={`Project image ${idx + 1}`}
                         fill
                         className="object-contain"
-                        priority={idx === 0}
+                        priority={idx === getInitialSlide()}
                       />
                     </DeviceFrameset>
                   </div>
@@ -100,7 +78,7 @@ export function ProjectCarousel({ images, onClose, projectType }: ProjectCarouse
                             fill
                             className="object-contain"
                             style={{ padding: '2px' }}
-                            priority={idx === 0}
+                            priority={idx === getInitialSlide()}
                           />
                         </div>
                       </div>

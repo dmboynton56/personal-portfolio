@@ -18,9 +18,9 @@ export function ProfileSection() {
           <h1 className="text-4xl md:text-5xl font-bold text-foreground">Drew Boynton</h1>
           <Logo size={48} clickable className="translate-y-[8px]" />
         </div>
-        <p className="text-xl md:text-2xl text-foreground/80 mb-6">Software Engineer</p>
+        <p className="text-xl md:text-2xl text-foreground/80 mb-6">Software/ML Engineer</p>
         <p className="max-w-lg mx-auto text-foreground/70">
-          I am a full stack developer with an interest in AI and machine learning.
+          I am a full stack developer with an interest in data analysis and machine learning.
         </p>
       </div>
     </section>

@@ -8,6 +8,7 @@ import { DeviceFrameset } from 'react-device-frameset'
 import '@/styles/device-frames.css'
 import { BorderBeam } from '@/components/ui/border-beam'
 import { NBAHofDisplay } from './NBAHofDisplay'
+import { DailyBiasDisplay } from './DailyBiasDisplay'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
@@ -67,6 +68,36 @@ const mockProjects: Project[] = [
     isInteractive: true
   },
   {
+    id: 'ictml-trading-system',
+    title: 'ICTML Advanced Trading System 📈',
+    description: 'Real-time machine learning trading system achieving 84.4% accuracy in daily market bias prediction for QQQ, SPY, and IWM. Features ensemble models, premium session filtering (9:30-12:00 EST), and daily bias probability vectors.',
+    type: 'desktop',
+    image: '/images/projects/ICTML_accuracies.png',
+    images: [
+      '/images/projects/ICTML_accuracies.png', // Model performance metrics
+      '/images/projects/ICTML_features.png',   // Feature importance analysis
+      '/images/projects/ICTML_matrices.png'    // Confusion matrices
+    ],
+    technologies: ['Python', 'XGBoost', 'Scikit-learn', 'Ensemble Methods'],
+    isInteractive: true
+  },
+  {
+    id: 'mancala-ai',
+    title: 'Mancala AI with Game Theory',
+    description: 'Intelligent Mancala game implementing minimax algorithm with alpha-beta pruning optimization. The AI evaluates game states 5 moves ahead, achieving 70-80% win rate against random opponents with 10x performance improvement through pruning. Features Monte Carlo simulation analysis for strategic validation.',
+    type: 'desktop',
+    image: '/images/projects/mancala-output.png', // Placeholder - will need actual game screenshots
+    images: [
+      '/images/projects/mancala-output.png',
+      '/images/projects/mancala-workflow.JPG',
+      '/images/projects/Mancala-4.JPG',
+      '/images/projects/Mancala-1.JPG',
+      '/images/projects/Mancala-2.JPG', // Game interface
+      '/images/projects/Mancala-3.JPG'  // AI performance analysis
+    ],
+    technologies: ['Minimax Algorithm', 'Alpha-Beta Pruning', 'Game Theory']
+  },
+  {
     id: 'houseclusters',
     title: 'Advanced Data Cluster Sorting',
     description: 'Project for my Advanced Data Science class. This project was a individual effort to sort data into clusters based on their similarity. We used a variety of data structures and algorithms to achieve this.',
@@ -80,8 +111,8 @@ const mockProjects: Project[] = [
   },
   {
     id: 'project1',
-    title: 'E-commerce Dashboard',
-    description: 'A comprehensive dashboard for managing online stores, featuring real-time analytics, inventory management, and customer insights. Built with a focus on usability and performance.',
+    title: 'CU Boulder Police Department Heatmap',
+    description: 'A simple heatmap of the CU Boulder Police Department data and its most common location occurrences.',
     type: 'desktop',
     image: '/images/projects/project1-1.JPG',
     images: [
@@ -93,7 +124,7 @@ const mockProjects: Project[] = [
   {
     id: 'simplefitness',
     title: 'Simple Fitness (Tracking App!)',
-    description: 'A simple fitness tracking app for logging strength training and cardio workouts. Built natively on iOS, which makes this my actual go to app for tracking my workouts.',
+    description: 'A native iOS app for tracking strength training and cardio workouts. Built with Swift and CoreData, this was a fun introduction to iOS development and its ecosystem compatibility.',
     type: 'mobile',
     image: '/images/projects/simplefitness-1.png',
     images: [
@@ -294,8 +325,11 @@ export function WorkSection() {
                   }`}
                 >
                   {project.isInteractive && project.id === 'nba-hof-predictor' ? (
-                    // Interactive NBA Predictor
-                    <div className="w-full h-full flex items-center justify-center">
+                    // Interactive NBA Predictor with clickable carousel
+                    <div 
+                      onClick={() => handleImageClick(project)}
+                      className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
+                    >
                       <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
                         <DeviceFrameset device="MacBook Pro" color="silver">
                           <div className="relative w-[1280px] h-[800px] bg-background">
@@ -311,6 +345,25 @@ export function WorkSection() {
                           <div className="bottom-bar" />
                         </DeviceFrameset>
                       </div>
+                      <div className="absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
+                    </div>
+                  ) : project.isInteractive && project.id === 'ictml-trading-system' ? (
+                    // Interactive ICTML Daily Bias with clickable carousel
+                    <div 
+                      onClick={() => handleImageClick(project)}
+                      className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
+                    >
+                      <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
+                        <DeviceFrameset device="MacBook Pro" color="silver">
+                          <div className="relative w-[1280px] h-[800px] bg-background">
+                            <div className="absolute inset-[8px] overflow-hidden">
+                              <DailyBiasDisplay />
+                            </div>
+                          </div>
+                          <div className="bottom-bar" />
+                        </DeviceFrameset>
+                      </div>
+                      <div className="absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
                     </div>
                   ) : (
                     // Standard image display
@@ -398,6 +451,15 @@ export function WorkSection() {
                     </p>
                   </div>
                 )}
+
+                {/* ICTML Info - appears below MacBook for ICTML project */}
+                {project.isInteractive && project.id === 'ictml-trading-system' && (
+                  <div className="mt-8 relative max-w-2xl mx-auto text-center">
+                    <p className="text-center text-sm text-muted-foreground">
+                      Live daily bias predictions for QQQ, SPY, and IWM • 84.4% accuracy • Updated daily at 9:30 AM EST • Click the screen above to see model analysis
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -408,6 +470,7 @@ export function WorkSection() {
         <ProjectCarousel
           images={selectedProject.images || [selectedProject.image]}
           projectType={selectedProject.type}
+          initialImage={selectedProject.image}
           onClose={() => {
             setIsCarouselOpen(false)
             setSelectedProject(null)
