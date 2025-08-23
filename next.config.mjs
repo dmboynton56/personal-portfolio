@@ -24,8 +24,6 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
-  basePath: (isProd && !isCustomDomain) ? '/personal-portfolio' : '',
-  assetPrefix: (isProd && !isCustomDomain) ? '/personal-portfolio/' : '',
   trailingSlash: true,
 }
 
