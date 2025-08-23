@@ -9,6 +9,7 @@ import '@/styles/device-frames.css'
 import { BorderBeam } from '@/components/ui/border-beam'
 import { NBAHofDisplay } from './NBAHofDisplay'
 import { DailyBiasDisplay } from './DailyBiasDisplay'
+import MancalaGame from './MancalaGame'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
@@ -95,7 +96,8 @@ const mockProjects: Project[] = [
       '/images/projects/Mancala-2.JPG', // Game interface
       '/images/projects/Mancala-3.JPG'  // AI performance analysis
     ],
-    technologies: ['Minimax Algorithm', 'Alpha-Beta Pruning', 'Game Theory']
+    technologies: ['Minimax Algorithm', 'Alpha-Beta Pruning', 'Game Theory'],
+    isInteractive: true
   },
   {
     id: 'houseclusters',
@@ -318,13 +320,22 @@ export function WorkSection() {
                 </div>
 
                 <div
-                  className={`relative mx-auto w-full ${
+                  className={`relative mx-auto w-full flex items-center justify-center ${
                     project.type === 'desktop'
                       ? 'h-[500px] mt-8'
                       : 'h-[600px] flex items-center justify-center'
                   }`}
                 >
-                  {project.isInteractive && project.id === 'nba-hof-predictor' ? (
+                  {project.isInteractive && project.id === 'mancala-ai' ? (
+                    <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center flex items-center justify-center w-full h-full">
+                      <DeviceFrameset device="MacBook Pro" color="silver">
+                        <div className="relative w-[1280px] h-[800px] bg-background flex items-center justify-center">
+                          <MancalaGame />
+                        </div>
+                        <div className="bottom-bar" />
+                      </DeviceFrameset>
+                    </div>
+                  ) : project.isInteractive && project.id === 'nba-hof-predictor' ? (
                     // Interactive NBA Predictor with clickable carousel
                     <div 
                       onClick={() => handleImageClick(project)}

@@ -103,8 +103,8 @@ export function DailyBiasDisplay() {
           </p>
         </div>
 
-        {/* Three Vertical Cards - Maximized */}
-        <div className="flex-1 grid grid-cols-3 gap-6">
+        {/* Three Vertical Cards - 80% Height */}
+        <div className="mb-6 grid grid-cols-3 gap-8">
           {Object.values(biasData.predictions).map((prediction) => (
             <div 
               key={prediction.symbol}
