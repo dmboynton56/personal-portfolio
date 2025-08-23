@@ -142,14 +142,15 @@ export default function MancalaGame() {
               />
             ))}
           </div>
-          {/* Bottom row (Player 1 pits) */}
+          {/* Bottom row (Player 1 pits) - REVERSED for correct UI mapping */}
           <div className="flex flex-row justify-center mt-2">
-            {board.slice(0, PITS_PER_PLAYER).map((stones, idx) => (
+            {board.slice(0, PITS_PER_PLAYER).slice().reverse().map((stones, idx) => (
               <Pit
                 key={idx}
                 stones={stones}
-                onClick={() => handlePitClick(idx)}
-                clickable={!gameOver && currentPlayer === 1 && isValidMove(board, idx, 1)}
+                // Calculate the correct pit index after reversing
+                onClick={() => handlePitClick(PITS_PER_PLAYER - 1 - idx)}
+                clickable={!gameOver && currentPlayer === 1 && isValidMove(board, PITS_PER_PLAYER - 1 - idx, 1)}
               />
             ))}
           </div>
