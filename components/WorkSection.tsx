@@ -126,7 +126,7 @@ const mockProjects: Project[] = [
   {
     id: 'simplefitness',
     title: 'Simple Fitness (Tracking App!)',
-    description: 'A native iOS app for tracking strength training and cardio workouts. Built with Swift and CoreData, this was a fun introduction to iOS development and its ecosystem compatibility.',
+    description: 'A native iOS app for tracking strength training and cardio workouts. Built with Swift and CoreData, this was a fun introduction to iOS development and its ecosystem compatibility. This was more a fun project just to learn more about iOS development and its language capabilities. ',
     type: 'mobile',
     image: '/images/projects/simplefitness-1.png',
     images: [

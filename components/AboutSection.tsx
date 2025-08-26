@@ -24,9 +24,9 @@ export function AboutSection() {
             I've learned a lot about the tech world, and I'm excited to see where it takes me.
           </p>
           <p>
-            As I approach graduation, I'm excited about the oppurtunities ahead and the future of the tech world. 
+            As I've gone from an active student to a college graduate, my desire to join the tech world has only increased. 
             This website showcases some of the projects I've worked on, and some of the things I've learned. My contact
-            information is at the bottom of the page, so feel free to reach out to me!
+            information is at the bottom of the page, so feel free to reach out!
           </p>
         </div>
       </div>
