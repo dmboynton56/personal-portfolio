@@ -5,12 +5,8 @@ const STONES_PER_PIT = 2;
 const TOTAL_PITS = PITS_PER_PLAYER * 2 + 2; // 8 (6 pits + 2 mancalas)
 type Player = 1 | 2;
 type State = { board: number[]; currentPlayer: Player };
-type Stats = { p1Wins: number; p2Wins: number; ties: number };
-function readStats(): Stats {
-  try { return JSON.parse(localStorage.getItem('mancalaStats') || '') as Stats; }
-  catch { return { p1Wins: 0, p2Wins: 0, ties: 0 }; }
-}
-function writeStats(s: Stats) { localStorage.setItem('mancalaStats', JSON.stringify(s)); }
+type Stats = { p1_wins: number; p2_wins: number; ties: number };
+
 function initBoard(): number[] {
   const board = Array(TOTAL_PITS).fill(STONES_PER_PIT);
   board[PITS_PER_PLAYER] = 0;
@@ -199,14 +195,30 @@ export default function MancalaGame() {
   const aiDepth = 8; // Fixed depth
   const ai = useMemo(() => new MancalaAI(aiDepth), [aiDepth]);
   const [suggestedPit, setSuggestedPit] = useState<number | null>(null);
-  const [stats, setStats] = useState<Stats>({ p1Wins: 0, p2Wins: 0, ties: 0 });
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [statsLoading, setStatsLoading] = useState(false);
+  const [statsError, setStatsError] = useState<string | null>(null);
 
-  // Only read stats from localStorage on client
+  // Fetch stats from Supabase on mount and after update
+  async function fetchStats() {
+    setStatsLoading(true);
+    setStatsError(null);
+    try {
+      const res = await fetch('/api/mancala-stats');
+      if (!res.ok) throw new Error('Failed to fetch stats');
+      const data = await res.json();
+      setStats(data);
+    } catch (err: any) {
+      setStatsError(err.message || 'Error fetching stats');
+    } finally {
+      setStatsLoading(false);
+    }
+  }
   useEffect(() => {
-    setStats(readStats());
+    fetchStats();
   }, []);
 
-  function commitMove(pitIdx: number) {
+  async function commitMove(pitIdx: number) {
     if (gameOver) return;
     if (!isValidMove(board, pitIdx, currentPlayer)) return;
     const res = applyMove({ board, currentPlayer }, pitIdx);
@@ -218,6 +230,17 @@ export default function MancalaGame() {
       setGameOver(true);
       setWinner(getWinner(nextBoard));
       setSuggestedPit(null);
+      // Update Supabase stats
+      try {
+        await fetch('/api/mancala-stats', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ winner: getWinner(nextBoard) })
+        });
+        fetchStats(); // Refresh stats after update
+      } catch (err) {
+        // Optionally handle error
+      }
       return;
     }
     setBoard(nextBoard);
@@ -250,17 +273,7 @@ export default function MancalaGame() {
     }, 250);
     return () => clearTimeout(t);
   }, [vsAI, gameOver, currentPlayer, board, ai]);
-  useEffect(() => {
-    if (!gameOver) return;
-    setStats(prev => {
-      const next = { ...prev };
-      if (winner === 1) next.p1Wins++;
-      else if (winner === 2) next.p2Wins++;
-      else next.ties++;
-      writeStats(next);
-      return next;
-    });
-  }, [gameOver, winner]);
+
   return (
     <div className="w-full h-full flex flex-col items-center justify-center bg-background py-8">
       <div className="flex flex-row items-center justify-center gap-8">
@@ -322,9 +335,17 @@ export default function MancalaGame() {
         <div className="flex flex-col items-center justify-center min-w-[180px]">
           <div className="bg-[#f5e6d6] rounded-xl shadow-md px-6 py-4 text-center">
             <div className="text-lg font-bold text-[#7c5a36] mb-2">Win Tracker</div>
-            <div className="text-base text-[#7c5a36] font-semibold">P1 Wins: <span className="text-green-700 font-bold">{stats.p1Wins}</span></div>
-            <div className="text-base text-[#7c5a36] font-semibold">P2 Wins: <span className="text-blue-700 font-bold">{stats.p2Wins}</span></div>
-            <div className="text-base text-[#7c5a36] font-semibold">Ties: <span className="text-gray-700 font-bold">{stats.ties}</span></div>
+            {statsLoading ? (
+              <div className="text-base text-[#7c5a36]">Loading...</div>
+            ) : statsError ? (
+              <div className="text-base text-red-600">{statsError}</div>
+            ) : stats ? (
+              <>
+                <div className="text-base text-[#7c5a36] font-semibold">P1 Wins: <span className="text-green-700 font-bold">{stats.p1_wins}</span></div>
+                <div className="text-base text-[#7c5a36] font-semibold">P2 Wins: <span className="text-blue-700 font-bold">{stats.p2_wins}</span></div>
+                <div className="text-base text-[#7c5a36] font-semibold">Ties: <span className="text-gray-700 font-bold">{stats.ties}</span></div>
+              </>
+            ) : null}
           </div>
         </div>
       </div>
