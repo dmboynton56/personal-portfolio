@@ -84,7 +84,7 @@ const mockProjects: Project[] = [
   },
   {
     id: 'mancala-ai',
-    title: 'Mancala AI with Game Theory',
+    title: 'Mancala AI with Game Theory (Try to beat the AI!)',
     description: 'Intelligent Mancala game implementing minimax algorithm with alpha-beta pruning optimization. The AI evaluates game states 5 moves ahead, achieving 70-80% win rate against random opponents with 10x performance improvement through pruning. Features Monte Carlo simulation analysis for strategic validation.',
     type: 'desktop',
     image: '/images/projects/mancala-output.png', // Placeholder - will need actual game screenshots
