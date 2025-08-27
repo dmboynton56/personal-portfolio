@@ -24,9 +24,7 @@ jobs:
         pip install pandas numpy scikit-learn yfinance pytz
         
     - name: Run Daily Bias Prediction
-      run: |
-        cd scripts
-        python fetch-daily-bias.py
+      run: python scripts/fetch-daily-bias.py
         
     - name: Check for changes
       id: verify-changed-files
