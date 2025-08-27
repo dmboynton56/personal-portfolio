@@ -1,5 +1,8 @@
 name: Update Daily Bias Predictions
 
+permissions:
+  contents: write
+
 on:
   schedule:
     # Runs daily at 9:35 AM EST / 10:35 AM EDT (after first 5-min candle closes) on weekdays
