@@ -44,6 +44,11 @@ export function DailyBiasDisplay() {
 
   useEffect(() => {
     loadBiasData()
+    // Poll every 60 seconds for updates
+    const interval = setInterval(() => {
+      loadBiasData()
+    }, 60000)
+    return () => clearInterval(interval)
   }, [])
 
   const getBiasColor = (bias: string) => {

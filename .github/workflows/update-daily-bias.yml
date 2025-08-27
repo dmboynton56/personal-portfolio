@@ -2,8 +2,8 @@ name: Update Daily Bias Predictions
 
 on:
   schedule:
-    # Runs daily at 2:30 PM UTC (9:30 AM EST / 10:30 AM EDT) on weekdays
-    - cron: '30 14 * * 1-5'
+    # Runs daily at 9:35 AM EST / 10:35 AM EDT (after first 5-min candle closes) on weekdays
+    - cron: '35 14 * * 1-5'
   workflow_dispatch: # Allow manual trigger
 
 jobs:

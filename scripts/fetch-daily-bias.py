@@ -13,14 +13,16 @@ import yfinance as yf
 from datetime import datetime, timedelta
 import pytz
 import warnings
+import sys
 warnings.filterwarnings('ignore')
 
 class RealDailyBiasPredictor:
-    def __init__(self):
+    def __init__(self, target_time=None):
         self.est_tz = pytz.timezone('America/New_York')
         self.symbols = ['QQQ', 'SPY', 'IWM']
         self.models = {}
         self.label_encoders = {}
+        self.target_time = target_time
         
     def load_models(self):
         """Load the actual ICTML models from the repo"""
@@ -59,27 +61,59 @@ class RealDailyBiasPredictor:
         """Fetch real market data using yfinance"""
         try:
             ticker = yf.Ticker(symbol)
-            end_date = datetime.now()
-            start_date = end_date - timedelta(days=days)
-            
-            # Get daily data
-            data = ticker.history(start=start_date, end=end_date, interval='1d')
-            
+            if self.target_time:
+                # Fetch data for the day of target_time
+                start_date = self.target_time.date() - timedelta(days=1)
+                end_date = self.target_time.date() + timedelta(days=1)
+                # Fetch 5-min data for the current day
+                data_5m = ticker.history(start=start_date, end=end_date, interval='5m')
+                # Fetch daily data for previous days
+                data_daily = ticker.history(start=start_date, end=end_date, interval='1d')
+                # Find the first 5-min candle after 9:30am (i.e., 9:30–9:35am)
+                est = self.est_tz
+                candle_time = self.target_time.replace(hour=9, minute=35, second=0, microsecond=0)
+                candle_str = candle_time.strftime('%Y-%m-%d %H:%M:%S')
+                # Find the 5-min candle ending at 9:35am
+                candle = data_5m.loc[data_5m.index.strftime('%Y-%m-%d %H:%M:%S') == candle_str]
+                if not candle.empty:
+                    print(f"Fetched {symbol} 5-min 9:30–9:35am candle for {candle_str}:")
+                    print(candle)
+                else:
+                    print(f"❌ 5-min 9:30–9:35am candle not found for {symbol} on {candle_str}")
+                # For feature calculation, append the 5-min candle as the 'current day' to the daily data
+                # Use previous day's daily data + today's 5-min bar
+                if not candle.empty and not data_daily.empty:
+                    # Use the last row of daily data as previous day
+                    prev_day = data_daily.iloc[-2]
+                    # Build a DataFrame with prev_day and the 5-min candle as current_day
+                    prev_day_df = pd.DataFrame([prev_day])
+                    candle_df = candle.copy()
+                    candle_df.index = [candle_time]  # ensure index is correct
+                    # Align columns to match daily data
+                    for col in prev_day_df.columns:
+                        if col not in candle_df.columns:
+                            candle_df[col] = None
+                    # Reorder columns
+                    candle_df = candle_df[prev_day_df.columns]
+                    combined = pd.concat([prev_day_df, candle_df])
+                    combined.columns = [col.lower() for col in combined.columns]
+                    return combined
+                else:
+                    print(f"❌ Not enough data for {symbol} to build feature DataFrame.")
+                    return None
+            else:
+                end_date = datetime.now()
+                start_date = end_date - timedelta(days=days)
+                data = ticker.history(start=start_date, end=end_date, interval='1d')
             if data.empty:
                 print(f"❌ No data received for {symbol}")
                 return None
-                
-            # Clean up column names
             data.columns = [col.lower() for col in data.columns]
-            
-            # Ensure we have enough data
             if len(data) < 5:
                 print(f"❌ Insufficient data for {symbol}: {len(data)} days")
                 return None
-                
-            print(f"✅ Fetched {len(data)} days of data for {symbol}")
+            print(f"✅ Fetched {len(data)} rows of data for {symbol}")
             return data
-            
         except Exception as e:
             print(f"❌ Error fetching data for {symbol}: {e}")
             return None
@@ -318,21 +352,27 @@ def main():
     """Main function to fetch and save daily bias predictions"""
     print("🚀 ICTML Daily Bias Predictor - Real Data Mode")
     print("=" * 50)
-    
-    predictor = RealDailyBiasPredictor()
-    
+    # Parse command-line argument for custom time
+    est = pytz.timezone('America/New_York')
+    target_time = None
+    if len(sys.argv) > 1:
+        try:
+            target_time = est.localize(datetime.strptime(sys.argv[1], "%Y-%m-%dT%H:%M"))
+        except Exception as e:
+            print(f"Invalid date format. Use YYYY-MM-DDTHH:MM. Error: {e}")
+            sys.exit(1)
+    else:
+        now_est = datetime.now(est)
+        target_time = now_est.replace(hour=9, minute=35, second=0, microsecond=0)
+    predictor = RealDailyBiasPredictor(target_time=target_time)
     # Generate predictions
     data = predictor.generate_predictions()
-    
     # Save to JSON file
     output_file = 'public/data/daily_bias_predictions.json'
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    
     with open(output_file, 'w') as f:
         json.dump(data, f, indent=2)
-    
     print(f"\n💾 Saved predictions to {output_file}")
-    
     # Print summary
     print("\n📊 Today's Predictions:")
     for symbol, pred in data['predictions'].items():
@@ -341,7 +381,6 @@ def main():
         price = pred['current_price']
         gap = pred['gap_pct']
         print(f"   {symbol}: {bias} ({confidence:.1f}%) ${price:.2f} ({gap:+.2f}%)")
-    
     print(f"\n🕒 Generated at: {data['lastUpdated']}")
     print("✅ Daily bias predictions updated successfully!")
 
