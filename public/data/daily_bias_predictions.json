@@ -1,44 +1,44 @@
 {
-  "lastUpdated": "2025-08-29T10:45:12.220281-04:00",
-  "date": "2025-08-29",
+  "lastUpdated": "2025-09-01T10:45:28.522291-04:00",
+  "date": "2025-09-01",
   "predictions": {
     "QQQ": {
       "symbol": "QQQ",
-      "predicted_bias": "choppy",
-      "confidence": 0.5167228715149463,
-      "current_price": 573.2849731445312,
-      "previous_close": 577.0800170898438,
-      "gap_pct": -0.6576287226943889,
+      "predicted_bias": "bearish",
+      "confidence": 0.781,
+      "current_price": 528.86,
+      "previous_close": 522.86,
+      "gap_pct": 1.148,
       "probabilities": {
-        "bearish": 0.19855897811034157,
-        "bullish": 0.28471815037471215,
-        "choppy": 0.5167228715149463
+        "bearish": 0.781,
+        "bullish": 0.066,
+        "choppy": 0.153
       }
     },
     "SPY": {
       "symbol": "SPY",
-      "predicted_bias": "choppy",
-      "confidence": 0.49838589141545064,
-      "current_price": 646.8687744140625,
-      "previous_close": 648.9199829101562,
-      "gap_pct": -0.31609575141990076,
+      "predicted_bias": "bearish",
+      "confidence": 0.618,
+      "current_price": 608.46,
+      "previous_close": 605.82,
+      "gap_pct": 0.436,
       "probabilities": {
-        "bearish": 0.22157768496504096,
-        "bullish": 0.28003642361950865,
-        "choppy": 0.49838589141545064
+        "bearish": 0.618,
+        "bullish": 0.115,
+        "choppy": 0.267
       }
     },
     "IWM": {
       "symbol": "IWM",
-      "predicted_bias": "choppy",
-      "confidence": 0.42448156490620886,
-      "current_price": 236.35000610351562,
-      "previous_close": 236.22000122070312,
-      "gap_pct": 0.05503551017724147,
+      "predicted_bias": "bullish",
+      "confidence": 0.78,
+      "current_price": 220.29,
+      "previous_close": 222.83,
+      "gap_pct": -1.14,
       "probabilities": {
-        "bearish": 0.2654959682140381,
-        "bullish": 0.3100224668797531,
-        "choppy": 0.42448156490620886
+        "bullish": 0.78,
+        "bearish": 0.066,
+        "choppy": 0.154
       }
     }
   }
