@@ -1,44 +1,44 @@
 {
-  "lastUpdated": "2025-09-04T10:45:45.848525-04:00",
-  "date": "2025-09-04",
+  "lastUpdated": "2025-09-05T10:44:40.480904-04:00",
+  "date": "2025-09-05",
   "predictions": {
     "QQQ": {
       "symbol": "QQQ",
       "predicted_bias": "choppy",
-      "confidence": 0.6108987318586425,
-      "current_price": 571.0,
-      "previous_close": 570.0700073242188,
-      "gap_pct": 0.16313657337393137,
+      "confidence": 0.5022644421925888,
+      "current_price": 579.5599975585938,
+      "previous_close": 575.22998046875,
+      "gap_pct": 0.7527453778252754,
       "probabilities": {
-        "bearish": 0.17730411422644088,
-        "bullish": 0.21179715391491644,
-        "choppy": 0.6108987318586425
+        "bearish": 0.20886877111993404,
+        "bullish": 0.2888667866874771,
+        "choppy": 0.5022644421925888
       }
     },
     "SPY": {
       "symbol": "SPY",
       "predicted_bias": "choppy",
-      "confidence": 0.4908031174339906,
-      "current_price": 644.739990234375,
-      "previous_close": 643.739990234375,
-      "gap_pct": 0.1553422212648179,
+      "confidence": 0.4716125391912528,
+      "current_price": 651.6500244140625,
+      "previous_close": 649.1199951171875,
+      "gap_pct": 0.3897629584524271,
       "probabilities": {
-        "bearish": 0.22520328235577522,
-        "bullish": 0.28399360021023456,
-        "choppy": 0.4908031174339906
+        "bearish": 0.26137973187258373,
+        "bullish": 0.26700772893616365,
+        "choppy": 0.4716125391912528
       }
     },
     "IWM": {
       "symbol": "IWM",
       "predicted_bias": "choppy",
-      "confidence": 0.43282459074488133,
-      "current_price": 234.3300018310547,
-      "previous_close": 233.6699981689453,
-      "gap_pct": 0.2824511778496215,
+      "confidence": 0.41249168354823396,
+      "current_price": 239.24000549316406,
+      "previous_close": 236.58999633789062,
+      "gap_pct": 1.1200850400660116,
       "probabilities": {
-        "bearish": 0.23856376655375286,
-        "bullish": 0.3286116427013659,
-        "choppy": 0.43282459074488133
+        "bearish": 0.31563574747867285,
+        "bullish": 0.27187256897309336,
+        "choppy": 0.41249168354823396
       }
     }
   }
