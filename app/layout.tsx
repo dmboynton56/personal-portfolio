@@ -1,3 +1,4 @@
+// app/layout.tsx
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
@@ -36,6 +37,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* JSON-LD so Google can use your logo in search results */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              url: 'https://www.drewboynton.com',
+              logo: 'https://www.drewboynton.com/images/general/newicon.png',
+            }),
+          }}
+        />
+        {/* Optional but nice for branding */}
+        <meta name="theme-color" content="#000000" />
+        {/* Optional canonical link */}
+        <link rel="canonical" href="https://www.drewboynton.com/" />
+      </head>
       <body className={`${inter.variable} font-sans antialiased bg-background text-foreground`}>
         <ThemeProvider
           attribute="class"
@@ -49,7 +68,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-
-
-import './globals.css'
