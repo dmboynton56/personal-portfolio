@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-09-12T09:49:01.188519-04:00",
+  "lastUpdated": "2025-09-12T10:44:27.189402-04:00",
   "date": "2025-09-12",
   "predictions": {
     "QQQ": {
@@ -11,34 +11,34 @@
       "gap_pct": 0.046219437096788184,
       "probabilities": {
         "bearish": 0.24140117057287638,
-        "bullish": 0.17912474190218408,
+        "bullish": 0.17912474190218405,
         "choppy": 0.5794740875249396
       }
     },
     "SPY": {
       "symbol": "SPY",
       "predicted_bias": "choppy",
-      "confidence": 0.5113738505952026,
+      "confidence": 0.5596975659754465,
       "current_price": 657.4099731445312,
       "previous_close": 657.6300048828125,
       "gap_pct": -0.03345828758535112,
       "probabilities": {
-        "bearish": 0.2604490759983733,
-        "bullish": 0.22817707340642446,
-        "choppy": 0.5113738505952026
+        "bearish": 0.20404682415015238,
+        "bullish": 0.2362556098744014,
+        "choppy": 0.5596975659754465
       }
     },
     "IWM": {
       "symbol": "IWM",
       "predicted_bias": "choppy",
-      "confidence": 0.4181220518599946,
+      "confidence": 0.39624914995692834,
       "current_price": 240.2100067138672,
       "previous_close": 240.8000030517578,
       "gap_pct": -0.24501508738096262,
       "probabilities": {
-        "bearish": 0.3283451985553416,
-        "bullish": 0.253532749584664,
-        "choppy": 0.4181220518599946
+        "bearish": 0.33978491459109295,
+        "bullish": 0.26396593545197894,
+        "choppy": 0.39624914995692834
       }
     }
   }
