@@ -1,44 +1,44 @@
 {
-  "lastUpdated": "2025-09-15T10:44:15.841163-04:00",
-  "date": "2025-09-15",
+  "lastUpdated": "2025-09-16T10:45:50.908367-04:00",
+  "date": "2025-09-16",
   "predictions": {
     "QQQ": {
       "symbol": "QQQ",
       "predicted_bias": "choppy",
-      "confidence": 0.58,
-      "current_price": 524.96,
-      "previous_close": 523.7,
-      "gap_pct": 0.24,
+      "confidence": 0.578484465444305,
+      "current_price": 591.8150024414062,
+      "previous_close": 591.6799926757812,
+      "gap_pct": 0.022818038009776064,
       "probabilities": {
-        "choppy": 0.58,
-        "bullish": 0.21,
-        "bearish": 0.21
+        "bearish": 0.23850730282007288,
+        "bullish": 0.18300823173562222,
+        "choppy": 0.578484465444305
       }
     },
     "SPY": {
       "symbol": "SPY",
-      "predicted_bias": "bearish",
-      "confidence": 0.816,
-      "current_price": 608.95,
-      "previous_close": 609.49,
-      "gap_pct": -0.089,
+      "predicted_bias": "choppy",
+      "confidence": 0.5677737348708242,
+      "current_price": 660.9199829101562,
+      "previous_close": 660.9099731445312,
+      "gap_pct": 0.0015145429834224958,
       "probabilities": {
-        "bearish": 0.816,
-        "bullish": 0.055,
-        "choppy": 0.129
+        "bearish": 0.22731969645598213,
+        "bullish": 0.20490656867319396,
+        "choppy": 0.5677737348708242
       }
     },
     "IWM": {
       "symbol": "IWM",
-      "predicted_bias": "bullish",
-      "confidence": 0.797,
-      "current_price": 227.95,
-      "previous_close": 226.57,
-      "gap_pct": 0.607,
+      "predicted_bias": "choppy",
+      "confidence": 0.4664345026131656,
+      "current_price": 237.9949951171875,
+      "previous_close": 239.35000610351562,
+      "gap_pct": -0.5661211413306173,
       "probabilities": {
-        "bullish": 0.797,
-        "bearish": 0.061,
-        "choppy": 0.142
+        "bearish": 0.30007873870315627,
+        "bullish": 0.23348675868367855,
+        "choppy": 0.4664345026131656
       }
     }
   }
