@@ -1,44 +1,44 @@
 {
-  "lastUpdated": "2025-09-19T10:45:27.113383-04:00",
-  "date": "2025-09-19",
+  "lastUpdated": "2025-09-22T10:47:18.229451-04:00",
+  "date": "2025-09-22",
   "predictions": {
     "QQQ": {
       "symbol": "QQQ",
-      "predicted_bias": "choppy",
-      "confidence": 0.5568975214616612,
-      "current_price": 596.9099731445312,
-      "previous_close": 595.3200073242188,
-      "gap_pct": 0.26707750466155333,
+      "predicted_bias": "bullish",
+      "confidence": 0.793,
+      "current_price": 511.21,
+      "previous_close": 515.52,
+      "gap_pct": -0.836,
       "probabilities": {
-        "bearish": 0.19886210416820232,
-        "bullish": 0.2442403743701365,
-        "choppy": 0.5568975214616612
+        "bullish": 0.793,
+        "bearish": 0.062,
+        "choppy": 0.145
       }
     },
     "SPY": {
       "symbol": "SPY",
-      "predicted_bias": "choppy",
-      "confidence": 0.5467420817672565,
-      "current_price": 661.6799926757812,
-      "previous_close": 662.260009765625,
-      "gap_pct": -0.08758147574832717,
+      "predicted_bias": "bearish",
+      "confidence": 0.566,
+      "current_price": 603.41,
+      "previous_close": 610.35,
+      "gap_pct": -1.137,
       "probabilities": {
-        "bearish": 0.20824632312469826,
-        "bullish": 0.24501159510804552,
-        "choppy": 0.5467420817672565
+        "bearish": 0.566,
+        "bullish": 0.13,
+        "choppy": 0.304
       }
     },
     "IWM": {
       "symbol": "IWM",
       "predicted_bias": "choppy",
-      "confidence": 0.43084374373790674,
-      "current_price": 244.44000244140625,
-      "previous_close": 244.83999633789062,
-      "gap_pct": -0.16336950762422198,
+      "confidence": 0.888,
+      "current_price": 221.31,
+      "previous_close": 218.31,
+      "gap_pct": 1.374,
       "probabilities": {
-        "bearish": 0.28747058564860767,
-        "bullish": 0.2816856706134857,
-        "choppy": 0.43084374373790674
+        "choppy": 0.888,
+        "bullish": 0.056,
+        "bearish": 0.056
       }
     }
   }
