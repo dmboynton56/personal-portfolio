@@ -1,44 +1,44 @@
 {
-  "lastUpdated": "2025-09-22T10:47:18.229451-04:00",
-  "date": "2025-09-22",
+  "lastUpdated": "2025-09-23T10:46:49.531311-04:00",
+  "date": "2025-09-23",
   "predictions": {
     "QQQ": {
       "symbol": "QQQ",
-      "predicted_bias": "bullish",
-      "confidence": 0.793,
-      "current_price": 511.21,
-      "previous_close": 515.52,
-      "gap_pct": -0.836,
+      "predicted_bias": "choppy",
+      "confidence": 0.5182472327995871,
+      "current_price": 601.8419799804688,
+      "previous_close": 602.2000122070312,
+      "gap_pct": -0.059454038409984554,
       "probabilities": {
-        "bullish": 0.793,
-        "bearish": 0.062,
-        "choppy": 0.145
+        "bearish": 0.24761668131022144,
+        "bullish": 0.23413608589019122,
+        "choppy": 0.5182472327995871
       }
     },
     "SPY": {
       "symbol": "SPY",
-      "predicted_bias": "bearish",
-      "confidence": 0.566,
-      "current_price": 603.41,
-      "previous_close": 610.35,
-      "gap_pct": -1.137,
+      "predicted_bias": "choppy",
+      "confidence": 0.5076466224180887,
+      "current_price": 667.0800170898438,
+      "previous_close": 666.8400268554688,
+      "gap_pct": 0.035989176520595335,
       "probabilities": {
-        "bearish": 0.566,
-        "bullish": 0.13,
-        "choppy": 0.304
+        "bearish": 0.2978387657042721,
+        "bullish": 0.19451461187763958,
+        "choppy": 0.5076466224180887
       }
     },
     "IWM": {
       "symbol": "IWM",
-      "predicted_bias": "choppy",
-      "confidence": 0.888,
-      "current_price": 221.31,
-      "previous_close": 218.31,
-      "gap_pct": 1.374,
+      "predicted_bias": "bullish",
+      "confidence": 0.34824160515340624,
+      "current_price": 245.75999450683594,
+      "previous_close": 244.38999938964844,
+      "gap_pct": 0.560577405216659,
       "probabilities": {
-        "choppy": 0.888,
-        "bullish": 0.056,
-        "bearish": 0.056
+        "bearish": 0.30722305359843555,
+        "bullish": 0.34824160515340624,
+        "choppy": 0.3445353412481583
       }
     }
   }
