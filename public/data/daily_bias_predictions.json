@@ -1,44 +1,44 @@
 {
-  "lastUpdated": "2025-10-10T10:45:38.121035-04:00",
-  "date": "2025-10-10",
+  "lastUpdated": "2025-10-13T10:46:43.095294-04:00",
+  "date": "2025-10-13",
   "predictions": {
     "QQQ": {
       "symbol": "QQQ",
-      "predicted_bias": "choppy",
-      "confidence": 0.6123414973380432,
-      "current_price": 612.719970703125,
-      "previous_close": 610.7000122070312,
-      "gap_pct": 0.33076116844893255,
+      "predicted_bias": "bullish",
+      "confidence": 0.658,
+      "current_price": 510.12,
+      "previous_close": 512.58,
+      "gap_pct": -0.479,
       "probabilities": {
-        "bearish": 0.18857899376938284,
-        "bullish": 0.1990795088925739,
-        "choppy": 0.6123414973380432
+        "bullish": 0.658,
+        "bearish": 0.103,
+        "choppy": 0.239
       }
     },
     "SPY": {
       "symbol": "SPY",
-      "predicted_bias": "choppy",
-      "confidence": 0.56347818214153,
-      "current_price": 673.4600219726562,
-      "previous_close": 671.1599731445312,
-      "gap_pct": 0.34269755649294287,
+      "predicted_bias": "bullish",
+      "confidence": 0.653,
+      "current_price": 605.16,
+      "previous_close": 610.93,
+      "gap_pct": -0.945,
       "probabilities": {
-        "bearish": 0.19082476147646663,
-        "bullish": 0.24569705638200356,
-        "choppy": 0.56347818214153
+        "bullish": 0.653,
+        "bearish": 0.104,
+        "choppy": 0.243
       }
     },
     "IWM": {
       "symbol": "IWM",
-      "predicted_bias": "choppy",
-      "confidence": 0.40963498265896964,
-      "current_price": 246.19500732421875,
-      "previous_close": 245.1300048828125,
-      "gap_pct": 0.4344643332893449,
+      "predicted_bias": "bearish",
+      "confidence": 0.694,
+      "current_price": 223.48,
+      "previous_close": 222.91,
+      "gap_pct": 0.257,
       "probabilities": {
-        "bearish": 0.28206367394859166,
-        "bullish": 0.3083013433924387,
-        "choppy": 0.40963498265896964
+        "bearish": 0.694,
+        "bullish": 0.092,
+        "choppy": 0.214
       }
     }
   }
