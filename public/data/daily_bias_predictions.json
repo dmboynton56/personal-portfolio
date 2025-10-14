@@ -1,44 +1,44 @@
 {
-  "lastUpdated": "2025-10-13T10:46:43.095294-04:00",
-  "date": "2025-10-13",
+  "lastUpdated": "2025-10-14T10:48:03.645893-04:00",
+  "date": "2025-10-14",
   "predictions": {
     "QQQ": {
       "symbol": "QQQ",
-      "predicted_bias": "bullish",
-      "confidence": 0.658,
-      "current_price": 510.12,
-      "previous_close": 512.58,
-      "gap_pct": -0.479,
+      "predicted_bias": "choppy",
+      "confidence": 0.4624605966283607,
+      "current_price": 592.1799926757812,
+      "previous_close": 602.010009765625,
+      "gap_pct": -1.6328660537838533,
       "probabilities": {
-        "bullish": 0.658,
-        "bearish": 0.103,
-        "choppy": 0.239
+        "bearish": 0.24216137258624265,
+        "bullish": 0.29537803078539665,
+        "choppy": 0.4624605966283607
       }
     },
     "SPY": {
       "symbol": "SPY",
-      "predicted_bias": "bullish",
-      "confidence": 0.653,
-      "current_price": 605.16,
-      "previous_close": 610.93,
-      "gap_pct": -0.945,
+      "predicted_bias": "choppy",
+      "confidence": 0.4448240149031348,
+      "current_price": 655.25,
+      "previous_close": 663.0399780273438,
+      "gap_pct": -1.174888134275139,
       "probabilities": {
-        "bullish": 0.653,
-        "bearish": 0.104,
-        "choppy": 0.243
+        "bearish": 0.23128383690599336,
+        "bullish": 0.32389214819087214,
+        "choppy": 0.4448240149031348
       }
     },
     "IWM": {
       "symbol": "IWM",
-      "predicted_bias": "bearish",
-      "confidence": 0.694,
-      "current_price": 223.48,
-      "previous_close": 222.91,
-      "gap_pct": 0.257,
+      "predicted_bias": "choppy",
+      "confidence": 0.5084814370049826,
+      "current_price": 241.27999877929688,
+      "previous_close": 244.41000366210938,
+      "gap_pct": -1.2806369771753092,
       "probabilities": {
-        "bearish": 0.694,
-        "bullish": 0.092,
-        "choppy": 0.214
+        "bearish": 0.2905008991176569,
+        "bullish": 0.2010176638773606,
+        "choppy": 0.5084814370049826
       }
     }
   }
