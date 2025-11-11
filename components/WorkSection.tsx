@@ -9,6 +9,7 @@ import '@/styles/device-frames.css'
 import { BorderBeam } from '@/components/ui/border-beam'
 import { NBAHofDisplay } from './NBAHofDisplay'
 import { DailyBiasDisplay } from './DailyBiasDisplay'
+import { SportsEdgeDisplay } from './SportsEdgeDisplay'
 import MancalaGame from './MancalaGame'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -80,6 +81,19 @@ const mockProjects: Project[] = [
       '/images/projects/ICTML_matrices.png'    // Confusion matrices
     ],
     technologies: ['Python', 'XGBoost', 'Scikit-learn', 'Ensemble Methods'],
+    isInteractive: true
+  },
+  {
+    id: 'sports-edge',
+    title: 'Sports Edge: NFL/NBA Betting Analysis 🏈',
+    description: 'Machine learning pipeline that computes model spreads and home win probabilities for NFL/NBA games, compares against sportsbook lines, and identifies betting edges. Features real-time odds integration, feature engineering (rest days, form metrics, opponent strength), and automated daily predictions.',
+    type: 'desktop',
+    image: '/images/projects/project3-1.JPG',
+    images: [
+      '/images/projects/project3-1.JPG',
+      '/images/projects/project3-2.JPG'
+    ],
+    technologies: ['Python', 'Scikit-learn', 'LightGBM', 'Supabase', 'Next.js', 'Sports Analytics'],
     isInteractive: true
   },
   {
@@ -376,6 +390,24 @@ export function WorkSection() {
                       </div>
                       <div className="absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
                     </div>
+                  ) : project.isInteractive && project.id === 'sports-edge' ? (
+                    // Interactive Sports Edge with clickable carousel
+                    <div 
+                      onClick={() => handleImageClick(project)}
+                      className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
+                    >
+                      <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
+                        <DeviceFrameset device="MacBook Pro" color="silver">
+                          <div className="relative w-[1280px] h-[800px] bg-background">
+                            <div className="absolute inset-[8px] overflow-hidden">
+                              <SportsEdgeDisplay />
+                            </div>
+                          </div>
+                          <div className="bottom-bar" />
+                        </DeviceFrameset>
+                      </div>
+                      <div className="absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
+                    </div>
                   ) : (
                     // Standard image display
                     <div 
@@ -468,6 +500,15 @@ export function WorkSection() {
                   <div className="mt-8 relative max-w-2xl mx-auto text-center">
                     <p className="text-center text-sm text-muted-foreground">
                       Live daily bias predictions for QQQ, SPY, and IWM • 84.4% accuracy • Updated daily at 9:30 AM EST • Click the screen above to see model analysis
+                    </p>
+                  </div>
+                )}
+
+                {/* Sports Edge Info - appears below MacBook for Sports Edge project */}
+                {project.isInteractive && project.id === 'sports-edge' && (
+                  <div className="mt-8 relative max-w-2xl mx-auto text-center">
+                    <p className="text-center text-sm text-muted-foreground">
+                      Live NFL/NBA game predictions vs sportsbook lines • Updated every 15 minutes • Click the screen above to see model analysis
                     </p>
                   </div>
                 )}

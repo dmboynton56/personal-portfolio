@@ -12,6 +12,20 @@ The portfolio is designed to provide a glimpse into my capabilities as a develop
 
 This project itself is an example of my work, built using Next.js, TypeScript, and Tailwind CSS, demonstrating attention to detail in UI development and modern web practices.
 
+## Sports Edge data plumbing
+
+The Supabase schema + migrations that back the Sports Edge card live in `supabase/migrations/001_sports_edge_schema.sql`. Apply them with `supabase db push --file supabase/migrations/001_sports_edge_schema.sql` and make sure the following env vars are set in your deployment target:
+
+```
+SUPABASE_URL
+SUPABASE_SERVICE_ROLE_KEY
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+SPORTS_EDGE_CRON_SECRET
+```
+
+To keep the `/api/sports-edges` route warm (and to provide a hook for future batch jobs), a scheduled GitHub Action (`.github/workflows/ping-sports-edge-api.yml`) POSTs to the same endpoint by hitting your deployed URL stored in the `SPORTS_EDGE_CRON_URL` repo secret together with the shared `SPORTS_EDGE_CRON_SECRET`.
+
 ## Contact
 
 If you'd like to discuss potential opportunities or collaborations, feel free to reach out:
