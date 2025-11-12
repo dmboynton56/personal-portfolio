@@ -1,10 +1,15 @@
 'use client'
 
+import type { MouseEvent } from 'react'
 import SportsEdgeCard from './SportsEdgeCard'
 
 export function SportsEdgeDisplay() {
+  const stopPropagation = (event: MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation()
+  }
+
   return (
-    <div className="h-full bg-background p-4 overflow-y-auto">
+    <div className="h-full bg-background p-4 overflow-y-auto" onClick={stopPropagation} onMouseDown={stopPropagation}>
       <div className="max-w-5xl mx-auto h-full flex flex-col">
         {/* Header */}
         <div className="text-center mb-6">

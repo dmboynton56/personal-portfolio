@@ -280,6 +280,7 @@ export function WorkSection() {
   }
 
   return (
+    <>
     <section id="work" className="min-h-screen bg-background-alt py-24">
       <div className="max-w-6xl mx-auto px-4 md:px-8">
         <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">Selected Work</h2>
@@ -350,7 +351,7 @@ export function WorkSection() {
                       </DeviceFrameset>
                     </div>
                   ) : project.isInteractive && project.id === 'nba-hof-predictor' ? (
-                    // Interactive NBA Predictor with clickable carousel
+                    // Interactive NBA Predictor
                     <div 
                       onClick={() => handleImageClick(project)}
                       className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
@@ -370,10 +371,10 @@ export function WorkSection() {
                           <div className="bottom-bar" />
                         </DeviceFrameset>
                       </div>
-                      <div className="absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
+                      <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
                     </div>
                   ) : project.isInteractive && project.id === 'ictml-trading-system' ? (
-                    // Interactive ICTML Daily Bias with clickable carousel
+                    // Interactive ICTML Daily Bias
                     <div 
                       onClick={() => handleImageClick(project)}
                       className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
@@ -388,13 +389,14 @@ export function WorkSection() {
                           <div className="bottom-bar" />
                         </DeviceFrameset>
                       </div>
-                      <div className="absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
+                      <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
                     </div>
                   ) : project.isInteractive && project.id === 'sports-edge' ? (
-                    // Interactive Sports Edge with clickable carousel
+                    // Interactive Sports Edge (no carousel)
                     <div 
-                      onClick={() => handleImageClick(project)}
-                      className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
+                      onClickCapture={(event) => event.stopPropagation()}
+                      onPointerDown={(event) => event.stopPropagation()}
+                      className="relative transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
                     >
                       <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
                         <DeviceFrameset device="MacBook Pro" color="silver">
@@ -406,7 +408,7 @@ export function WorkSection() {
                           <div className="bottom-bar" />
                         </DeviceFrameset>
                       </div>
-                      <div className="absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
+                      <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
                     </div>
                   ) : (
                     // Standard image display
@@ -443,7 +445,7 @@ export function WorkSection() {
                           </DeviceFrameset>
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
+                      <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
                     </div>
                   )}
                 </div>
@@ -517,19 +519,20 @@ export function WorkSection() {
           ))}
         </div>
       </div>
-
-      {isCarouselOpen && selectedProject && (
-        <ProjectCarousel
-          images={selectedProject.images || [selectedProject.image]}
-          projectType={selectedProject.type}
-          initialImage={selectedProject.image}
-          onClose={() => {
-            setIsCarouselOpen(false)
-            setSelectedProject(null)
-          }}
-        />
-      )}
     </section>
+
+    {isCarouselOpen && selectedProject && (
+      <ProjectCarousel
+        images={selectedProject.images || [selectedProject.image]}
+        projectType={selectedProject.type}
+        initialImage={selectedProject.image}
+        onClose={() => {
+          setIsCarouselOpen(false)
+          setSelectedProject(null)
+        }}
+      />
+    )}
+    </>
   )
 }
 
