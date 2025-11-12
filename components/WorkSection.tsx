@@ -394,7 +394,7 @@ export function WorkSection() {
                   ) : project.isInteractive && project.id === 'sports-edge' ? (
                     // Interactive Sports Edge (no carousel)
                     <div 
-                      onClickCapture={(event) => event.stopPropagation()}
+                      onClick={(event) => event.stopPropagation()}
                       onPointerDown={(event) => event.stopPropagation()}
                       className="relative transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
                     >
@@ -535,4 +535,3 @@ export function WorkSection() {
     </>
   )
 }
-

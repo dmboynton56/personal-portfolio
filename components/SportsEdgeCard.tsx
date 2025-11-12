@@ -1,14 +1,115 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type ComponentType } from 'react'
 import type { SportsEdgePayload, NflGameEdge } from '@/lib/sportsEdgeData'
 import { calculateEdge } from '@/lib/sportsEdgeData'
+import * as NflLogos from 'react-nfl-logos'
+
+const sportsEdgeTabs: { key: 'NFL' | 'NBA'; label: string; srNote?: string }[] = [
+  { key: 'NFL', label: 'NFL • Weekly' },
+  { key: 'NBA', label: 'NBA • Daily', srNote: 'Coming soon preview' }
+]
+
+type MockNbaEdge = {
+  id: string
+  matchup: string
+  tipoff: string
+  bookSpread: number
+  modelSpread: number
+  edge: number
+  favored: string
+  note: string
+  paceTag: string
+}
+
+const teamLogoMap: Record<string, keyof typeof NflLogos> = {
+  Cardinals: 'ARI',
+  Falcons: 'ATL',
+  Ravens: 'BAL',
+  Bills: 'BUF',
+  Panthers: 'CAR',
+  Bears: 'CHI',
+  Bengals: 'CIN',
+  Browns: 'CLE',
+  Cowboys: 'DAL',
+  Broncos: 'DEN',
+  Lions: 'DET',
+  Packers: 'GB',
+  Texans: 'HOU',
+  Colts: 'IND',
+  Jaguars: 'JAX',
+  Chiefs: 'KC',
+  Chargers: 'LAC',
+  Rams: 'LAR',
+  Raiders: 'LV',
+  Dolphins: 'MIA',
+  Vikings: 'MIN',
+  Patriots: 'NE',
+  Saints: 'NO',
+  Giants: 'NYG',
+  Jets: 'NYJ',
+  Eagles: 'PHI',
+  Steelers: 'PIT',
+  Seahawks: 'SEA',
+  '49ers': 'SF',
+  Buccaneers: 'TB',
+  Titans: 'TEN',
+  Commanders: 'WAS'
+}
+
+const mockNbaSlate: MockNbaEdge[] = [
+  {
+    id: 'bos-mia',
+    matchup: 'Celtics @ Heat',
+    tipoff: 'Tue, Nov 26 • 7:30p ET',
+    bookSpread: -2.5,
+    modelSpread: -5.1,
+    edge: 2.6,
+    favored: 'Celtics',
+    note: 'Boston depth bumps late-game rating while Miami faces altitude hangover.',
+    paceTag: '+3.2 tempo'
+  },
+  {
+    id: 'den-phx',
+    matchup: 'Nuggets @ Suns',
+    tipoff: 'Tue, Nov 26 • 9:00p ET',
+    bookSpread: 1.5,
+    modelSpread: -1.8,
+    edge: -3.3,
+    favored: 'Suns',
+    note: 'Booker usage spike plus Jokic fatigue flag flips edge toward Phoenix.',
+    paceTag: '-1.9 tempo'
+  },
+  {
+    id: 'nyk-lal',
+    matchup: 'Knicks @ Lakers',
+    tipoff: 'Tue, Nov 26 • 10:30p ET',
+    bookSpread: 4.5,
+    modelSpread: 1.1,
+    edge: -3.4,
+    favored: 'Knicks',
+    note: 'Brunson + Randle two-man grade +0.18 vs Lakers drop coverage.',
+    paceTag: '+1.6 tempo'
+  },
+  {
+    id: 'sac-dal',
+    matchup: 'Kings @ Mavericks',
+    tipoff: 'Tue, Nov 26 • 8:30p ET',
+    bookSpread: -1.0,
+    modelSpread: -3.9,
+    edge: 2.9,
+    favored: 'Kings',
+    note: 'Dallas second night travel + Sabonis DHO advantage keeps edge in Sac.',
+    paceTag: '+4.5 tempo'
+  }
+]
 
 export default function SportsEdgeCard() {
   const [data, setData] = useState<SportsEdgePayload | null>(null)
   const [err, setErr] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'NFL' | 'NBA'>('NFL')
+  const [comingSoonVisible, setComingSoonVisible] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +137,14 @@ export default function SportsEdgeCard() {
     const interval = setInterval(fetchData, 60000)
     return () => clearInterval(interval)
   }, [])
+  
+  useEffect(() => {
+    if (activeTab === 'NBA') {
+      setComingSoonVisible(true)
+    } else {
+      setComingSoonVisible(false)
+    }
+  }, [activeTab])
 
   const sortedGames: NflGameEdge[] = useMemo(() => {
     if (!data?.nfl.games) return []
@@ -70,6 +179,33 @@ export default function SportsEdgeCard() {
 
   const formatPercent = (value: number) => `${(value * 100).toFixed(1)}%`
 
+  const getLogoComponent = (team: string): ComponentType<{ size?: number }> | null => {
+    const logoKey = teamLogoMap[team]
+    if (!logoKey) return null
+    const LogoComponent = (NflLogos as Record<string, ComponentType<{ size?: number }>>)[logoKey]
+    return LogoComponent || null
+  }
+
+  const renderTeamBadge = (team: string) => {
+    const LogoComponent = getLogoComponent(team)
+    return (
+      <div className="flex items-center gap-1.5">
+        {LogoComponent ? (
+          <div className="flex h-7 w-7 items-center justify-center">
+            <LogoComponent size={28} />
+          </div>
+        ) : (
+          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted">
+            <span className="text-[10px] font-semibold uppercase text-muted-foreground">
+              {team.slice(0, 2)}
+            </span>
+          </div>
+        )}
+        <span className="text-xs font-semibold text-foreground">{team}</span>
+      </div>
+    )
+  }
+
   const edgeBadge = (edge: number) => {
     const absEdge = Math.abs(edge)
     if (absEdge >= 4) return { label: 'Fire', className: 'text-emerald-400' }
@@ -77,6 +213,8 @@ export default function SportsEdgeCard() {
     if (absEdge >= 1.2) return { label: 'Lean', className: 'text-sky-300' }
     return { label: 'Watch', className: 'text-muted-foreground' }
   }
+
+  const formatSpread = (value: number) => (value > 0 ? `+${value.toFixed(1)}` : value.toFixed(1))
 
   if (isLoading) {
     return (
@@ -111,20 +249,29 @@ export default function SportsEdgeCard() {
   return (
     <div className="rounded-2xl border p-4">
       <div className="mb-3 flex items-center gap-2">
-        {(['NFL', 'NBA'] as const).map((tab) => (
+        {sportsEdgeTabs.map((tab) => (
           <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`flex-1 rounded-xl border px-3 py-2 text-sm font-semibold transition ${
-              activeTab === tab
+            key={tab.key}
+            type="button"
+            aria-pressed={activeTab === tab.key}
+            aria-label={tab.srNote ? `${tab.label} — ${tab.srNote}` : tab.label}
+            onClick={() => setActiveTab(tab.key)}
+            className={`flex-1 rounded-xl border px-3 py-2 text-left transition ${
+              activeTab === tab.key
                 ? 'bg-foreground text-background border-foreground'
                 : 'bg-card text-muted-foreground border-border hover:text-foreground'
             }`}
           >
-            {tab === 'NFL' ? 'NFL • Weekly' : 'NBA • Daily'}
+            <span className="text-sm font-semibold leading-tight">{tab.label}</span>
+            {tab.srNote && <span className="sr-only">{tab.srNote}</span>}
           </button>
         ))}
       </div>
+      <p className="mb-4 text-center text-xs text-muted-foreground" aria-live="polite">
+        {activeTab === 'NFL'
+          ? 'Showing live NFL model edges.'
+          : 'NBA board unlocked — coming soon preview loading.'}
+      </p>
 
       {activeTab === 'NFL' ? (
         <div className="space-y-4">
@@ -157,11 +304,15 @@ export default function SportsEdgeCard() {
                     key={game.gameId}
                     className="flex flex-col rounded-xl border bg-card/60 p-3 hover:border-accent/60"
                   >
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-semibold text-foreground">
-                        {game.awayTeam} @ {game.homeTeam}
-                      </span>
-                      <span className={`text-[10px] font-semibold uppercase ${badge.className}`}>
+                    <div className="flex items-start justify-between gap-3 text-xs">
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
+                          {renderTeamBadge(game.awayTeam)}
+                          <span className="text-[11px] text-muted-foreground">@</span>
+                          {renderTeamBadge(game.homeTeam)}
+                        </div>
+                      </div>
+                      <span className={`min-w-[60px] text-right text-[10px] font-semibold uppercase ${badge.className}`}>
                         {badge.label}
                       </span>
                     </div>
@@ -203,11 +354,57 @@ export default function SportsEdgeCard() {
           )}
         </div>
       ) : (
-        <div className="relative overflow-hidden rounded-2xl border border-dashed bg-muted/10 p-6 text-center">
-          <div className="text-sm text-muted-foreground">
-            Daily NBA edges will highlight pace, travel and injury-adjusted projections for every slate. Pick a date to see model outputs.
+        <div className="relative overflow-hidden rounded-2xl border border-dashed bg-muted/10 p-6">
+          <div className="text-[11px] uppercase tracking-[0.25em] text-muted-foreground">
+            NBA 2024-25 slate
           </div>
-          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center bg-background/80 text-center">
+          <p className="mt-1 text-sm text-muted-foreground">
+            Daily NBA edges will highlight pace, travel and injury adjustments for every slate. Pick a date to see full outputs once the model ships.
+          </p>
+          <div className="mt-4 grid grid-cols-1 gap-3 text-left md:grid-cols-2">
+            {mockNbaSlate.map((game) => {
+              const badge = edgeBadge(game.edge)
+              return (
+                <div
+                  key={game.id}
+                  className="flex flex-col rounded-xl border bg-card/70 p-3 backdrop-blur-sm"
+                >
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-semibold text-foreground">{game.matchup}</span>
+                    <span className={`text-[10px] font-semibold uppercase ${badge.className}`}>
+                      {badge.label}
+                    </span>
+                  </div>
+                  <div className="text-[11px] text-muted-foreground">{game.tipoff}</div>
+                  <div className="mt-3 space-y-1 text-xs">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Book spread</span>
+                      <span className="font-semibold text-foreground">{formatSpread(game.bookSpread)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Model spread</span>
+                      <span className="font-semibold text-foreground">{formatSpread(game.modelSpread)}</span>
+                    </div>
+                  </div>
+                  <div className="mt-2 inline-flex items-center text-[11px] font-medium text-accent">
+                    {game.paceTag}
+                  </div>
+                  <div className="mt-3 rounded-lg bg-foreground/5 p-2 text-sm font-semibold text-foreground">
+                    Edge {game.edge > 0 ? '+' : ''}
+                    {game.edge.toFixed(1)} pts toward {game.favored}
+                  </div>
+                  <p className="mt-2 text-xs text-muted-foreground">{game.note}</p>
+                </div>
+              )
+            })}
+          </div>
+          <div
+            className={`pointer-events-none absolute inset-0 flex flex-col items-center justify-center bg-background/75 text-center backdrop-blur-sm transition-opacity duration-300 ${
+              comingSoonVisible ? 'opacity-100' : 'opacity-0'
+            }`}
+            aria-hidden={!comingSoonVisible}
+          >
+            <div className="mb-2 text-xs font-semibold uppercase tracking-[0.3em] text-accent">Sneak Peek</div>
             <div className="text-2xl font-semibold text-foreground">NBA model</div>
             <div className="text-sm text-muted-foreground">
               Coming soon — nightly predictions unlock later this month.
@@ -218,4 +415,3 @@ export default function SportsEdgeCard() {
     </div>
   )
 }
-

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
 
-const PITS_PER_PLAYER = 3;
-const STONES_PER_PIT = 2;
-const TOTAL_PITS = PITS_PER_PLAYER * 2 + 2; // 8 (6 pits + 2 mancalas)
+const PITS_PER_PLAYER = 6;
+const STONES_PER_PIT = 4;
+const TOTAL_PITS = PITS_PER_PLAYER * 2 + 2; // 14 (12 pits + 2 mancalas)
 type Player = 1 | 2;
 type State = { board: number[]; currentPlayer: Player };
 type Stats = { p1_wins: number; p2_wins: number; ties: number };
@@ -290,42 +290,39 @@ export default function MancalaGame() {
           </label>
         </div>
         {/* Center: Board */}
-        <div className="bg-[#e7cba9] rounded-3xl shadow-2xl px-8 py-6 flex items-center">
+        <div className="bg-[#e7cba9] rounded-3xl shadow-2xl px-6 py-5 flex items-center border-4 border-[#b48457]">
           {/* Left Mancala */}
           <MancalaPit stones={board[PITS_PER_PLAYER]} />
           {/* Main pits */}
           <div className="flex flex-col mx-4">
             {/* Top row (Player 2 pits) */}
-            <div className="flex flex-row justify-center mb-2">
-              {board.slice(PITS_PER_PLAYER + 1, TOTAL_PITS - 1).map((stones, idx) => {
-                const pitIndex = PITS_PER_PLAYER + 1 + idx;
-                return (
+            <div className="flex flex-row justify-center mb-3">
+              {Array.from({ length: PITS_PER_PLAYER }, (_, i) => PITS_PER_PLAYER + 1 + i)
+                .slice()
+                .reverse()
+                .map((pitIndex) => (
                   <Pit
                     key={pitIndex}
-                    stones={stones}
+                    stones={board[pitIndex]}
                     pitIndex={pitIndex}
                     suggested={suggestedPit === pitIndex}
                     onClick={() => handlePitClick(pitIndex)}
                     clickable={!gameOver && currentPlayer === 2 && isValidMove(board, pitIndex, 2)}
                   />
-                );
-              })}
+                ))}
             </div>
-            {/* Bottom row (Player 1 pits) - REVERSED for correct UI mapping */}
-            <div className="flex flex-row justify-center mt-2">
-              {board.slice(0, PITS_PER_PLAYER).slice().reverse().map((stones, idx) => {
-                const pitIndex = PITS_PER_PLAYER - 1 - idx;
-                return (
-                  <Pit
-                    key={pitIndex}
-                    stones={stones}
-                    pitIndex={pitIndex}
-                    suggested={suggestedPit === pitIndex}
-                    onClick={() => handlePitClick(pitIndex)}
-                    clickable={!gameOver && currentPlayer === 1 && isValidMove(board, pitIndex, 1)}
-                  />
-                );
-              })}
+            {/* Bottom row (Player 1 pits) */}
+            <div className="flex flex-row justify-center mt-3">
+              {Array.from({ length: PITS_PER_PLAYER }, (_, i) => PITS_PER_PLAYER - 1 - i).map((pitIndex) => (
+                <Pit
+                  key={pitIndex}
+                  stones={board[pitIndex]}
+                  pitIndex={pitIndex}
+                  suggested={suggestedPit === pitIndex}
+                  onClick={() => handlePitClick(pitIndex)}
+                  clickable={!gameOver && currentPlayer === 1 && isValidMove(board, pitIndex, 1)}
+                />
+              ))}
             </div>
           </div>
           {/* Right Mancala */}
@@ -399,7 +396,7 @@ function Pit({ stones, pitIndex, suggested = false, onClick, clickable = false }
 function MancalaPit({ stones }: { stones: number }) {
   return (
     <div
-      className="relative flex items-center justify-center w-20 h-32 bg-[#7c5a36] rounded-3xl shadow-lg mx-2"
+      className="relative flex items-center justify-center w-20 h-40 bg-[#7c5a36] rounded-3xl shadow-lg mx-2"
     >
       <div className="absolute flex flex-wrap justify-center items-center w-full h-full">
         {Array.from({ length: stones }).map((_, i) => (
