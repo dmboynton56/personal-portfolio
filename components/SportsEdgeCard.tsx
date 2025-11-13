@@ -1,6 +1,13 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import type { SportsEdgePayload, NflGameEdge } from '@/lib/sportsEdgeData'
 import { calculateEdge } from '@/lib/sportsEdgeData'
 import { NflTeamLogo } from './NflTeamLogo'
@@ -76,33 +83,64 @@ export default function SportsEdgeCard() {
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'NFL' | 'NBA'>('NFL')
   const [comingSoonVisible, setComingSoonVisible] = useState(false)
+  const [availableWeeks, setAvailableWeeks] = useState<number[]>([])
+  const [selectedWeek, setSelectedWeek] = useState<number | undefined>(undefined)
+  const [weekFilter, setWeekFilter] = useState<number | undefined>(undefined)
+  const requestIdRef = useRef(0)
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const fetchData = useCallback(
+    async (week?: number) => {
+      const requestId = ++requestIdRef.current
       try {
         setIsLoading(true)
-        const response = await fetch('/api/sports-edges')
+        const params =
+          typeof week === 'number' && Number.isFinite(week) ? `?week=${week}` : ''
+        const response = await fetch(`/api/sports-edges${params}`)
+        const payloadJson: unknown = await response.json()
         if (!response.ok) {
-          const errorData = await response.json()
-          throw new Error(errorData.error || 'Failed to fetch data')
+          const errorMessage =
+            typeof payloadJson === 'object' &&
+            payloadJson !== null &&
+            'error' in payloadJson &&
+            typeof (payloadJson as { error?: string }).error === 'string'
+              ? (payloadJson as { error?: string }).error
+              : 'Failed to fetch data'
+          throw new Error(errorMessage)
         }
-        const payload: SportsEdgePayload = await response.json()
+        if (requestId !== requestIdRef.current) return
+        const payload = payloadJson as SportsEdgePayload
         setData(payload)
         setErr(null)
+        setAvailableWeeks(payload.nfl.availableWeeks ?? [])
+        setSelectedWeek(payload.nfl.week)
       } catch (e) {
+        if (requestId !== requestIdRef.current) return
         setErr(String(e))
         setData(null)
       } finally {
-        setIsLoading(false)
+        if (requestId === requestIdRef.current) {
+          setIsLoading(false)
+        }
       }
+    },
+    []
+  )
+
+  useEffect(() => {
+    const load = () => {
+      fetchData(
+        typeof weekFilter === 'number' && Number.isFinite(weekFilter)
+          ? weekFilter
+          : undefined
+      )
     }
 
-    fetchData()
-    
+    load()
+
     // Refresh every 60 seconds
-    const interval = setInterval(fetchData, 60000)
+    const interval = setInterval(load, 60000)
     return () => clearInterval(interval)
-  }, [])
+  }, [fetchData, weekFilter])
   
   useEffect(() => {
     if (activeTab === 'NBA') {
@@ -121,6 +159,31 @@ export default function SportsEdgeCard() {
         : diff
     })
   }, [data])
+
+  const handleWeekChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const nextWeek = Number(event.target.value)
+    if (!Number.isFinite(nextWeek) || weekFilter === nextWeek) return
+    setSelectedWeek(nextWeek)
+    setWeekFilter(nextWeek)
+  }
+
+  const labelSuffix = useMemo(() => {
+    if (!data?.nfl.label) return ''
+    const week = selectedWeek ?? data.nfl.week
+    if (!Number.isFinite(week)) {
+      return data.nfl.label
+    }
+    const pattern = new RegExp(`^Week\\s+${week}\\s*`, 'i')
+    const trimmed = data.nfl.label.replace(pattern, '').trim()
+    return trimmed
+  }, [data?.nfl.label, data?.nfl.week, selectedWeek])
+
+  const weekOptions = useMemo(() => {
+    if (availableWeeks.length) {
+      return [...availableWeeks].sort((a, b) => b - a)
+    }
+    return selectedWeek ? [selectedWeek] : []
+  }, [availableWeeks, selectedWeek])
 
   const formatKickoff = (iso: string) => {
     const date = new Date(iso)
@@ -219,8 +282,33 @@ export default function SportsEdgeCard() {
               <div className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
                 NFL {data.nfl.season}
               </div>
-              <div className="text-base font-semibold text-foreground">
-                {data.nfl.label}
+              <div className="flex flex-wrap items-center gap-2">
+                <label htmlFor="nfl-week-select" className="sr-only">
+                  Select NFL week
+                </label>
+                <select
+                  id="nfl-week-select"
+                  value={selectedWeek ?? ''}
+                  onChange={handleWeekChange}
+                  className="rounded-lg border border-border bg-background/80 px-3 py-1 text-sm font-semibold text-foreground shadow-sm focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground disabled:opacity-60"
+                  disabled={!weekOptions.length}
+                >
+                  {selectedWeek == null && (
+                    <option value="" disabled>
+                      Select week
+                    </option>
+                  )}
+                  {weekOptions.map((week) => (
+                    <option key={week} value={week}>
+                      Week {week}
+                    </option>
+                  ))}
+                </select>
+                {labelSuffix && (
+                  <span className="text-base font-semibold text-muted-foreground">
+                    {labelSuffix}
+                  </span>
+                )}
               </div>
             </div>
             <div className="text-xs text-muted-foreground">

@@ -54,6 +54,10 @@ type LoadedEdges = {
   window: WeekWindow
 }
 
+type LoadOptions = {
+  week?: number
+}
+
 const parseIsoDate = (value?: string | null) => {
   if (!value) return null
   const parsed = new Date(value)
@@ -116,6 +120,22 @@ const formatWeekLabel = (week: number, window: WeekWindow) => {
   return `Week of ${format.format(window.start)}`
 }
 
+const windowFromGames = (games: SupabaseGameRow[], fallback: WeekWindow) => {
+  const timestamps = games
+    .map((game) => parseIsoDate(game.game_time_utc))
+    .filter((date): date is Date => Boolean(date))
+
+  if (!timestamps.length) {
+    return fallback
+  }
+
+  const sorted = timestamps.sort((a, b) => a.getTime() - b.getTime())
+  return {
+    start: sorted[0],
+    end: sorted[sorted.length - 1]
+  }
+}
+
 const mapGameToNflEdge = (
   game: SupabaseGameRow,
   prediction: SupabasePredictionRow
@@ -134,19 +154,33 @@ const mapGameToNflEdge = (
   note: 'Sports Edge weekly snapshot from Supabase.'
 })
 
-const loadNflEdges = async (): Promise<LoadedEdges | null> => {
+const loadNflEdges = async (
+  options: LoadOptions = {}
+): Promise<LoadedEdges | null> => {
   if (!supabase) return null
 
-  const window = getWeekWindow()
-  const { data: games, error: gamesError } = await supabase
+  const weekFilter = Number.isFinite(options.week) ? (options.week as number) : undefined
+  const defaultWindow = getWeekWindow()
+
+  let gamesQuery = supabase
     .from('games')
     .select(
       'id, league, season, week, game_time_utc, home_team, away_team, book_spread'
     )
     .eq('league', 'NFL')
-    .gte('game_time_utc', window.start.toISOString())
-    .lt('game_time_utc', window.end.toISOString())
-    .order('game_time_utc', { ascending: true })
+
+  if (typeof weekFilter === 'number') {
+    gamesQuery = gamesQuery.eq('week', weekFilter)
+  } else {
+    gamesQuery = gamesQuery
+      .gte('game_time_utc', defaultWindow.start.toISOString())
+      .lt('game_time_utc', defaultWindow.end.toISOString())
+  }
+
+  const { data: games, error: gamesError } = await gamesQuery.order(
+    'game_time_utc',
+    { ascending: true }
+  )
 
   if (gamesError) {
     console.warn(
@@ -214,7 +248,11 @@ const loadNflEdges = async (): Promise<LoadedEdges | null> => {
   }
 
   const season = determineSeason(games)
-  const week = determineWeek(games)
+  const week = typeof weekFilter === 'number' ? weekFilter : determineWeek(games)
+  const window =
+    typeof weekFilter === 'number'
+      ? windowFromGames(games, defaultWindow)
+      : defaultWindow
   const label = formatWeekLabel(week, window)
 
   return {
@@ -226,13 +264,55 @@ const loadNflEdges = async (): Promise<LoadedEdges | null> => {
   }
 }
 
-export async function GET() {
-  let payload: SportsEdgePayload = sportsEdgeMockData
+const loadAvailableWeeks = async (season: number) => {
+  if (!supabase) return []
+
+  const { data, error } = await supabase
+    .from('games')
+    .select('week')
+    .eq('league', 'NFL')
+    .eq('season', season)
+    .not('week', 'is', null)
+    .order('week', { ascending: true })
+
+  if (error) {
+    console.warn('Supabase error when gathering available NFL weeks.', error)
+    return []
+  }
+
+  const uniqueWeeks = Array.from(
+    new Set(
+      (data ?? [])
+        .map((row) => row.week)
+        .filter((week): week is number => Number.isFinite(week))
+    )
+  )
+
+  return uniqueWeeks
+}
+
+export async function GET(request: NextRequest) {
+  const weekParam = request.nextUrl.searchParams.get('week')
+  const requestedWeek = weekParam ? Number(weekParam) : undefined
+  const normalizedWeek =
+    typeof requestedWeek === 'number' && Number.isFinite(requestedWeek)
+      ? requestedWeek
+      : undefined
+
+  let payload: SportsEdgePayload = {
+    ...sportsEdgeMockData,
+    nfl: {
+      ...sportsEdgeMockData.nfl,
+      availableWeeks:
+        sportsEdgeMockData.nfl.availableWeeks ?? [sportsEdgeMockData.nfl.week]
+    }
+  }
 
   if (supabase) {
     try {
-      const nflEdges = await loadNflEdges()
+      const nflEdges = await loadNflEdges({ week: normalizedWeek })
       if (nflEdges) {
+        const availableWeeks = await loadAvailableWeeks(nflEdges.season)
         payload = {
           ...payload,
           nfl: {
@@ -240,7 +320,11 @@ export async function GET() {
             week: nflEdges.week,
             label: nflEdges.label,
             updatedAt: new Date().toISOString(),
-            games: nflEdges.games
+            games: nflEdges.games,
+            availableWeeks:
+              availableWeeks.length > 0
+                ? availableWeeks
+                : payload.nfl.availableWeeks
           }
         }
       } else {

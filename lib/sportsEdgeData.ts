@@ -18,6 +18,7 @@ export type SportsEdgePayload = {
     label: string
     updatedAt: string
     games: NflGameEdge[]
+    availableWeeks: number[]
   }
   nba: {
     status: 'coming-soon'
@@ -32,6 +33,7 @@ export const sportsEdgeMockData: SportsEdgePayload = {
     week: 11,
     label: 'Week 11 outlook',
     updatedAt: '2024-11-12T15:30:00Z',
+    availableWeeks: [11],
     games: [
       {
         gameId: '2024-W11-BUF-MIA',
