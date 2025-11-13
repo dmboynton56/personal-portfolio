@@ -1,14 +1,16 @@
--- Sports-Edge: Initial Schema Migration (mirrors sports-edge/sql/001_initial_schema.sql)
--- Run with: supabase db push --file supabase/migrations/001_sports_edge_schema.sql
+-- Sports-Edge: Initial Schema Migration
+-- Creates tables, views, and RLS policies for sports betting analysis
 
 -- Games table
 create table if not exists games (
   id uuid primary key default gen_random_uuid(),
   league text check (league in ('NFL','NBA')) not null,
   season int not null,
+  week smallint check (week between 1 and 30),
   game_time_utc timestamptz not null,
   home_team text not null,
   away_team text not null,
+  book_spread numeric,
   created_at timestamptz default now()
 );
 
@@ -79,6 +81,7 @@ select
   g.id as game_id,
   g.league, 
   g.season, 
+  g.week,
   g.game_time_utc,
   g.home_team, 
   g.away_team,
@@ -125,3 +128,4 @@ create policy "public read odds" on odds_snapshots for select using (true);
 create policy "public read preds" on model_predictions for select using (true);
 create policy "public read features" on features for select using (true);
 create policy "public read runs" on model_runs for select using (true);
+

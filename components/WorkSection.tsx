@@ -510,7 +510,7 @@ export function WorkSection() {
                 {project.isInteractive && project.id === 'sports-edge' && (
                   <div className="mt-8 relative max-w-2xl mx-auto text-center">
                     <p className="text-center text-sm text-muted-foreground">
-                      Live NFL/NBA game predictions vs sportsbook lines • Updated every 15 minutes • Click the screen above to see model analysis
+                      Live NFL/NBA game predictions vs sportsbook lines • Examine the spreads in the screen above to see model analysis
                     </p>
                   </div>
                 )}

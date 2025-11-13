@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useMemo, useState, type ComponentType } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { SportsEdgePayload, NflGameEdge } from '@/lib/sportsEdgeData'
 import { calculateEdge } from '@/lib/sportsEdgeData'
-import * as NflLogos from 'react-nfl-logos'
+import { NflTeamLogo } from './NflTeamLogo'
+import { getTeamShortName } from '@/lib/nflTeams'
 
 const sportsEdgeTabs: { key: 'NFL' | 'NBA'; label: string; srNote?: string }[] = [
   { key: 'NFL', label: 'NFL • Weekly' },
@@ -20,41 +21,6 @@ type MockNbaEdge = {
   favored: string
   note: string
   paceTag: string
-}
-
-const teamLogoMap: Record<string, keyof typeof NflLogos> = {
-  Cardinals: 'ARI',
-  Falcons: 'ATL',
-  Ravens: 'BAL',
-  Bills: 'BUF',
-  Panthers: 'CAR',
-  Bears: 'CHI',
-  Bengals: 'CIN',
-  Browns: 'CLE',
-  Cowboys: 'DAL',
-  Broncos: 'DEN',
-  Lions: 'DET',
-  Packers: 'GB',
-  Texans: 'HOU',
-  Colts: 'IND',
-  Jaguars: 'JAX',
-  Chiefs: 'KC',
-  Chargers: 'LAC',
-  Rams: 'LAR',
-  Raiders: 'LV',
-  Dolphins: 'MIA',
-  Vikings: 'MIN',
-  Patriots: 'NE',
-  Saints: 'NO',
-  Giants: 'NYG',
-  Jets: 'NYJ',
-  Eagles: 'PHI',
-  Steelers: 'PIT',
-  Seahawks: 'SEA',
-  '49ers': 'SF',
-  Buccaneers: 'TB',
-  Titans: 'TEN',
-  Commanders: 'WAS'
 }
 
 const mockNbaSlate: MockNbaEdge[] = [
@@ -179,33 +145,6 @@ export default function SportsEdgeCard() {
 
   const formatPercent = (value: number) => `${(value * 100).toFixed(1)}%`
 
-  const getLogoComponent = (team: string): ComponentType<{ size?: number }> | null => {
-    const logoKey = teamLogoMap[team]
-    if (!logoKey) return null
-    const LogoComponent = (NflLogos as Record<string, ComponentType<{ size?: number }>>)[logoKey]
-    return LogoComponent || null
-  }
-
-  const renderTeamBadge = (team: string) => {
-    const LogoComponent = getLogoComponent(team)
-    return (
-      <div className="flex items-center gap-1.5">
-        {LogoComponent ? (
-          <div className="flex h-7 w-7 items-center justify-center">
-            <LogoComponent size={28} />
-          </div>
-        ) : (
-          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted">
-            <span className="text-[10px] font-semibold uppercase text-muted-foreground">
-              {team.slice(0, 2)}
-            </span>
-          </div>
-        )}
-        <span className="text-xs font-semibold text-foreground">{team}</span>
-      </div>
-    )
-  }
-
   const edgeBadge = (edge: number) => {
     const absEdge = Math.abs(edge)
     if (absEdge >= 4) return { label: 'Fire', className: 'text-emerald-400' }
@@ -304,13 +243,27 @@ export default function SportsEdgeCard() {
                     key={game.gameId}
                     className="flex flex-col rounded-xl border bg-card/60 p-3 hover:border-accent/60"
                   >
-                    <div className="flex items-start justify-between gap-3 text-xs">
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-2">
-                          {renderTeamBadge(game.awayTeam)}
-                          <span className="text-[11px] text-muted-foreground">@</span>
-                          {renderTeamBadge(game.homeTeam)}
+                    <div className="flex items-start justify-between gap-2 text-xs">
+                      <div className="flex flex-1 items-center gap-2">
+                        <NflTeamLogo team={game.awayTeam} size={28} className="shrink-0" />
+                        <div className="flex flex-col leading-tight">
+                          <span className="font-semibold text-foreground">
+                            {getTeamShortName(game.awayTeam)}
+                          </span>
+                          <span className="text-[11px] uppercase text-muted-foreground tracking-wide">
+                            {game.awayTeam}
+                          </span>
                         </div>
+                        <span className="text-[11px] text-muted-foreground">@</span>
+                        <div className="flex flex-col items-end leading-tight">
+                          <span className="font-semibold text-foreground">
+                            {getTeamShortName(game.homeTeam)}
+                          </span>
+                          <span className="text-[11px] uppercase text-muted-foreground tracking-wide">
+                            {game.homeTeam}
+                          </span>
+                        </div>
+                        <NflTeamLogo team={game.homeTeam} size={28} className="shrink-0" />
                       </div>
                       <span className={`min-w-[60px] text-right text-[10px] font-semibold uppercase ${badge.className}`}>
                         {badge.label}
