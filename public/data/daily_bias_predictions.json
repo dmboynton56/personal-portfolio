@@ -1,44 +1,44 @@
 {
-  "lastUpdated": "2025-11-17T09:48:13.068762-05:00",
-  "date": "2025-11-17",
+  "lastUpdated": "2025-11-18T09:48:22.696537-05:00",
+  "date": "2025-11-18",
   "predictions": {
     "QQQ": {
       "symbol": "QQQ",
-      "predicted_bias": "bullish",
-      "confidence": 0.772,
-      "current_price": 528.18,
-      "previous_close": 522.79,
-      "gap_pct": 1.031,
+      "predicted_bias": "choppy",
+      "confidence": 0.4766153326532446,
+      "current_price": 600.0800170898438,
+      "previous_close": 603.6599731445312,
+      "gap_pct": -0.5930418139269885,
       "probabilities": {
-        "bullish": 0.772,
-        "bearish": 0.068,
-        "choppy": 0.16
+        "bearish": 0.259474424157899,
+        "bullish": 0.2639102431888563,
+        "choppy": 0.4766153326532446
       }
     },
     "SPY": {
       "symbol": "SPY",
-      "predicted_bias": "bullish",
-      "confidence": 0.686,
-      "current_price": 605.08,
-      "previous_close": 608.1,
-      "gap_pct": -0.497,
+      "predicted_bias": "choppy",
+      "confidence": 0.35955551530404883,
+      "current_price": 663.1400146484375,
+      "previous_close": 665.6699829101562,
+      "gap_pct": -0.3800634438492044,
       "probabilities": {
-        "bullish": 0.686,
-        "bearish": 0.094,
-        "choppy": 0.22
+        "bearish": 0.3564192705716455,
+        "bullish": 0.28402521412430565,
+        "choppy": 0.35955551530404883
       }
     },
     "IWM": {
       "symbol": "IWM",
       "predicted_bias": "choppy",
-      "confidence": 0.724,
-      "current_price": 220.26,
-      "previous_close": 219.8,
-      "gap_pct": 0.211,
+      "confidence": 0.40511925024306505,
+      "current_price": 232.66000366210938,
+      "previous_close": 232.75999450683594,
+      "gap_pct": -0.042958776029540534,
       "probabilities": {
-        "choppy": 0.724,
-        "bullish": 0.138,
-        "bearish": 0.138
+        "bearish": 0.2522091944381832,
+        "bullish": 0.34267155531875176,
+        "choppy": 0.40511925024306505
       }
     }
   }
