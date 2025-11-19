@@ -32,3 +32,17 @@ This folder keeps the SQL migrations that provision the `games`, `odds_snapshots
 
 ## Local development
 If you run `supabase start`, the same migration file can be applied against the local dockerized Postgres instance. Update your `.env.local` with the local URL + service key so `/api/sports-edges` queries the dev database.
+
+
+### Odds API hydration
+
+Use the new POST endpoint at `/api/sports-edges/odds` (protected by the same `SPORTS_EDGE_CRON_SECRET`) to fetch spreads from [The Odds API](https://the-odds-api.com/) and write them into the `games.book_spread` column. Configure the request via:
+
+```
+THE_ODDS_API_KEY
+THE_ODDS_API_REGIONS (optional, default `us`)
+THE_ODDS_API_MARKETS (optional, default `spreads`)
+THE_ODDS_API_BOOKMAKERS (optional comma list, default `draftkings,betmgm`)
+```
+
+Trigger it from your scheduler before hitting `/api/sports-edges` so the UI reads fresh numbers from Supabase.

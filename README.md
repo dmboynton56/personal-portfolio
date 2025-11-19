@@ -26,19 +26,6 @@ SPORTS_EDGE_CRON_SECRET
 
 To keep the `/api/sports-edges` route warm (and to provide a hook for future batch jobs), a scheduled GitHub Action (`.github/workflows/ping-sports-edge-api.yml`) POSTs to the same endpoint by hitting your deployed URL stored in the `SPORTS_EDGE_CRON_URL` repo secret together with the shared `SPORTS_EDGE_CRON_SECRET`.
 
-### Odds API hydration
-
-Use the new POST endpoint at `/api/sports-edges/odds` (protected by the same `SPORTS_EDGE_CRON_SECRET`) to fetch spreads from [The Odds API](https://the-odds-api.com/) and write them into the `games.book_spread` column. Configure the request via:
-
-```
-THE_ODDS_API_KEY
-THE_ODDS_API_REGIONS (optional, default `us`)
-THE_ODDS_API_MARKETS (optional, default `spreads`)
-THE_ODDS_API_BOOKMAKERS (optional comma list, default `draftkings,betmgm`)
-```
-
-Trigger it from your scheduler before hitting `/api/sports-edges` so the UI reads fresh numbers from Supabase.
-
 ## Contact
 
 If you'd like to discuss potential opportunities or collaborations, feel free to reach out:
