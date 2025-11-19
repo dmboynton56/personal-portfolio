@@ -1,6 +1,7 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import { X } from 'lucide-react';
@@ -20,6 +21,12 @@ interface ProjectCarouselProps {
 
 export function ProjectCarousel({ images, onClose, projectType, initialImage }: ProjectCarouselProps) {
   const swiperRef = useRef(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
 
   // Calculate which slide to start on based on initialImage
   const getInitialSlide = () => {
@@ -28,10 +35,12 @@ export function ProjectCarousel({ images, onClose, projectType, initialImage }: 
     return index >= 0 ? index : 0;
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-background/90 backdrop-blur-xl" />
-      <div className="relative w-full max-w-6xl h-[85vh] flex flex-col bg-background-emphasis rounded-2xl p-8 shadow-2xl">
+  if (!mounted) return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center">
+      <div className="absolute inset-0 bg-background/90 backdrop-blur-xl" onClick={onClose} />
+      <div className="relative w-full max-w-6xl h-[85vh] flex flex-col bg-background-emphasis rounded-2xl p-8 shadow-2xl pointer-events-auto">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-50 text-foreground hover:text-foreground/80 transition-colors"
@@ -91,6 +100,7 @@ export function ProjectCarousel({ images, onClose, projectType, initialImage }: 
           ))}
         </Swiper>
       </div>
-    </div>
+    </div>,
+    document.body
   );
-} 
+}
