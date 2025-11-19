@@ -31,6 +31,8 @@ type SupabaseGameRow = {
   home_team: string
   away_team: string
   book_spread?: number | null
+  home_score?: number | null
+  away_score?: number | null
 }
 
 type SupabasePredictionRow = {
@@ -139,20 +141,40 @@ const windowFromGames = (games: SupabaseGameRow[], fallback: WeekWindow) => {
 const mapGameToNflEdge = (
   game: SupabaseGameRow,
   prediction: SupabasePredictionRow
-): NflGameEdge => ({
-  gameId: game.id,
-  homeTeam: game.home_team,
-  awayTeam: game.away_team,
-  kickoffUtc: game.game_time_utc,
-  bookSpread: game.book_spread ?? 0,
-  modelSpread:
-    prediction.my_spread ??
-    (game.book_spread != null ? game.book_spread : 0),
-  homeWinProb: prediction.my_home_win_prob ?? 0.5,
-  modelVersion: prediction.model_version ?? 'sports-edge-weekly',
-  predictionUpdated: prediction.asof_ts ?? game.game_time_utc,
-  note: 'Sports Edge weekly snapshot from Supabase.'
-})
+): NflGameEdge => {
+  const modelSpread = prediction.my_spread ?? (game.book_spread != null ? game.book_spread : 0)
+  const actualHomeScore = game.home_score ?? null
+  const actualAwayScore = game.away_score ?? null
+  
+  // Calculate spreadHit: true if the actual margin covers the predicted spread
+  // my_spread is the predicted margin from home team's perspective (negative = home favored, positive = home underdog)
+  // Home covers if actualMargin is better than -my_spread (i.e., actualMargin > -my_spread)
+  // For negative spreads (home favored): home covers if actualMargin >= |spread| (home wins by at least that much)
+  // For positive spreads (home underdog): home covers if actualMargin > -spread (home loses by less than spread OR wins)
+  let spreadHit: boolean | null = null
+  if (actualHomeScore != null && actualAwayScore != null && prediction.my_spread != null) {
+    const actualMargin = actualHomeScore - actualAwayScore
+    // Home covers if actualMargin > -my_spread
+    // This works for both negative and positive spreads
+    spreadHit = actualMargin > -modelSpread
+  }
+  
+  return {
+    gameId: game.id,
+    homeTeam: game.home_team,
+    awayTeam: game.away_team,
+    kickoffUtc: game.game_time_utc,
+    bookSpread: game.book_spread ?? 0,
+    modelSpread,
+    homeWinProb: prediction.my_home_win_prob ?? 0.5,
+    modelVersion: prediction.model_version ?? 'sports-edge-weekly',
+    predictionUpdated: prediction.asof_ts ?? game.game_time_utc,
+    note: 'Sports Edge weekly snapshot from Supabase.',
+    actualHomeScore,
+    actualAwayScore,
+    spreadHit
+  }
+}
 
 const loadNflEdges = async (
   options: LoadOptions = {}
@@ -165,7 +187,7 @@ const loadNflEdges = async (
   let gamesQuery = supabase
     .from('games')
     .select(
-      'id, league, season, week, game_time_utc, home_team, away_team, book_spread'
+      'id, league, season, week, game_time_utc, home_team, away_team, book_spread, home_score, away_score'
     )
     .eq('league', 'NFL')
 
@@ -257,7 +279,7 @@ const loadNflEdges = async (
 
   return {
     games: mappedGames,
-    season,
+    season: season ?? 2025,
     week,
     label,
     window
@@ -346,7 +368,7 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json(payload, {
     headers: {
-      'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120'
+      'Cache-Control': 'public, s-maxage=21600, stale-while-revalidate=43200'
     }
   })
 }

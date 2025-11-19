@@ -367,11 +367,25 @@ export default function SportsEdgeCard() {
                           {game.bookSpread > 0 ? `+${game.bookSpread.toFixed(1)}` : game.bookSpread.toFixed(1)}
                         </span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between items-center">
                         <span className="text-muted-foreground">Model spread</span>
-                        <span className="font-semibold text-foreground">
-                          {game.modelSpread > 0 ? `+${game.modelSpread.toFixed(1)}` : game.modelSpread.toFixed(1)}
-                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-semibold text-foreground">
+                            {game.modelSpread > 0 ? `+${game.modelSpread.toFixed(1)}` : game.modelSpread.toFixed(1)}
+                          </span>
+                          {game.spreadHit !== null && (
+                            <span
+                              className={`text-xs font-bold ${
+                                game.spreadHit
+                                  ? 'text-emerald-500'
+                                  : 'text-red-500'
+                              }`}
+                              title={game.spreadHit ? 'Spread prediction hit' : 'Spread prediction missed'}
+                            >
+                              {game.spreadHit ? '✓' : '✗'}
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Home win</span>
@@ -379,6 +393,14 @@ export default function SportsEdgeCard() {
                           {formatPercent(game.homeWinProb)}
                         </span>
                       </div>
+                      {game.actualHomeScore != null && game.actualAwayScore != null && (
+                        <div className="flex justify-between pt-1 border-t border-border/50">
+                          <span className="text-muted-foreground">Final</span>
+                          <span className="font-semibold text-foreground">
+                            {game.awayTeam} {game.actualAwayScore} - {game.homeTeam} {game.actualHomeScore}
+                          </span>
+                        </div>
+                      )}
                     </div>
                     <div className="mt-3 rounded-lg bg-foreground/5 p-2 text-sm font-semibold text-foreground">
                       Edge {edge > 0 ? '+' : ''}

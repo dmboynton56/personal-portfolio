@@ -9,6 +9,9 @@ export type NflGameEdge = {
   modelVersion: string
   predictionUpdated: string
   note: string
+  actualHomeScore?: number | null
+  actualAwayScore?: number | null
+  spreadHit?: boolean | null
 }
 
 export type SportsEdgePayload = {

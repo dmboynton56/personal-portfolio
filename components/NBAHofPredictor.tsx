@@ -45,7 +45,7 @@ export function NBAHofPredictor() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       type: 'bot',
-      content: "🏀 Welcome! I'm trained on 5,250+ NBA players from 1976-2025. Enter any player's name to see their Hall of Fame prediction! Try: LeBron James, Stephen Curry, Michael Jordan, Kobe Bryant, etc.",
+      content: "Welcome! I'm trained on 5,250+ NBA players from 1976-2025. Enter any player's name to see their Hall of Fame prediction! Try: LeBron James, Stephen Curry, Michael Jordan, Kobe Bryant, etc.",
       timestamp: new Date()
     }
   ])
@@ -194,7 +194,7 @@ export function NBAHofPredictor() {
       {/* Header */}
       <div className="p-4 border-b border-border bg-background-emphasis rounded-t-lg">
         <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-          🏀 NBA Hall of Fame Predictor
+          NBA Hall of Fame Predictor
           <span className="text-xs bg-accent/20 text-accent px-2 py-1 rounded-full">XGBoost ML</span>
         </h3>
         <p className="text-sm text-muted-foreground mt-1">

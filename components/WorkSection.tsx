@@ -60,11 +60,13 @@ const mockProjects: Project[] = [
     title: 'NBA Hall of Fame Predictor 🏀',
     description: 'Interactive machine learning model that predicts NBA players\' Hall of Fame chances with 99% accuracy. Features real-time player lookup and detailed prediction analysis using XGBoost trained on 5,250+ players since 1976. Try entering any NBA player name!',
     type: 'desktop',
-    image: '/images/projects/project1-1.JPG', // Placeholder for behind-the-scenes
+    image: '/images/projects/nba-hof-top-20.png', // Placeholder for behind-the-scenes
     images: [
-      '/images/projects/project1-1.JPG', // Model training process
-      '/images/projects/project3-1.JPG', // Data analysis
-      '/images/projects/project3-2.JPG'  // Feature importance
+      '/images/projects/nba-hof-top-20.png',
+      '/images/projects/nba-hof-roc-curves.png',
+      '/images/projects/nba-hof-career-ws.png',
+      '/images/projects/nba-hof-hold-out-prob.png',
+      '/images/projects/nba-hof-mvp-chart.png'
     ],
     technologies: ['Python', 'XGBoost', 'Next.js', 'TypeScript', 'Basketball Analytics'],
     isInteractive: true
