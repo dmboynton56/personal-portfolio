@@ -1,44 +1,44 @@
 {
-  "lastUpdated": "2025-11-21T09:45:46.932560-05:00",
-  "date": "2025-11-21",
+  "lastUpdated": "2025-11-24T09:49:06.665295-05:00",
+  "date": "2025-11-24",
   "predictions": {
     "QQQ": {
       "symbol": "QQQ",
-      "predicted_bias": "choppy",
-      "confidence": 0.5592624840811511,
-      "current_price": 586.8099975585938,
-      "previous_close": 585.6699829101562,
-      "gap_pct": 0.19465137051635137,
+      "predicted_bias": "bearish",
+      "confidence": 0.679,
+      "current_price": 516.0,
+      "previous_close": 514.03,
+      "gap_pct": 0.383,
       "probabilities": {
-        "bearish": 0.21440669002743742,
-        "bullish": 0.2263308258914115,
-        "choppy": 0.5592624840811511
+        "bearish": 0.679,
+        "bullish": 0.096,
+        "choppy": 0.225
       }
     },
     "SPY": {
       "symbol": "SPY",
-      "predicted_bias": "choppy",
-      "confidence": 0.48249327167096046,
-      "current_price": 654.6099853515625,
-      "previous_close": 652.530029296875,
-      "gap_pct": 0.31875254184527396,
+      "predicted_bias": "bearish",
+      "confidence": 0.742,
+      "current_price": 622.15,
+      "previous_close": 614.55,
+      "gap_pct": 1.236,
       "probabilities": {
-        "bearish": 0.25043626534186336,
-        "bullish": 0.26707046298717624,
-        "choppy": 0.48249327167096046
+        "bearish": 0.742,
+        "bullish": 0.077,
+        "choppy": 0.181
       }
     },
     "IWM": {
       "symbol": "IWM",
-      "predicted_bias": "bearish",
-      "confidence": 0.36590044664982685,
-      "current_price": 230.57000732421875,
-      "previous_close": 229.11000061035156,
-      "gap_pct": 0.6372514119757817,
+      "predicted_bias": "choppy",
+      "confidence": 0.712,
+      "current_price": 218.87,
+      "previous_close": 221.4,
+      "gap_pct": -1.141,
       "probabilities": {
-        "bearish": 0.36590044664982685,
-        "bullish": 0.3072957121903608,
-        "choppy": 0.3268038411598123
+        "choppy": 0.712,
+        "bullish": 0.144,
+        "bearish": 0.144
       }
     }
   }
