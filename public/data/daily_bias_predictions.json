@@ -1,44 +1,44 @@
 {
-  "lastUpdated": "2025-12-01T09:51:01.618043-05:00",
-  "date": "2025-12-01",
+  "lastUpdated": "2025-12-02T09:51:15.328146-05:00",
+  "date": "2025-12-02",
   "predictions": {
     "QQQ": {
       "symbol": "QQQ",
-      "predicted_bias": "bearish",
-      "confidence": 0.715,
-      "current_price": 514.73,
-      "previous_close": 513.01,
-      "gap_pct": 0.335,
+      "predicted_bias": "choppy",
+      "confidence": 0.5880869551542433,
+      "current_price": 622.010009765625,
+      "previous_close": 617.1699829101562,
+      "gap_pct": 0.7842291409971782,
       "probabilities": {
-        "bearish": 0.714,
-        "bullish": 0.086,
-        "choppy": 0.2
+        "bearish": 0.1800866392439038,
+        "bullish": 0.2318264056018529,
+        "choppy": 0.5880869551542433
       }
     },
     "SPY": {
       "symbol": "SPY",
-      "predicted_bias": "bullish",
-      "confidence": 0.869,
-      "current_price": 622.01,
-      "previous_close": 617.79,
-      "gap_pct": 0.683,
+      "predicted_bias": "choppy",
+      "confidence": 0.538578123499065,
+      "current_price": 682.7150268554688,
+      "previous_close": 680.27001953125,
+      "gap_pct": 0.3594171805342117,
       "probabilities": {
-        "bullish": 0.869,
-        "bearish": 0.039,
-        "choppy": 0.092
+        "bearish": 0.2171425246138564,
+        "bullish": 0.2442793518870788,
+        "choppy": 0.538578123499065
       }
     },
     "IWM": {
       "symbol": "IWM",
-      "predicted_bias": "bearish",
-      "confidence": 0.567,
-      "current_price": 222.73,
-      "previous_close": 225.53,
-      "gap_pct": -1.243,
+      "predicted_bias": "choppy",
+      "confidence": 0.3923072308130417,
+      "current_price": 246.60000610351562,
+      "previous_close": 245.6199951171875,
+      "gap_pct": 0.3989947910635504,
       "probabilities": {
-        "bearish": 0.567,
-        "bullish": 0.13,
-        "choppy": 0.303
+        "bearish": 0.2990573468718639,
+        "bullish": 0.3086354223150946,
+        "choppy": 0.3923072308130417
       }
     }
   }
