@@ -1,44 +1,44 @@
 {
-  "lastUpdated": "2025-12-08T09:50:05.593348-05:00",
-  "date": "2025-12-08",
+  "lastUpdated": "2025-12-09T09:52:01.689881-05:00",
+  "date": "2025-12-09",
   "predictions": {
     "QQQ": {
       "symbol": "QQQ",
-      "predicted_bias": "bearish",
-      "confidence": 0.693,
-      "current_price": 502.99,
-      "previous_close": 505.36,
-      "gap_pct": -0.469,
+      "predicted_bias": "choppy",
+      "confidence": 0.5147662955237202,
+      "current_price": 623.5700073242188,
+      "previous_close": 624.280029296875,
+      "gap_pct": -0.11373453247510511,
       "probabilities": {
-        "bearish": 0.693,
-        "bullish": 0.092,
-        "choppy": 0.215
+        "bearish": 0.20467901313097348,
+        "bullish": 0.2805546913453062,
+        "choppy": 0.5147662955237202
       }
     },
     "SPY": {
       "symbol": "SPY",
       "predicted_bias": "choppy",
-      "confidence": 0.853,
-      "current_price": 611.95,
-      "previous_close": 616.5,
-      "gap_pct": -0.738,
+      "confidence": 0.6019994376782684,
+      "current_price": 683.8900146484375,
+      "previous_close": 683.6300048828125,
+      "gap_pct": 0.038033697141419465,
       "probabilities": {
-        "choppy": 0.852,
-        "bullish": 0.074,
-        "bearish": 0.074
+        "bearish": 0.20209680356292498,
+        "bullish": 0.1959037587588069,
+        "choppy": 0.6019994376782684
       }
     },
     "IWM": {
       "symbol": "IWM",
-      "predicted_bias": "bullish",
-      "confidence": 0.578,
-      "current_price": 218.45,
-      "previous_close": 218.75,
-      "gap_pct": -0.138,
+      "predicted_bias": "choppy",
+      "confidence": 0.42271265713053424,
+      "current_price": 251.35000610351562,
+      "previous_close": 250.8699951171875,
+      "gap_pct": 0.1913385401486137,
       "probabilities": {
-        "bullish": 0.578,
-        "bearish": 0.127,
-        "choppy": 0.295
+        "bearish": 0.29578250237299364,
+        "bullish": 0.2815048404964723,
+        "choppy": 0.42271265713053424
       }
     }
   }
