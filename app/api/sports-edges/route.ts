@@ -37,6 +37,7 @@ type SupabaseGameRow = {
 
 type SupabasePredictionRow = {
   game_id: string
+  model_name: string | null
   my_spread: number | null
   my_home_win_prob: number | null
   model_version: string | null
@@ -181,6 +182,7 @@ const loadNflEdges = async (
 ): Promise<LoadedEdges | null> => {
   if (!supabase) return null
 
+  const preferredModelName = process.env.SPORTS_EDGE_MODEL_NAME?.trim()
   const weekFilter = Number.isFinite(options.week) ? (options.week as number) : undefined
   const defaultWindow = getWeekWindow()
 
@@ -223,13 +225,13 @@ const loadNflEdges = async (
 
   let predictionsQuery = supabase
     .from('model_predictions')
-    .select('game_id, my_spread, my_home_win_prob, model_version, asof_ts')
+    .select('game_id, model_name, my_spread, my_home_win_prob, model_version, asof_ts')
     .in('game_id', gameIds)
 
-  if (process.env.SPORTS_EDGE_MODEL_NAME) {
+  if (preferredModelName) {
     predictionsQuery = predictionsQuery.eq(
       'model_name',
-      process.env.SPORTS_EDGE_MODEL_NAME
+      preferredModelName
     )
   }
 
@@ -251,16 +253,34 @@ const loadNflEdges = async (
     return null
   }
 
-  const latestPredictions = new Map<string, SupabasePredictionRow>()
+  // Track the latest prediction per (game_id, model_name) plus the freshest overall per game.
+  const latestPredictionsByModel = new Map<string, SupabasePredictionRow>()
+  const latestPredictionsByGame = new Map<string, SupabasePredictionRow>()
   for (const prediction of predictions) {
-    if (!latestPredictions.has(prediction.game_id)) {
-      latestPredictions.set(prediction.game_id, prediction)
+    const key = `${prediction.game_id}:${prediction.model_name ?? 'unknown'}`
+    if (!latestPredictionsByModel.has(key)) {
+      latestPredictionsByModel.set(key, prediction)
     }
+
+    if (!latestPredictionsByGame.has(prediction.game_id)) {
+      latestPredictionsByGame.set(prediction.game_id, prediction)
+    }
+  }
+
+  const pickPrediction = (gameId: string) => {
+    if (preferredModelName) {
+      const preferred = latestPredictionsByModel.get(
+        `${gameId}:${preferredModelName}`
+      )
+      if (preferred) return preferred
+    }
+
+    return latestPredictionsByGame.get(gameId) ?? null
   }
 
   const mappedGames = games
     .map((game) => {
-      const prediction = latestPredictions.get(game.id)
+      const prediction = pickPrediction(game.id)
       return prediction ? mapGameToNflEdge(game, prediction) : null
     })
     .filter((value): value is NflGameEdge => Boolean(value))
