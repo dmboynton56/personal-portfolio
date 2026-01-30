@@ -3,7 +3,8 @@ import { createClient } from '@supabase/supabase-js'
 import {
   sportsEdgeMockData,
   SportsEdgePayload,
-  NflGameEdge
+  NflGameEdge,
+  NbaGameEdge
 } from '@/lib/sportsEdgeData'
 
 const supabaseUrl = process.env.SUPABASE_URL
@@ -59,6 +60,15 @@ type LoadedEdges = {
 
 type LoadOptions = {
   week?: number
+  date?: string
+}
+
+type LoadedNbaEdges = {
+  games: NbaGameEdge[]
+  season: number
+  date: string
+  label: string
+  window: WeekWindow
 }
 
 const parseIsoDate = (value?: string | null) => {
@@ -80,6 +90,26 @@ const getWeekWindow = (): WeekWindow => {
     Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
   )
   start.setUTCDate(start.getUTCDate() - DEFAULT_LOOKBACK_DAYS)
+  const end = new Date(start)
+  end.setUTCDate(end.getUTCDate() + DEFAULT_HORIZON_DAYS)
+  end.setUTCHours(23, 59, 59, 999)
+
+  return { start, end }
+}
+
+const getDateWindow = (): WeekWindow => {
+  const envStart = parseIsoDate(process.env.SPORTS_EDGE_DATE_START)
+  const envEnd = parseIsoDate(process.env.SPORTS_EDGE_DATE_END)
+
+  if (envStart && envEnd && envStart < envEnd) {
+    return { start: envStart, end: envEnd }
+  }
+
+  const now = new Date()
+  const start = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
+  )
+  start.setUTCHours(0, 0, 0, 0)
   const end = new Date(start)
   end.setUTCDate(end.getUTCDate() + DEFAULT_HORIZON_DAYS)
   end.setUTCHours(23, 59, 59, 999)
@@ -306,25 +336,52 @@ const loadNflEdges = async (
   }
 }
 
-const loadAvailableWeeks = async (season: number) => {
+const loadAvailableWeeks = async (season?: number) => {
   if (!supabase) return []
 
-  const { data, error } = await supabase
+  // Query weeks from games that have predictions, not just games in the default window
+  // This ensures we get all available weeks even if current window is empty
+  let query = supabase
     .from('games')
-    .select('week')
+    .select('week, id')
     .eq('league', 'NFL')
-    .eq('season', season)
     .not('week', 'is', null)
-    .order('week', { ascending: true })
 
-  if (error) {
-    console.warn('Supabase error when gathering available NFL weeks.', error)
+  if (typeof season === 'number' && Number.isFinite(season)) {
+    query = query.eq('season', season)
+  }
+
+  const { data: games, error: gamesError } = await query.order('week', {
+    ascending: true
+  })
+
+  if (gamesError) {
+    console.warn('Supabase error when gathering available NFL weeks.', gamesError)
     return []
   }
 
+  if (!games?.length) {
+    return []
+  }
+
+  // Get game IDs that have predictions
+  const gameIds = games.map((g) => g.id)
+  const { data: predictions } = await supabase
+    .from('model_predictions')
+    .select('game_id')
+    .in('game_id', gameIds)
+    .limit(10000) // Reasonable limit
+
+  if (!predictions?.length) {
+    return []
+  }
+
+  // Get unique weeks from games that have predictions
+  const gamesWithPredictions = new Set(predictions.map((p) => p.game_id))
   const uniqueWeeks = Array.from(
     new Set(
-      (data ?? [])
+      games
+        .filter((g) => gamesWithPredictions.has(g.id))
         .map((row) => row.week)
         .filter((week): week is number => Number.isFinite(week))
     )
@@ -333,13 +390,270 @@ const loadAvailableWeeks = async (season: number) => {
   return uniqueWeeks
 }
 
+const mapGameToNbaEdge = (
+  game: SupabaseGameRow,
+  prediction: SupabasePredictionRow
+): NbaGameEdge => {
+  const modelSpread = prediction.my_spread ?? (game.book_spread != null ? game.book_spread : 0)
+  const actualHomeScore = game.home_score ?? null
+  const actualAwayScore = game.away_score ?? null
+  
+  // Calculate spreadHit: same logic as NFL
+  let spreadHit: boolean | null = null
+  if (actualHomeScore != null && actualAwayScore != null && prediction.my_spread != null) {
+    const actualMargin = actualHomeScore - actualAwayScore
+    spreadHit = actualMargin > -modelSpread
+  }
+  
+  return {
+    gameId: game.id,
+    homeTeam: game.home_team,
+    awayTeam: game.away_team,
+    tipoffUtc: game.game_time_utc,
+    bookSpread: game.book_spread ?? 0,
+    modelSpread,
+    homeWinProb: prediction.my_home_win_prob ?? 0.5,
+    modelVersion: prediction.model_version ?? 'sports-edge-daily',
+    predictionUpdated: prediction.asof_ts ?? game.game_time_utc,
+    note: 'Sports Edge daily snapshot from Supabase.',
+    actualHomeScore,
+    actualAwayScore,
+    spreadHit
+  }
+}
+
+const loadNbaEdges = async (
+  options: LoadOptions = {}
+): Promise<LoadedNbaEdges | null> => {
+  if (!supabase) return null
+
+  const preferredModelName = process.env.SPORTS_EDGE_MODEL_NAME?.trim()
+  const dateFilter = options.date
+  const defaultWindow = getDateWindow()
+
+  let gamesQuery = supabase
+    .from('games')
+    .select(
+      'id, league, season, week, game_time_utc, home_team, away_team, book_spread, home_score, away_score'
+    )
+    .eq('league', 'NBA')
+
+  if (dateFilter) {
+    // Filter by date: get all games on this date (UTC)
+    const filterDate = new Date(dateFilter)
+    const startOfDay = new Date(Date.UTC(
+      filterDate.getUTCFullYear(),
+      filterDate.getUTCMonth(),
+      filterDate.getUTCDate(),
+      0, 0, 0, 0
+    ))
+    const endOfDay = new Date(startOfDay)
+    endOfDay.setUTCDate(endOfDay.getUTCDate() + 1)
+    
+    gamesQuery = gamesQuery
+      .gte('game_time_utc', startOfDay.toISOString())
+      .lt('game_time_utc', endOfDay.toISOString())
+  } else {
+    gamesQuery = gamesQuery
+      .gte('game_time_utc', defaultWindow.start.toISOString())
+      .lt('game_time_utc', defaultWindow.end.toISOString())
+  }
+
+  const { data: games, error: gamesError } = await gamesQuery.order(
+    'game_time_utc',
+    { ascending: true }
+  )
+
+  if (gamesError) {
+    console.warn(
+      'Supabase error when loading NBA games for date window.',
+      gamesError
+    )
+    return null
+  }
+
+  if (!games?.length) {
+    return null
+  }
+
+  const gameIds = games.map((game) => game.id)
+  if (!gameIds.length) {
+    return null
+  }
+
+  let predictionsQuery = supabase
+    .from('model_predictions')
+    .select('game_id, model_name, my_spread, my_home_win_prob, model_version, asof_ts')
+    .in('game_id', gameIds)
+
+  if (preferredModelName) {
+    predictionsQuery = predictionsQuery.eq(
+      'model_name',
+      preferredModelName
+    )
+  }
+
+  predictionsQuery = predictionsQuery.order('asof_ts', {
+    ascending: false
+  })
+
+  const { data: predictions, error: predictionError } = await predictionsQuery
+
+  if (predictionError) {
+    console.warn(
+      'Supabase error when loading NBA model_predictions.',
+      predictionError
+    )
+    return null
+  }
+
+  if (!predictions?.length) {
+    return null
+  }
+
+  // Track the latest prediction per (game_id, model_name) plus the freshest overall per game.
+  const latestPredictionsByModel = new Map<string, SupabasePredictionRow>()
+  const latestPredictionsByGame = new Map<string, SupabasePredictionRow>()
+  for (const prediction of predictions) {
+    const key = `${prediction.game_id}:${prediction.model_name ?? 'unknown'}`
+    if (!latestPredictionsByModel.has(key)) {
+      latestPredictionsByModel.set(key, prediction)
+    }
+
+    if (!latestPredictionsByGame.has(prediction.game_id)) {
+      latestPredictionsByGame.set(prediction.game_id, prediction)
+    }
+  }
+
+  const pickPrediction = (gameId: string) => {
+    if (preferredModelName) {
+      const preferred = latestPredictionsByModel.get(
+        `${gameId}:${preferredModelName}`
+      )
+      if (preferred) return preferred
+    }
+
+    return latestPredictionsByGame.get(gameId) ?? null
+  }
+
+  const mappedGames = games
+    .map((game) => {
+      const prediction = pickPrediction(game.id)
+      return prediction ? mapGameToNbaEdge(game, prediction) : null
+    })
+    .filter((value): value is NbaGameEdge => Boolean(value))
+
+  if (!mappedGames.length) {
+    return null
+  }
+
+  const season = determineSeason(games)
+  
+  // Determine the date label
+  let date: string
+  let label: string
+  if (dateFilter) {
+    date = dateFilter
+    const dateObj = new Date(dateFilter)
+    label = dateObj.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    })
+  } else {
+    // Use the first game's date
+    const firstGameDate = parseIsoDate(games[0]?.game_time_utc)
+    if (firstGameDate) {
+      date = firstGameDate.toISOString().split('T')[0]
+      label = firstGameDate.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      })
+    } else {
+      date = new Date().toISOString().split('T')[0]
+      label = 'Today'
+    }
+  }
+
+  const window = dateFilter
+    ? windowFromGames(games, defaultWindow)
+    : defaultWindow
+
+  return {
+    games: mappedGames,
+    season: season ?? 2024,
+    date,
+    label,
+    window
+  }
+}
+
+const loadAvailableDates = async (season?: number) => {
+  if (!supabase) return []
+
+  // Query dates from NBA games that have predictions
+  let query = supabase
+    .from('games')
+    .select('game_time_utc, id')
+    .eq('league', 'NBA')
+
+  if (typeof season === 'number' && Number.isFinite(season)) {
+    query = query.eq('season', season)
+  }
+
+  const { data: games, error: gamesError } = await query.order('game_time_utc', {
+    ascending: false
+  })
+
+  if (gamesError) {
+    console.warn('Supabase error when gathering available NBA dates.', gamesError)
+    return []
+  }
+
+  if (!games?.length) {
+    return []
+  }
+
+  // Get game IDs that have predictions
+  const gameIds = games.map((g) => g.id)
+  const { data: predictions } = await supabase
+    .from('model_predictions')
+    .select('game_id')
+    .in('game_id', gameIds)
+    .limit(10000)
+
+  if (!predictions?.length) {
+    return []
+  }
+
+  // Get unique dates (YYYY-MM-DD) from games that have predictions
+  const gamesWithPredictions = new Set(predictions.map((p) => p.game_id))
+  const dateSet = new Set<string>()
+  
+  games
+    .filter((g) => gamesWithPredictions.has(g.id))
+    .forEach((game) => {
+      const date = parseIsoDate(game.game_time_utc)
+      if (date) {
+        const dateStr = date.toISOString().split('T')[0]
+        dateSet.add(dateStr)
+      }
+    })
+
+  // Sort dates descending (most recent first)
+  return Array.from(dateSet).sort((a, b) => b.localeCompare(a))
+}
+
 export async function GET(request: NextRequest) {
   const weekParam = request.nextUrl.searchParams.get('week')
+  const dateParam = request.nextUrl.searchParams.get('date')
   const requestedWeek = weekParam ? Number(weekParam) : undefined
   const normalizedWeek =
     typeof requestedWeek === 'number' && Number.isFinite(requestedWeek)
       ? requestedWeek
       : undefined
+  const normalizedDate = dateParam || undefined
 
   let payload: SportsEdgePayload = {
     ...sportsEdgeMockData,
@@ -347,14 +661,25 @@ export async function GET(request: NextRequest) {
       ...sportsEdgeMockData.nfl,
       availableWeeks:
         sportsEdgeMockData.nfl.availableWeeks ?? [sportsEdgeMockData.nfl.week]
+    },
+    nba: {
+      ...sportsEdgeMockData.nba,
+      availableDates: sportsEdgeMockData.nba.availableDates ?? []
     }
   }
 
   if (supabase) {
     try {
+      // Always load available weeks/dates independently, regardless of whether loadEdges returns data
+      // This fixes the bug where dropdown only shows options from the current window
+      const [availableWeeks, availableDates] = await Promise.all([
+        loadAvailableWeeks(),
+        loadAvailableDates()
+      ])
+      
+      // Load NFL edges
       const nflEdges = await loadNflEdges({ week: normalizedWeek })
       if (nflEdges) {
-        const availableWeeks = await loadAvailableWeeks(nflEdges.season)
         payload = {
           ...payload,
           nfl: {
@@ -370,8 +695,51 @@ export async function GET(request: NextRequest) {
           }
         }
       } else {
+        // Even if no edges returned, update availableWeeks if we found any
+        if (availableWeeks.length > 0) {
+          payload = {
+            ...payload,
+            nfl: {
+              ...payload.nfl,
+              availableWeeks
+            }
+          }
+        }
         console.warn(
           'No NFL edges returned from Supabase window. Serving mock payload.'
+        )
+      }
+
+      // Load NBA edges
+      const nbaEdges = await loadNbaEdges({ date: normalizedDate })
+      if (nbaEdges) {
+        payload = {
+          ...payload,
+          nba: {
+            season: nbaEdges.season,
+            date: nbaEdges.date,
+            label: nbaEdges.label,
+            updatedAt: new Date().toISOString(),
+            games: nbaEdges.games,
+            availableDates:
+              availableDates.length > 0
+                ? availableDates
+                : payload.nba.availableDates
+          }
+        }
+      } else {
+        // Even if no edges returned, update availableDates if we found any
+        if (availableDates.length > 0) {
+          payload = {
+            ...payload,
+            nba: {
+              ...payload.nba,
+              availableDates
+            }
+          }
+        }
+        console.warn(
+          'No NBA edges returned from Supabase window. Serving mock payload.'
         )
       }
     } catch (error) {
