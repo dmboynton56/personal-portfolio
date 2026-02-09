@@ -1,44 +1,44 @@
 {
-  "lastUpdated": "2026-02-06T10:10:52.616373-05:00",
-  "date": "2026-02-06",
+  "lastUpdated": "2026-02-09T10:32:29.888895-05:00",
+  "date": "2026-02-09",
   "predictions": {
     "QQQ": {
       "symbol": "QQQ",
-      "predicted_bias": "choppy",
-      "confidence": 0.5182392378264935,
-      "current_price": 603.8699951171875,
-      "previous_close": 597.030029296875,
-      "gap_pct": 1.1456652906333638,
+      "predicted_bias": "bearish",
+      "confidence": 0.59,
+      "current_price": 516.7,
+      "previous_close": 516.29,
+      "gap_pct": 0.08,
       "probabilities": {
-        "bearish": 0.19653338508417775,
-        "bullish": 0.28522737708932855,
-        "choppy": 0.5182392378264935
+        "bearish": 0.59,
+        "bullish": 0.123,
+        "choppy": 0.287
       }
     },
     "SPY": {
       "symbol": "SPY",
-      "predicted_bias": "choppy",
-      "confidence": 0.5289053797788444,
-      "current_price": 684.7100219726562,
-      "previous_close": 677.6199951171875,
-      "gap_pct": 1.0463131115607947,
+      "predicted_bias": "bullish",
+      "confidence": 0.764,
+      "current_price": 612.65,
+      "previous_close": 618.36,
+      "gap_pct": -0.923,
       "probabilities": {
-        "bearish": 0.20769655238063667,
-        "bullish": 0.263398067840519,
-        "choppy": 0.5289053797788444
+        "bullish": 0.764,
+        "bearish": 0.071,
+        "choppy": 0.165
       }
     },
     "IWM": {
       "symbol": "IWM",
       "predicted_bias": "choppy",
-      "confidence": 0.37515435966008165,
-      "current_price": 261.4599914550781,
-      "previous_close": 255.8300018310547,
-      "gap_pct": 2.2006760675948307,
+      "confidence": 0.58,
+      "current_price": 220.62,
+      "previous_close": 222.49,
+      "gap_pct": -0.84,
       "probabilities": {
-        "bearish": 0.2947754897153479,
-        "bullish": 0.33007015062457057,
-        "choppy": 0.37515435966008165
+        "choppy": 0.58,
+        "bullish": 0.21,
+        "bearish": 0.21
       }
     }
   }
