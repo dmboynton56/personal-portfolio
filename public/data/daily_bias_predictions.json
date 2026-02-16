@@ -1,44 +1,44 @@
 {
-  "lastUpdated": "2026-02-13T10:22:56.378555-05:00",
-  "date": "2026-02-13",
+  "lastUpdated": "2026-02-16T10:11:03.807286-05:00",
+  "date": "2026-02-16",
   "predictions": {
     "QQQ": {
       "symbol": "QQQ",
-      "predicted_bias": "choppy",
-      "confidence": 0.5222553692827058,
-      "current_price": 598.7293090820312,
-      "previous_close": 600.6400146484375,
-      "gap_pct": -0.3181116009269897,
+      "predicted_bias": "bearish",
+      "confidence": 0.648,
+      "current_price": 506.08,
+      "previous_close": 513.26,
+      "gap_pct": -1.398,
       "probabilities": {
-        "bearish": 0.22780610534099777,
-        "bullish": 0.2499385253762966,
-        "choppy": 0.5222553692827058
+        "bearish": 0.648,
+        "bullish": 0.106,
+        "choppy": 0.246
       }
     },
     "SPY": {
       "symbol": "SPY",
-      "predicted_bias": "choppy",
-      "confidence": 0.5816572984443786,
-      "current_price": 679.8400268554688,
-      "previous_close": 681.27001953125,
-      "gap_pct": -0.2099010135166613,
+      "predicted_bias": "bullish",
+      "confidence": 0.881,
+      "current_price": 621.41,
+      "previous_close": 614.69,
+      "gap_pct": 1.094,
       "probabilities": {
-        "bearish": 0.17348797144570882,
-        "bullish": 0.24485473010991293,
-        "choppy": 0.5816572984443786
+        "bullish": 0.881,
+        "bearish": 0.036,
+        "choppy": 0.083
       }
     },
     "IWM": {
       "symbol": "IWM",
-      "predicted_bias": "choppy",
-      "confidence": 0.39380979598027366,
-      "current_price": 259.7699890136719,
-      "previous_close": 259.5400085449219,
-      "gap_pct": 0.08861079647772084,
+      "predicted_bias": "bearish",
+      "confidence": 0.718,
+      "current_price": 223.17,
+      "previous_close": 222.88,
+      "gap_pct": 0.129,
       "probabilities": {
-        "bearish": 0.3277705839449338,
-        "bullish": 0.27841962007479276,
-        "choppy": 0.39380979598027366
+        "bearish": 0.718,
+        "bullish": 0.085,
+        "choppy": 0.197
       }
     }
   }
