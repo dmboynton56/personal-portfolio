@@ -1,44 +1,44 @@
 {
-  "lastUpdated": "2026-02-16T10:11:03.807286-05:00",
-  "date": "2026-02-16",
+  "lastUpdated": "2026-02-17T10:27:55.509543-05:00",
+  "date": "2026-02-17",
   "predictions": {
     "QQQ": {
       "symbol": "QQQ",
       "predicted_bias": "bearish",
-      "confidence": 0.648,
-      "current_price": 506.08,
-      "previous_close": 513.26,
-      "gap_pct": -1.398,
+      "confidence": 0.853,
+      "current_price": 505.14,
+      "previous_close": 510.67,
+      "gap_pct": -1.082,
       "probabilities": {
-        "bearish": 0.648,
-        "bullish": 0.106,
-        "choppy": 0.246
+        "bearish": 0.853,
+        "bullish": 0.044,
+        "choppy": 0.103
       }
     },
     "SPY": {
       "symbol": "SPY",
       "predicted_bias": "bullish",
-      "confidence": 0.881,
-      "current_price": 621.41,
-      "previous_close": 614.69,
-      "gap_pct": 1.094,
+      "confidence": 0.621,
+      "current_price": 616.63,
+      "previous_close": 608.78,
+      "gap_pct": 1.29,
       "probabilities": {
-        "bullish": 0.881,
-        "bearish": 0.036,
-        "choppy": 0.083
+        "bullish": 0.621,
+        "bearish": 0.114,
+        "choppy": 0.265
       }
     },
     "IWM": {
       "symbol": "IWM",
-      "predicted_bias": "bearish",
-      "confidence": 0.718,
-      "current_price": 223.17,
-      "previous_close": 222.88,
-      "gap_pct": 0.129,
+      "predicted_bias": "bullish",
+      "confidence": 0.709,
+      "current_price": 224.55,
+      "previous_close": 224.15,
+      "gap_pct": 0.178,
       "probabilities": {
-        "bearish": 0.718,
-        "bullish": 0.085,
-        "choppy": 0.197
+        "bullish": 0.709,
+        "bearish": 0.087,
+        "choppy": 0.204
       }
     }
   }
