@@ -1,0 +1,31 @@
+# Portfolio Analytics FAQ
+
+## What does "edge" mean here?
+`edge_pts` is the model spread minus the book spread. It measures disagreement size, not guaranteed value.
+
+## Why can edge direction feel counterintuitive?
+Spreads use home-team perspective. Sign interpretation depends on whether the home team is favored or an underdog in each line.
+
+## Why might the UI and chat disagree at times?
+They can use different windows or timing. Chat may query by explicit week, while cards may show a moving time window.
+
+## Is a high spread hit rate proof of long-term performance?
+No. Hit rate is one diagnostic. You should also monitor sample size, regime changes, and version-specific drift.
+
+## What happens when Supabase is unavailable?
+The Sports Edge API can fall back to mock payloads for UI continuity; chat will report missing SQL results and continue with docs-based context.
+
+## What documentation should be kept current?
+- Data dictionary
+- Metric definitions
+- Model cards
+- Weekly postmortems
+- Limitations/risk notes
+
+## How should users phrase strong chat questions?
+Best pattern: include league, time slice, and intent.
+
+Examples:
+- "NFL week 14 top deltas and brief rationale"
+- "Explain edge_pts and spreadHit with formulas"
+- "What risk caveats apply to this week's board?"

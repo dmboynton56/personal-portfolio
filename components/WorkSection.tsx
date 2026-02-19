@@ -23,6 +23,7 @@ interface Project {
   images?: string[]
   technologies: string[]
   isInteractive?: boolean
+  caseStudyUrl?: string
 }
 
 interface PlayerPrediction {
@@ -96,7 +97,19 @@ const mockProjects: Project[] = [
       '/images/projects/project3-2.JPG'
     ],
     technologies: ['Python', 'Scikit-learn', 'LightGBM', 'Supabase', 'Next.js', 'Sports Analytics'],
-    isInteractive: true
+    isInteractive: true,
+    caseStudyUrl: '/projects/sports-edge'
+  },
+  {
+    id: 'llm-advisor',
+    title: 'LLM Advisor: Agentic Trading System 🤖',
+    description: 'Autonomous trading agent that uses Google Gemini 1.5 Flash to analyze market sentiment and adjust statistical mean-reversion thresholds in real-time. Features automated risk management, backtesting engine, and Alpaca trade execution.',
+    type: 'desktop',
+    image: '/images/projects/llm-advisor-dashboard.png', // Placeholder
+    images: [],
+    technologies: ['Python', 'Gemini API', 'Alpaca', 'Pandas', 'Backtesting'],
+    isInteractive: false,
+    caseStudyUrl: '/projects/llm-advisor'
   },
   {
     id: 'mancala-ai',
@@ -159,7 +172,7 @@ export function WorkSection() {
   const observerRefs = useRef<(HTMLDivElement | null)[]>([])
   const [isCarouselOpen, setIsCarouselOpen] = useState(false)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
-  
+
   // NBA Predictor state
   const [nbaInput, setNbaInput] = useState('')
   const [nbaIsLoading, setNbaIsLoading] = useState(false)
@@ -227,8 +240,8 @@ export function WorkSection() {
 
     const normalizedQuery = query.toLowerCase().trim()
     const matches = Object.keys(nbaPredictions)
-      .filter(key => 
-        key.includes(normalizedQuery) || 
+      .filter(key =>
+        key.includes(normalizedQuery) ||
         nbaPredictions[key].player.toLowerCase().includes(normalizedQuery)
       )
       .slice(0, 5)
@@ -261,8 +274,8 @@ export function WorkSection() {
 
     // Try fuzzy search if direct match not found
     if (!prediction) {
-      const fuzzyMatch = Object.keys(nbaPredictions).find(key => 
-        key.includes(playerKey) || 
+      const fuzzyMatch = Object.keys(nbaPredictions).find(key =>
+        key.includes(playerKey) ||
         nbaPredictions[key].player.toLowerCase().includes(playerKey)
       )
       if (fuzzyMatch) {
@@ -283,257 +296,263 @@ export function WorkSection() {
 
   return (
     <>
-    <section id="work" className="min-h-screen bg-background-alt py-24">
-      <div className="max-w-6xl mx-auto px-4 md:px-8">
-        <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">Selected Work</h2>
-        
-        <div className="space-y-64">
-          {mockProjects.map((project, index) => (
-            <div
-              key={project.id}
-              ref={el => {
-                observerRefs.current[index] = el
-              }}
-              className="opacity-0 translate-y-10 transition-all duration-1000 ease-out"
-            >
-              <div className={`grid grid-cols-1 gap-16 ${
-                project.type === 'desktop' 
-                  ? '' 
-                  : 'md:grid-cols-2 md:items-center'
-              }`}>
-                <div className="relative rounded-xl p-[2px] bg-gradient-to-r from-accent/80 via-accent/60 to-accent/80 shadow-[0_0_25px_rgba(0,0,0,0.25)] hover:shadow-[0_0_30px_rgba(0,0,0,0.3)] transition-shadow">
-                  <div 
-                    className={`bg-background-emphasis p-12 rounded-xl relative overflow-hidden group`}
-                  >
-                    <BorderBeam 
-                      colorFrom="hsl(var(--accent))"
-                      colorTo="hsl(var(--accent))"
-                      duration={4}
-                      size={100}
-                      borderWidth={1}
-                    />
-                    <div className="relative z-10">
-                      <h3 className="text-2xl font-bold text-foreground mb-6">
-                        {project.title}
-                      </h3>
-                      <p className="text-muted-foreground mb-8">
-                        {project.description}
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {project.technologies.map((tech) => (
-                          <span
-                            key={tech}
-                            className="px-3 py-1 rounded-full shine-border group/tag transition-all duration-300 hover:scale-[1.02]"
-                            style={{ '--shine-degree': '45deg' } as React.CSSProperties}
-                          >
-                            <span className="relative z-10 text-muted-foreground group-hover/tag:text-foreground text-sm transition-colors">
-                              {tech}
+      <section id="work" className="min-h-screen bg-background-alt py-24">
+        <div className="max-w-6xl mx-auto px-4 md:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">Selected Work</h2>
+
+          <div className="space-y-64">
+            {mockProjects.map((project, index) => (
+              <div
+                key={project.id}
+                ref={el => {
+                  observerRefs.current[index] = el
+                }}
+                className="opacity-0 translate-y-10 transition-all duration-1000 ease-out"
+              >
+                <div className={`grid grid-cols-1 gap-16 ${project.type === 'desktop'
+                    ? ''
+                    : 'md:grid-cols-2 md:items-center'
+                  }`}>
+                  <div className="relative rounded-xl p-[2px] bg-gradient-to-r from-accent/80 via-accent/60 to-accent/80 shadow-[0_0_25px_rgba(0,0,0,0.25)] hover:shadow-[0_0_30px_rgba(0,0,0,0.3)] transition-shadow">
+                    <div
+                      className={`bg-background-emphasis p-12 rounded-xl relative overflow-hidden group`}
+                    >
+                      <BorderBeam
+                        colorFrom="hsl(var(--accent))"
+                        colorTo="hsl(var(--accent))"
+                        duration={4}
+                        size={100}
+                        borderWidth={1}
+                      />
+                      <div className="relative z-10">
+                        <h3 className="text-2xl font-bold text-foreground mb-6">
+                          {project.title}
+                        </h3>
+                        <p className="text-muted-foreground mb-8">
+                          {project.description}
+                        </p>
+                        <div className="flex flex-wrap gap-2 mb-8">
+                          {project.technologies.map((tech) => (
+                            <span
+                              key={tech}
+                              className="px-3 py-1 rounded-full shine-border group/tag transition-all duration-300 hover:scale-[1.02]"
+                              style={{ '--shine-degree': '45deg' } as React.CSSProperties}
+                            >
+                              <span className="relative z-10 text-muted-foreground group-hover/tag:text-foreground text-sm transition-colors">
+                                {tech}
+                              </span>
                             </span>
-                          </span>
-                        ))}
+                          ))}
+                        </div>
+
+                        {project.caseStudyUrl && (
+                          <Button asChild className="shine-border w-full sm:w-auto">
+                            <a href={project.caseStudyUrl}>
+                              View Deep Dive <div className="ml-2">→</div>
+                            </a>
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div
-                  className={`relative mx-auto w-full flex items-center justify-center ${
-                    project.type === 'desktop'
-                      ? 'h-[500px] mt-8'
-                      : 'h-[600px] flex items-center justify-center'
-                  }`}
-                >
-                  {project.isInteractive && project.id === 'mancala-ai' ? (
-                    <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center flex items-center justify-center w-full h-full">
-                      <DeviceFrameset device="MacBook Pro" color="silver">
-                        <div className="relative w-[1280px] h-[800px] bg-background flex items-center justify-center">
-                          <MancalaGame />
-                        </div>
-                        <div className="bottom-bar" />
-                      </DeviceFrameset>
-                    </div>
-                  ) : project.isInteractive && project.id === 'nba-hof-predictor' ? (
-                    // Interactive NBA Predictor
-                    <div 
-                      onClick={() => handleImageClick(project)}
-                      className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
-                    >
-                      <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
+                  <div
+                    className={`relative mx-auto w-full flex items-center justify-center ${project.type === 'desktop'
+                        ? 'h-[500px] mt-8'
+                        : 'h-[600px] flex items-center justify-center'
+                      }`}
+                  >
+                    {project.isInteractive && project.id === 'mancala-ai' ? (
+                      <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center flex items-center justify-center w-full h-full">
                         <DeviceFrameset device="MacBook Pro" color="silver">
-                          <div className="relative w-[1280px] h-[800px] bg-background">
-                            <div className="absolute inset-[8px] overflow-hidden">
-                              <NBAHofDisplay 
-                                prediction={nbaCurrentPrediction || undefined}
-                                isLoading={nbaIsLoading}
-                                searchQuery={nbaInput}
-                                noResults={nbaNoResults}
-                              />
-                            </div>
+                          <div className="relative w-[1280px] h-[800px] bg-background flex items-center justify-center">
+                            <MancalaGame />
                           </div>
                           <div className="bottom-bar" />
                         </DeviceFrameset>
                       </div>
-                      <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
-                    </div>
-                  ) : project.isInteractive && project.id === 'ictml-trading-system' ? (
-                    // Interactive ICTML Daily Bias
-                    <div 
-                      onClick={() => handleImageClick(project)}
-                      className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
-                    >
-                      <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
-                        <DeviceFrameset device="MacBook Pro" color="silver">
-                          <div className="relative w-[1280px] h-[800px] bg-background">
-                            <div className="absolute inset-[8px] overflow-hidden">
-                              <DailyBiasDisplay />
-                            </div>
-                          </div>
-                          <div className="bottom-bar" />
-                        </DeviceFrameset>
-                      </div>
-                      <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
-                    </div>
-                  ) : project.isInteractive && project.id === 'sports-edge' ? (
-                    // Interactive Sports Edge (no carousel)
-                    <div 
-                      onClick={(event) => event.stopPropagation()}
-                      onPointerDown={(event) => event.stopPropagation()}
-                      className="relative transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
-                    >
-                      <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
-                        <DeviceFrameset device="MacBook Pro" color="silver">
-                          <div className="relative w-[1280px] h-[800px] bg-background">
-                            <div className="absolute inset-[8px] overflow-hidden">
-                              <SportsEdgeDisplay />
-                            </div>
-                          </div>
-                          <div className="bottom-bar" />
-                        </DeviceFrameset>
-                      </div>
-                      <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
-                    </div>
-                  ) : (
-                    // Standard image display
-                    <div 
-                      onClick={() => handleImageClick(project)}
-                      className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
-                    >
-                      {project.type === 'mobile' ? (
-                        <div className="transform scale-[0.65] md:scale-[0.85] origin-center">
-                          <DeviceFrameset device="iPhone X" color="black" landscape={false}>
-                            <Image
-                              src={project.image}
-                              alt={project.title}
-                              fill
-                              className="object-contain"
-                            />
-                          </DeviceFrameset>
-                        </div>
-                      ) : (
+                    ) : project.isInteractive && project.id === 'nba-hof-predictor' ? (
+                      // Interactive NBA Predictor
+                      <div
+                        onClick={() => handleImageClick(project)}
+                        className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
+                      >
                         <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
                           <DeviceFrameset device="MacBook Pro" color="silver">
                             <div className="relative w-[1280px] h-[800px] bg-background">
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <Image
-                                  src={project.image}
-                                  alt={project.title}
-                                  fill
-                                  className="object-contain"
-                                  style={{ padding: '2px' }}
+                              <div className="absolute inset-[8px] overflow-hidden">
+                                <NBAHofDisplay
+                                  prediction={nbaCurrentPrediction || undefined}
+                                  isLoading={nbaIsLoading}
+                                  searchQuery={nbaInput}
+                                  noResults={nbaNoResults}
                                 />
                               </div>
                             </div>
                             <div className="bottom-bar" />
                           </DeviceFrameset>
                         </div>
+                        <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
+                      </div>
+                    ) : project.isInteractive && project.id === 'ictml-trading-system' ? (
+                      // Interactive ICTML Daily Bias
+                      <div
+                        onClick={() => handleImageClick(project)}
+                        className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
+                      >
+                        <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
+                          <DeviceFrameset device="MacBook Pro" color="silver">
+                            <div className="relative w-[1280px] h-[800px] bg-background">
+                              <div className="absolute inset-[8px] overflow-hidden">
+                                <DailyBiasDisplay />
+                              </div>
+                            </div>
+                            <div className="bottom-bar" />
+                          </DeviceFrameset>
+                        </div>
+                        <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
+                      </div>
+                    ) : project.isInteractive && project.id === 'sports-edge' ? (
+                      // Interactive Sports Edge (no carousel)
+                      <div
+                        onClick={(event) => event.stopPropagation()}
+                        onPointerDown={(event) => event.stopPropagation()}
+                        className="relative transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
+                      >
+                        <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
+                          <DeviceFrameset device="MacBook Pro" color="silver">
+                            <div className="relative w-[1280px] h-[800px] bg-background">
+                              <div className="absolute inset-[8px] overflow-hidden">
+                                <SportsEdgeDisplay />
+                              </div>
+                            </div>
+                            <div className="bottom-bar" />
+                          </DeviceFrameset>
+                        </div>
+                        <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
+                      </div>
+                    ) : (
+                      // Standard image display
+                      <div
+                        onClick={() => handleImageClick(project)}
+                        className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
+                      >
+                        {project.type === 'mobile' ? (
+                          <div className="transform scale-[0.65] md:scale-[0.85] origin-center">
+                            <DeviceFrameset device="iPhone X" color="black" landscape={false}>
+                              <Image
+                                src={project.image}
+                                alt={project.title}
+                                fill
+                                className="object-contain"
+                              />
+                            </DeviceFrameset>
+                          </div>
+                        ) : (
+                          <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
+                            <DeviceFrameset device="MacBook Pro" color="silver">
+                              <div className="relative w-[1280px] h-[800px] bg-background">
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <Image
+                                    src={project.image}
+                                    alt={project.title}
+                                    fill
+                                    className="object-contain"
+                                    style={{ padding: '2px' }}
+                                  />
+                                </div>
+                              </div>
+                              <div className="bottom-bar" />
+                            </DeviceFrameset>
+                          </div>
+                        )}
+                        <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* NBA Search Bar - appears below MacBook for NBA project */}
+                  {project.isInteractive && project.id === 'nba-hof-predictor' && (
+                    <div className="mt-8 relative max-w-2xl mx-auto">
+                      {/* Search Suggestions */}
+                      {nbaSearchSuggestions.length > 0 && (
+                        <div className="absolute bottom-full left-0 right-0 mb-2 bg-background border border-border rounded-lg shadow-lg max-h-32 overflow-y-auto z-10">
+                          {nbaSearchSuggestions.map((suggestion, index) => (
+                            <button
+                              key={index}
+                              onClick={() => handleNbaSubmit(suggestion)}
+                              className="w-full px-4 py-2 text-left text-sm hover:bg-muted transition-colors border-b border-border last:border-b-0"
+                            >
+                              {suggestion}
+                            </button>
+                          ))}
+                        </div>
                       )}
-                      <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
+
+                      {/* Search Input */}
+                      <form onSubmit={(e) => { e.preventDefault(); handleNbaSubmit(); }} className="flex gap-3">
+                        <div className="flex-1 relative">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                          <Input
+                            value={nbaInput}
+                            onChange={handleNbaInputChange}
+                            placeholder="Enter NBA player name (e.g., LeBron James, Michael Jordan)..."
+                            className="pl-9 h-12 text-base"
+                            disabled={nbaIsLoading}
+                          />
+                        </div>
+                        <Button
+                          type="submit"
+                          disabled={!nbaInput.trim() || nbaIsLoading}
+                          size="lg"
+                          className="h-12 px-6"
+                        >
+                          <Send className="w-4 h-4 mr-2" />
+                          Predict
+                        </Button>
+                      </form>
+
+                      <p className="text-center text-sm text-muted-foreground mt-3">
+                        Search from 5,250+ NBA players • Click the screen above to see behind-the-scenes
+                      </p>
+                    </div>
+                  )}
+
+                  {/* ICTML Info - appears below MacBook for ICTML project */}
+                  {project.isInteractive && project.id === 'ictml-trading-system' && (
+                    <div className="mt-8 relative max-w-2xl mx-auto text-center">
+                      <p className="text-center text-sm text-muted-foreground">
+                        Live daily bias predictions for QQQ, SPY, and IWM • 84.4% accuracy • Updated daily at 9:30 AM EST • Click the screen above to see model analysis
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Sports Edge Info - appears below MacBook for Sports Edge project */}
+                  {project.isInteractive && project.id === 'sports-edge' && (
+                    <div className="mt-8 relative max-w-2xl mx-auto text-center">
+                      <p className="text-center text-sm text-muted-foreground">
+                        Live NFL/NBA game predictions vs sportsbook lines • Examine the spreads in the screen above to see model analysis
+                      </p>
                     </div>
                   )}
                 </div>
-
-                {/* NBA Search Bar - appears below MacBook for NBA project */}
-                {project.isInteractive && project.id === 'nba-hof-predictor' && (
-                  <div className="mt-8 relative max-w-2xl mx-auto">
-                    {/* Search Suggestions */}
-                    {nbaSearchSuggestions.length > 0 && (
-                      <div className="absolute bottom-full left-0 right-0 mb-2 bg-background border border-border rounded-lg shadow-lg max-h-32 overflow-y-auto z-10">
-                        {nbaSearchSuggestions.map((suggestion, index) => (
-                          <button
-                            key={index}
-                            onClick={() => handleNbaSubmit(suggestion)}
-                            className="w-full px-4 py-2 text-left text-sm hover:bg-muted transition-colors border-b border-border last:border-b-0"
-                          >
-                            {suggestion}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                    
-                    {/* Search Input */}
-                    <form onSubmit={(e) => { e.preventDefault(); handleNbaSubmit(); }} className="flex gap-3">
-                      <div className="flex-1 relative">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                        <Input
-                          value={nbaInput}
-                          onChange={handleNbaInputChange}
-                          placeholder="Enter NBA player name (e.g., LeBron James, Michael Jordan)..."
-                          className="pl-9 h-12 text-base"
-                          disabled={nbaIsLoading}
-                        />
-                      </div>
-                      <Button 
-                        type="submit" 
-                        disabled={!nbaInput.trim() || nbaIsLoading} 
-                        size="lg"
-                        className="h-12 px-6"
-                      >
-                        <Send className="w-4 h-4 mr-2" />
-                        Predict
-                      </Button>
-                    </form>
-                    
-                    <p className="text-center text-sm text-muted-foreground mt-3">
-                      Search from 5,250+ NBA players • Click the screen above to see behind-the-scenes
-                    </p>
-                  </div>
-                )}
-
-                {/* ICTML Info - appears below MacBook for ICTML project */}
-                {project.isInteractive && project.id === 'ictml-trading-system' && (
-                  <div className="mt-8 relative max-w-2xl mx-auto text-center">
-                    <p className="text-center text-sm text-muted-foreground">
-                      Live daily bias predictions for QQQ, SPY, and IWM • 84.4% accuracy • Updated daily at 9:30 AM EST • Click the screen above to see model analysis
-                    </p>
-                  </div>
-                )}
-
-                {/* Sports Edge Info - appears below MacBook for Sports Edge project */}
-                {project.isInteractive && project.id === 'sports-edge' && (
-                  <div className="mt-8 relative max-w-2xl mx-auto text-center">
-                    <p className="text-center text-sm text-muted-foreground">
-                      Live NFL/NBA game predictions vs sportsbook lines • Examine the spreads in the screen above to see model analysis
-                    </p>
-                  </div>
-                )}
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    {isCarouselOpen && selectedProject && (
-      <ProjectCarousel
-        images={selectedProject.images || [selectedProject.image]}
-        projectType={selectedProject.type}
-        initialImage={selectedProject.image}
-        onClose={() => {
-          setIsCarouselOpen(false)
-          setSelectedProject(null)
-        }}
-      />
-    )}
+      {isCarouselOpen && selectedProject && (
+        <ProjectCarousel
+          images={selectedProject.images || [selectedProject.image]}
+          projectType={selectedProject.type}
+          initialImage={selectedProject.image}
+          onClose={() => {
+            setIsCarouselOpen(false)
+            setSelectedProject(null)
+          }}
+        />
+      )}
     </>
   )
 }

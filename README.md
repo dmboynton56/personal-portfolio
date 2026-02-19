@@ -26,6 +26,52 @@ SPORTS_EDGE_CRON_SECRET
 
 To keep the `/api/sports-edges` route warm (and to provide a hook for future batch jobs), a scheduled GitHub Action (`.github/workflows/ping-sports-edge-api.yml`) POSTs to the same endpoint by hitting your deployed URL stored in the `SPORTS_EDGE_CRON_URL` repo secret together with the shared `SPORTS_EDGE_CRON_SECRET`.
 
+## Sports Edge Chat + RAG MVP
+
+The Sports Edge project page now includes a hybrid chat assistant:
+
+- SQL path: reads Supabase `games` + latest `model_predictions` to answer result-oriented questions.
+- Retrieval path: reads markdown docs in `docs/` for methodology, definitions, and risk caveats.
+- Hybrid path: combines both for questions like "Week 12 top edges and why."
+
+Core files:
+
+- `app/api/chat/route.ts`
+- `components/SportsEdgeChat.tsx`
+- `docs/data-dictionary.md`
+- `docs/metric-definitions.md`
+- `docs/model-cards/`
+- `docs/project-postmortems/`
+- `docs/limitations-and-risk.md`
+- `docs/faq.md`
+
+Optional LLM generation:
+
+```
+OPENAI_API_KEY
+OPENAI_CHAT_MODEL
+```
+
+If `OPENAI_API_KEY` is not set, `/api/chat` still works in deterministic fallback mode using SQL summaries + retrieved docs.
+
+## Local Vertex + BigQuery Chat Testing
+
+To test `/api/chat` against your Google stack locally:
+
+1. Copy `.env.example` to `.env.local`.
+2. Set:
+   - `GCP_PROJECT_ID`
+   - `VERTEX_APP_ID`
+   - `BIGQUERY_PROJECT_ID`
+   - `BIGQUERY_DATASET`
+   - `BIGQUERY_CHAT_VIEW`
+3. Provide credentials with one of:
+   - `GOOGLE_APPLICATION_CREDENTIALS` (file path), or
+   - `GCP_SERVICE_ACCOUNT_JSON`, or
+   - `GCP_SERVICE_ACCOUNT_JSON_BASE64`
+
+The route uses BigQuery for numeric stats questions (for example, home ATS counts) and Vertex AI Search `:answer` for document-grounded responses with citations.
+
 ## Contact
 
 If you'd like to discuss potential opportunities or collaborations, feel free to reach out:

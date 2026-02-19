@@ -1,0 +1,30 @@
+# Limitations and Risk Notes
+
+## Scope Boundaries
+- Portfolio analytics are educational and demonstrative.
+- Outputs are not financial, wagering, or legal advice.
+
+## Modeling Risks
+- Non-stationarity: team/player behavior and market pricing can shift quickly.
+- Small samples: early weeks and sparse matchup histories are unstable.
+- Missing context: late injury news and rotation changes can invalidate priors.
+
+## Data Risks
+- Upstream API outages or delayed snapshots.
+- Inconsistent naming/mapping across data providers.
+- Null or stale fields (scores, lines, features) during ingestion windows.
+
+## Evaluation Risks
+- Hit-rate alone can hide risk concentration.
+- Weekly slices can overstate confidence without season-level calibration checks.
+- Changing model versions can break apples-to-apples comparisons if not segmented.
+
+## Operational Controls
+- Keep run logs in `model_runs` and inspect failed writes.
+- Track freshness (`prediction_ts`, `odds_ts`) before interpreting edges.
+- Segment dashboards and postmortems by `model_name` and `model_version`.
+
+## Communication Rules for Chat UX
+- State uncertainty and sample size.
+- Separate observed SQL facts from methodological interpretation.
+- Cite source docs whenever explaining assumptions.

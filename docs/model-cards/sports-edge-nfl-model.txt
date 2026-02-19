@@ -1,0 +1,47 @@
+# Model Card: Sports Edge NFL Spread Model
+
+## Purpose
+Estimate fair spread and home win probability for NFL games, then compare against market spreads to surface model-to-book deltas.
+
+## Decision Outputs
+- `my_spread` (home-team perspective)
+- `my_home_win_prob` (0 to 1)
+
+## Primary Consumers
+- Portfolio UI (`/api/sports-edges`)
+- Chat endpoint (`/api/chat`) for SQL summaries and explanations
+
+## Training Objective
+- Supervised prediction on game-level outcomes
+- Spread regression objective for `my_spread`
+- Probability calibration layer for `my_home_win_prob`
+
+## Feature Families
+- Team strength and form windows (rolling offense/defense)
+- Rest and travel context
+- Opponent-adjusted performance
+- Market context and line movement snapshots
+- Injury/availability proxies when available
+
+## Data Freshness and Cadence
+- Odds can be hydrated via `/api/sports-edges/odds`
+- Predictions are loaded from `model_predictions` and sorted by latest `asof_ts`
+- UI refreshes periodically and can be warmed by scheduled cron POST
+
+## Validation and Monitoring
+- Weekly hit-rate checks against completed games
+- Monitoring by `model_version`
+- Run health tracked in `model_runs`
+
+## Intended Use
+- Decision support and model diagnostics in a portfolio context
+- Educational demonstration of an end-to-end analytics pipeline
+
+## Non-Goals
+- Financial or wagering advice
+- Guarantee of edge persistence across books and market states
+
+## Known Risk Areas
+- Regime changes (injuries, coaching shifts, weather shocks)
+- Small sample instability early in season
+- Latency between line movement and score refresh

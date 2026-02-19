@@ -1,0 +1,38 @@
+# Model Card: NBA Hall of Fame Predictor (XGBoost)
+
+## Purpose
+Estimate Hall of Fame probability for NBA players using historical career outcomes and performance/accolade features.
+
+## Decision Output
+- `hofProbability` between 0 and 1
+- Confidence bands (`Very High`, `High`, `Medium`, `Low`, `Very Low`)
+
+## Dataset Scope
+- Player pool represented in `public/data/nba_hof_predictions.json`
+- Includes active and retired players
+- Portfolio UI references this dataset for lookup and interactive analysis
+
+## Feature Families
+- Career totals (points, rebounds, assists, blocks)
+- Career impact (`careerWinShares`, `careerVORP`)
+- Peak metrics (`peakPER`, `peakBPM`, `peakVORP`, `peakWinShares`)
+- Accolades (All-Star, All-NBA, MVP, DPOY, All-Defense)
+- Longevity (`seasons`, last season indicators)
+
+## Training Notes
+- Gradient boosted trees (XGBoost)
+- Structured tabular features with nonlinear interactions
+- Output calibrated to produce interpretable probability style scores
+
+## Intended Use
+- Exploratory and educational player comparisons
+- Demonstration of model-driven ranking and explanation in UI
+
+## Non-Goals
+- Official Hall of Fame selection forecasting
+- Causal claims about voter behavior
+
+## Known Limitations
+- Era effects and selection criteria can drift
+- International and non-NBA context may be underrepresented
+- Dataset quality and labeling assumptions directly affect output quality

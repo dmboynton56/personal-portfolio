@@ -1,0 +1,46 @@
+# Metric Definitions
+
+## Sports Edge Metrics
+
+### `edge_pts`
+Formula:
+`edge_pts = my_spread - book_spread`
+
+Interpretation:
+- Positive: model is less bullish on home team than market line.
+- Negative: model is more bullish on home team than market line.
+- Magnitude: absolute value reflects disagreement size in points.
+
+### `spreadHit` (completed games)
+For a completed game:
+- `actual_margin = home_score - away_score`
+- `spreadHit = actual_margin > -my_spread`
+
+This checks whether the model-side spread condition was met under the app's home-perspective convention.
+
+### Spread Hit Rate
+`spread_hit_rate = spread_hits / completed_games`
+
+Notes:
+- Undefined when there are no completed games in the selected slice.
+- Sensitive to sample size and should be tracked by week/season and model version.
+
+### Data Freshness Fields
+- `prediction_ts`: timestamp of latest model prediction selected for game
+- `odds_ts`: timestamp of latest odds snapshot selected for game
+- `updatedAt` (API payload): timestamp when API response was produced
+
+## NBA Hall of Fame Metrics
+
+### `hofProbability`
+Model-estimated probability-style score from 0 to 1.
+
+### Confidence Buckets
+Suggested mapping in UI context:
+- Very High: very likely candidate
+- High: strong candidate
+- Medium: borderline
+- Low/Very Low: unlikely under current feature profile
+
+### Feature Importance Context
+Higher influence features typically include career impact metrics, award history, and longevity.

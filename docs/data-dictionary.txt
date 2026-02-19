@@ -1,0 +1,98 @@
+# Data Dictionary
+
+## Scope
+This document defines the core Sports Edge tables and views used by the portfolio app and chatbot.
+
+## Table: games
+Primary key and game-level metadata.
+
+| Column | Type | Meaning | Notes |
+|---|---|---|---|
+| `id` | `uuid` | Unique game identifier | Primary key |
+| `league` | `text` | League code | `NFL` or `NBA` |
+| `season` | `int` | Season year | Example: `2025` |
+| `week` | `smallint` | League week index | Mostly used for NFL |
+| `game_time_utc` | `timestamptz` | Scheduled start time in UTC | UI localizes this |
+| `home_team` | `text` | Home team display name | |
+| `away_team` | `text` | Away team display name | |
+| `book_spread` | `numeric` | Consensus spread from home perspective | Negative means home favored |
+| `home_score` | `integer` | Final home score | `null` until complete |
+| `away_score` | `integer` | Final away score | `null` until complete |
+| `created_at` | `timestamptz` | Insert timestamp | Default `now()` |
+
+## Table: model_predictions
+Model outputs per game and model version.
+
+| Column | Type | Meaning | Notes |
+|---|---|---|---|
+| `id` | `uuid` | Row identifier | Primary key |
+| `game_id` | `uuid` | Reference to `games.id` | Foreign key |
+| `model_name` | `text` | Strategy/model family | Optional filter via env |
+| `model_version` | `text` | Version tag | Use for reproducibility |
+| `my_spread` | `numeric` | Model spread from home perspective | Comparable to `games.book_spread` |
+| `my_home_win_prob` | `numeric` | Predicted home win probability | `0.0` to `1.0` |
+| `asof_ts` | `timestamptz` | Prediction timestamp | Latest row per game is usually used |
+| `created_at" | `timestamptz` | Insert timestamp | |
+
+## Table: odds_snapshots
+Book-level odds snapshots for drift and audit.
+
+| Column | Type | Meaning | Notes |
+|---|---|---|---|
+| `id` | `uuid` | Snapshot identifier | Primary key |
+| `game_id` | `uuid` | Reference to `games.id` | Foreign key |
+| `book` | `text` | Bookmaker name | Example: `draftkings` |
+| `market" | `text` | Market type | `spread`, `moneyline`, `total` |
+| `line` | `numeric` | Market line value | For spreads, home perspective |
+| `price` | `numeric` | Price/odds metadata | Optional by market |
+| `snapshot_ts` | `timestamptz` | Snapshot timestamp | Used for latest-line joins |
+| `created_at` | `timestamptz` | Insert timestamp | |
+
+## Table: features
+Feature payload used to score games.
+
+| Column | Type | Meaning | Notes |
+|---|---|---|---|
+| `id` | `uuid` | Row identifier | Primary key |
+| `game_id` | `uuid` | Reference to `games.id` | Foreign key |
+| `feature_json` | `jsonb` | Serialized engineered features | Retrieval source for explanations |
+| `asof_ts` | `timestamptz` | Feature computation time | |
+| `created_at` | `timestamptz` | Insert timestamp | |
+
+## Table: model_runs
+Operational audit trail for pipeline jobs.
+
+| Column | Type | Meaning | Notes |
+|---|---|---|---|
+| `id` | `uuid` | Run identifier | Primary key |
+| `league` | `text` | League target for run | |
+| `started_at` | `timestamptz` | Run start time | |
+| `finished_at` | `timestamptz` | Run finish time | Null if interrupted |
+| `rows_written` | `int` | Rows inserted/updated | |
+| `success` | `boolean` | Run outcome | |
+| `error_text` | `text` | Error details when failed | |
+| `created_at` | `timestamptz` | Insert timestamp | |
+
+## View: games_today_enriched
+Join of `games`, latest spread snapshot, and latest prediction per game for same-day display.
+
+| Column | Source | Meaning |
+|---|---|---|
+| `game_id` | `games.id` | Game key |
+| `league`, `season`, `week` | `games` | Core dimensions |
+| `game_time_utc`, `home_team`, `away_team` | `games` | Schedule and matchup |
+| `book_spread` | latest `odds_snapshots.line` | Latest spread line |
+| `my_spread`, `my_home_win_prob` | latest `model_predictions` | Latest model outputs |
+| `edge_pts` | computed | `my_spread - book_spread` |
+| `model_version` | `model_predictions` | Version tag |
+| `prediction_ts`, `odds_ts` | joined timestamps | Data freshness |
+
+## Join Rules
+- `games.id = model_predictions.game_id`
+- `games.id = odds_snapshots.game_id`
+- Latest rows are chosen by descending `asof_ts` (predictions) and `snapshot_ts` (odds).
+
+## Time and Sign Conventions
+- All stored timestamps are UTC.
+- Spread values use home-team perspective.
+- More positive spread means the home team is weaker relative to market expectation.

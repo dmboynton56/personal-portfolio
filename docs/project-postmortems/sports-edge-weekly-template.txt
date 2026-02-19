@@ -1,0 +1,45 @@
+# Sports Edge Weekly Postmortem Template
+
+## Header
+- Week:
+- League:
+- Model name/version:
+- Date range reviewed:
+
+## Performance Snapshot
+- Games scored:
+- Completed games:
+- Spread hit rate:
+- Average absolute edge:
+- Largest miss (game + delta):
+- Largest hit (game + delta):
+
+## What Worked
+- Example edge archetypes that held up
+- Feature signals that aligned with outcomes
+- Any line-movement timing advantages observed
+
+## What Missed
+- Cases where market beat model assumptions
+- Injury/travel/weather effects not captured in time
+- Data quality or stale snapshot issues
+
+## Root Cause Tags
+Use one or more tags per miss:
+- `injury-latency`
+- `market-regime-shift`
+- `small-sample-variance`
+- `feature-leakage-risk`
+- `schedule-context-missed`
+- `data-quality`
+
+## Action Items
+- Feature updates:
+- Monitoring additions:
+- Data pipeline changes:
+- Backtest tasks:
+
+## Follow-up Questions
+- Should this failure mode change weighting or feature gating?
+- Is the issue structural or noise likely to mean-revert?
+- What threshold or guardrail should be added?
