@@ -135,6 +135,21 @@ body {
     pointer-events: none;
   }
 
+  /* Ensure button text is visible over shine effects */
+  .shine-border {
+    color: hsl(var(--foreground)/0.9);
+  }
+
+  .shine-border:hover {
+    color: hsl(var(--foreground));
+  }
+
+  /* Handle children within shine-border (like text or icons) */
+  .shine-border > * {
+    position: relative;
+    z-index: 10;
+  }
+
   /* Project container specific styling */
   .bg-background-emphasis.shine-border {
     border: 1px solid hsl(var(--accent-container)/0.3);

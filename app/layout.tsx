@@ -28,6 +28,7 @@ export const metadata: Metadata = {
     ],
     shortcut: ['/images/general/newicon.png'],
   },
+  manifest: '/site.webmanifest',
 }
 
 export default function RootLayout({

@@ -72,8 +72,8 @@ export function ProjectLayout({
 
                         <div className="flex gap-4">
                             {liveUrl && (
-                                <Button asChild size="lg" className="shine-border">
-                                    <a href={liveUrl} target="_blank" rel="noopener noreferrer">
+                                <Button asChild size="lg" className="shine-border group/btn">
+                                    <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="relative z-10 flex items-center justify-center text-foreground/80 group-hover/btn:text-foreground transition-colors">
                                         <ExternalLink className="w-4 h-4 mr-2" />
                                         View Live
                                     </a>

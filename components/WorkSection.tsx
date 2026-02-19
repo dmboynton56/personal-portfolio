@@ -346,8 +346,8 @@ export function WorkSection() {
                         </div>
 
                         {project.caseStudyUrl && (
-                          <Button asChild className="shine-border w-full sm:w-auto">
-                            <a href={project.caseStudyUrl}>
+                          <Button asChild className="shine-border w-full sm:w-auto group/btn">
+                            <a href={project.caseStudyUrl} className="relative z-10 flex items-center justify-center text-foreground/80 group-hover/btn:text-foreground transition-colors">
                               View Deep Dive <div className="ml-2">→</div>
                             </a>
                           </Button>
