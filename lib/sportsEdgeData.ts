@@ -14,6 +14,22 @@ export type NflGameEdge = {
   spreadHit?: boolean | null
 }
 
+export type NbaGameEdge = {
+  gameId: string
+  homeTeam: string
+  awayTeam: string
+  tipoffUtc: string
+  bookSpread: number
+  modelSpread: number
+  homeWinProb: number
+  modelVersion: string
+  predictionUpdated: string
+  note: string
+  actualHomeScore?: number | null
+  actualAwayScore?: number | null
+  spreadHit?: boolean | null
+}
+
 export type SportsEdgePayload = {
   nfl: {
     season: number
@@ -24,9 +40,12 @@ export type SportsEdgePayload = {
     availableWeeks: number[]
   }
   nba: {
-    status: 'coming-soon'
-    message: string
+    season: number
+    date: string
+    label: string
     updatedAt: string
+    games: NbaGameEdge[]
+    availableDates: string[]
   }
 }
 
@@ -137,13 +156,16 @@ export const sportsEdgeMockData: SportsEdgePayload = {
     ]
   },
   nba: {
-    status: 'coming-soon',
-    message: 'Daily NBA edges unlock once rotation minutes stabilize after Thanksgiving.',
-    updatedAt: '2024-11-12T15:30:00Z'
+    season: 2024,
+    date: '2024-11-26',
+    label: 'Nov 26, 2024',
+    updatedAt: '2024-11-12T15:30:00Z',
+    availableDates: ['2024-11-26'],
+    games: []
   }
 }
 
-export const calculateEdge = (game: NflGameEdge) =>
+export const calculateEdge = (game: NflGameEdge | NbaGameEdge) =>
   Number((game.modelSpread - game.bookSpread).toFixed(1))
 
 export const formatPercentage = (value: number) => `${(value * 100).toFixed(1)}%`

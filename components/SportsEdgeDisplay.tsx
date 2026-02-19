@@ -20,7 +20,12 @@ export function SportsEdgeDisplay() {
   ]
 
   return (
-    <div className="h-full bg-background p-4 overflow-y-auto" onClick={stopPropagation} onMouseDown={stopPropagation}>
+    <div 
+      className="h-full bg-background p-4 overflow-y-auto" 
+      onClick={stopPropagation} 
+      onMouseDown={stopPropagation}
+      style={{ overscrollBehavior: 'contain' }}
+    >
       <div className="max-w-5xl mx-auto h-full flex flex-col">
         {/* Header */}
         <div className="text-center mb-6">
@@ -38,7 +43,7 @@ export function SportsEdgeDisplay() {
         </div>
 
         {/* Sports Edge Card */}
-        <div className="flex-1">
+        <div className="flex-1 min-h-0">
           <SportsEdgeCard />
         </div>
       </div>
