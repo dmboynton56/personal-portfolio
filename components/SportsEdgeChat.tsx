@@ -5,6 +5,8 @@ import { Loader2, MessageSquareText, Send } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
+import ReactMarkdown from 'react-markdown'
+
 type ChatRole = 'user' | 'assistant'
 
 type Citation = {
@@ -160,7 +162,25 @@ export function SportsEdgeChat() {
                 : 'mr-8 bg-muted text-foreground'
             }`}
           >
-            <p className="whitespace-pre-wrap">{message.content}</p>
+            <div className={message.role === 'assistant' ? "prose prose-sm dark:prose-invert max-w-none break-words" : "whitespace-pre-wrap break-words leading-relaxed"}>
+              {message.role === 'assistant' ? (
+                <ReactMarkdown 
+                  components={{
+                    p: ({ children }) => <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>,
+                    ul: ({ children }) => <ul className="mb-2 list-disc pl-4">{children}</ul>,
+                    ol: ({ children }) => <ol className="mb-2 list-decimal pl-4">{children}</ol>,
+                    li: ({ children }) => <li className="mb-1">{children}</li>,
+                    strong: ({ children }) => <strong className="font-bold text-foreground">{children}</strong>,
+                    code: ({ children }) => <code className="rounded bg-muted-foreground/20 px-1 py-0.5 font-mono text-xs">{children}</code>,
+                    pre: ({ children }) => <pre className="my-2 overflow-x-auto rounded bg-muted-foreground/10 p-2 font-mono text-xs">{children}</pre>
+                  }}
+                >
+                  {message.content}
+                </ReactMarkdown>
+              ) : (
+                message.content
+              )}
+            </div>
             {message.role === 'assistant' && message.citations && message.citations.length > 0 && (
               <div className="mt-3 space-y-2 border-t border-border/70 pt-2 text-xs">
                 {message.citations.slice(0, 3).map((citation) => (
