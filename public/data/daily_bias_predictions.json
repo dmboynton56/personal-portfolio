@@ -1,44 +1,44 @@
 {
-  "lastUpdated": "2026-03-06T10:06:37.448021-05:00",
-  "date": "2026-03-06",
+  "lastUpdated": "2026-03-09T11:33:28.281616-04:00",
+  "date": "2026-03-09",
   "predictions": {
     "QQQ": {
       "symbol": "QQQ",
-      "predicted_bias": "choppy",
-      "confidence": 0.4729633388609621,
-      "current_price": 600.219970703125,
-      "previous_close": 608.9099731445312,
-      "gap_pct": -1.4271407637699483,
+      "predicted_bias": "bearish",
+      "confidence": 0.732,
+      "current_price": 515.2,
+      "previous_close": 517.7,
+      "gap_pct": -0.482,
       "probabilities": {
-        "bearish": 0.22395563674613458,
-        "bullish": 0.3030810243929033,
-        "choppy": 0.4729633388609621
+        "bearish": 0.732,
+        "bullish": 0.08,
+        "choppy": 0.188
       }
     },
     "SPY": {
       "symbol": "SPY",
       "predicted_bias": "choppy",
-      "confidence": 0.3955875809683457,
-      "current_price": 671.1099853515625,
-      "previous_close": 681.3099975585938,
-      "gap_pct": -1.4971176474118937,
+      "confidence": 0.829,
+      "current_price": 607.34,
+      "previous_close": 613.78,
+      "gap_pct": -1.049,
       "probabilities": {
-        "bearish": 0.2756683025078056,
-        "bullish": 0.32874411652384866,
-        "choppy": 0.3955875809683457
+        "choppy": 0.828,
+        "bullish": 0.086,
+        "bearish": 0.086
       }
     },
     "IWM": {
       "symbol": "IWM",
-      "predicted_bias": "bullish",
-      "confidence": 0.40386209023289277,
-      "current_price": 250.6699981689453,
-      "previous_close": 256.760009765625,
-      "gap_pct": -2.3718692027776274,
+      "predicted_bias": "choppy",
+      "confidence": 0.642,
+      "current_price": 220.86,
+      "previous_close": 222.81,
+      "gap_pct": -0.877,
       "probabilities": {
-        "bearish": 0.2260037044123329,
-        "bullish": 0.40386209023289277,
-        "choppy": 0.3701342053547745
+        "choppy": 0.642,
+        "bullish": 0.179,
+        "bearish": 0.179
       }
     }
   }
