@@ -1,52 +1,71 @@
 # Data Dictionary & BigQuery Schema
 
 ## Scope
-This document provides the canonical schema for the Sports Edge BigQuery environment. The chatbot uses this to generate SQL queries.
+This document provides the canonical schema for the Sports Edge BigQuery environment. Use this to generate SQL queries.
 
 ## Datasets
-1. `sports_edge_results`: Contains historical outcomes and calculated performance metrics.
-2. `sports_edge_raw`: Contains raw play-by-play, schedules, and team statistics.
-3. `sports_edge_curated`: Contains engineered feature snapshots used for model inference.
-
-## Primary Tables (sports_edge_results)
-
-### Table: `game_results`
-Use this table for questions about win/loss records, scores, and spread coverage.
-- `game_id` (STRING): Unique identifier.
-- `league` (STRING): 'NFL' or 'NBA'.
-- `season` (INT64): Year of the season.
-- `game_date` (DATE): Date of the game.
-- `actual_home_points` (INT64): Final score for the home team.
-- `actual_away_points` (INT64): Final score for the away team.
-- `actual_home_win` (BOOL): True if home team won.
-- `actual_home_margin` (INT64): (Home Points - Away Points).
-- `model_version` (STRING): The version of the model used for predictions.
+1. `sports_edge_raw`: Contains raw play-by-play, schedules, and team statistics.
+2. `sports_edge_curated`: Contains engineered feature snapshots and model outputs.
 
 ## Primary Tables (sports_edge_raw)
 
-### Table: `raw_nba_game_logs`
-Use this for detailed team-level performance trends.
-- `team` (STRING): Team name.
-- `points_scored` (INT64): Points scored by the team.
-- `points_allowed` (INT64): Points allowed by the team.
-- `net_rating` (FLOAT64): Advanced efficiency metric.
+### Table: `learned-pier-478122-p7.sports_edge_raw.raw_schedules`
+Use this for questions about historical scores, schedules, and win/loss records.
+- `game_id` (STRING): Unique identifier.
+- `league` (STRING): 'NBA' or 'NFL'.
+- `season` (INT64): Year of the season.
+- `game_date` (DATE): Date of the game.
+- `home_team` (STRING): Full name of the home team.
+- `away_team` (STRING): Full name of the away team.
+- `home_score` (INT64): Final score for the home team.
+- `away_score` (INT64): Final score for the away team.
 
-### Table: `raw_schedules`
-Use this for upcoming games and schedule lookups.
-- `home_team` (STRING): 2-3 letter team abbreviation (e.g., 'BOS', 'KC').
-- `away_team` (STRING): 2-3 letter team abbreviation (e.g., 'LAL', 'SF').
+### Table: `learned-pier-478122-p7.sports_edge_raw.raw_nba_game_logs`
+Use this for team-level performance trends.
+- `team` (STRING): Team name.
 - `game_date` (DATE)
+- `points_scored` (INT64)
+- `points_allowed` (INT64)
+- `point_diff` (INT64)
+- `net_rating` (FLOAT64)
 
 ## Primary Tables (sports_edge_curated)
 
-### Table: `feature_snapshots`
-Use this for questions about model features like rest days.
+### Table: `learned-pier-478122-p7.sports_edge_curated.feature_snapshots`
+Use this for CURRENT/UPCOMING games to see the latest features.
+
+### Table: `learned-pier-478122-p7.sports_edge_curated.training_feature_view_v2`
+Use this for HISTORICAL analytical questions about past performance, rest, fatigue, and back-to-backs (B2B). This table contains the full history of games.
+- `game_id` (STRING)
+- `league` (STRING)
+- `season` (INT64)
+- `game_date` (DATE)
+- `home_win` (BOOL): TRUE if home team won.
+- `home_margin` (FLOAT64): Points margin for home team (positive = home win).
 - `rest_home` (FLOAT64): Days of rest for home team.
 - `rest_away` (FLOAT64): Days of rest for away team.
-- `rest_differential` (FLOAT64): Difference in rest between teams.
-- `opp_strength_differential` (FLOAT64): SOS adjustment.
+- `b2b_home` (BOOL): True if home team is on second night of a back-to-back.
+- `b2b_away` (BOOL): True if away team is on second night of a back-to-back.
+- `opp_strength_home_season` (FLOAT64)
+- `opp_strength_away_season` (FLOAT64)
+- `home_team_win_pct` (FLOAT64)
+- `away_team_win_pct` (FLOAT64)
+
+**IMPORTANT NOTE FOR training_feature_view_v2**: This view DOES NOT have `home_team` or `away_team` columns! You MUST JOIN `training_feature_view_v2` with `learned-pier-478122-p7.sports_edge_raw.raw_schedules` ON `game_id` to filter by team names (like `raw_schedules.home_team = 'BOS'`).
+
+### Table: `learned-pier-478122-p7.sports_edge_curated.model_predictions`
+Use this for model output questions.
+- `game_id` (STRING)
+- `predicted_spread` (FLOAT64)
+- `home_win_prob` (FLOAT64)
+- `model_version` (STRING)
 
 ## Join Logic
-- Tables can be joined on `game_id`.
-- League filters (`league = 'NBA'` or `league = 'NFL'`) should always be applied.
-- Season filters (`season = 2025`) are recommended for performance.
+- Most tables can be joined on `game_id`.
+- Always filter by `league` ('NBA' or 'NFL').
+- IMPORTANT: Team names are typically abbreviations (e.g. "BOS", "LAL" for NBA, or "NE", "KC" for NFL). Do NOT use full names like "Boston Celtics" unless matching against a specific table that uses them. If a user asks for "Celtics", use 'BOS'.
+
+## Win/Loss Logic (Curated Tables)
+- A "win" for the **home team** is when `home_win = TRUE`.
+- A "win" for the **away team** is when `home_win = FALSE`.
+- Use `home_margin > 0` as a backup for win logic if `home_win` isn't used.

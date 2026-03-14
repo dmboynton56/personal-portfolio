@@ -44,3 +44,14 @@ Suggested mapping in UI context:
 
 ### Feature Importance Context
 Higher influence features typically include career impact metrics, award history, and longevity.
+
+## Feature Rationale (The "Why")
+
+### Rest Days and Fatigue
+The model cares about rest days because cumulative fatigue significantly impacts team efficiency. Teams playing on the second night of a back-to-back (B2B) or a third game in four nights (3in4) typically show a measurable drop in defensive intensity and shooting accuracy. 
+
+### `opp_strength_differential` (SOS Adjustment)
+Raw PPG (Points Per Game) is a misleading metric because it doesn't account for who a team has played. `opp_strength_differential` adjusts a team's performance based on the quality of their opponents. A high-scoring game against a top-tier defense is weighted more heavily than the same score against a bottom-tier defense. This "Strength of Schedule" adjustment is essential for identifying true betting edges where the public might be overvaluing raw stats.
+
+### Form Metrics (3-game vs 10-game)
+Short-term form (3-game) captures recent momentum, injuries, or rotation changes. Long-term form (10-game) provides a more stable baseline of a team's true talent level. The model compares these windows to identify teams that are currently overperforming or underperforming relative to their season average.

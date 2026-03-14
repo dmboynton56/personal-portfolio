@@ -95,9 +95,7 @@ export default function SportsEdgeCard() {
 
     load()
 
-    // Refresh every 60 seconds
-    const interval = setInterval(load, 60000)
-    return () => clearInterval(interval)
+    // No interval polling needed since data updates once daily
   }, [fetchData, weekFilter, dateFilter, activeTab])
   
   useEffect(() => {
