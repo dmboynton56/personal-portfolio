@@ -1,6 +1,6 @@
 # Sports Edge Supabase Setup
 
-This folder keeps the SQL migrations that provision the `games`, `odds_snapshots`, `model_predictions`, `features`, `model_runs`, and `games_today_enriched` view the portfolio needs.
+This folder keeps the SQL migrations that provision the `games`, `odds_snapshots`, `model_predictions`, `features`, `model_runs`, and `games_today_enriched` view for Sports Edge, plus LLM Advisor telemetry tables.
 
 ## Prerequisites
 - A Supabase project (or self-hosted Postgres 15+).
@@ -21,9 +21,12 @@ This folder keeps the SQL migrations that provision the `games`, `odds_snapshots
    ```bash
    supabase link --project-ref <your-ref>
    ```
-3. Push the migration in this folder:
+3. Push the migrations in this folder:
    ```bash
    supabase db push --file supabase/migrations/001_sports_edge_schema.sql
+   supabase db push --file supabase/migrations/002_add_week_column.sql
+   supabase db push --file supabase/migrations/004_add_actual_scores.sql
+   supabase db push --file supabase/migrations/005_llm_advisor_telemetry.sql
    ```
 4. Confirm the view returns rows:
    ```bash
@@ -42,7 +45,33 @@ Use the new POST endpoint at `/api/sports-edges/odds` (protected by the same `SP
 THE_ODDS_API_KEY
 THE_ODDS_API_REGIONS (optional, default `us`)
 THE_ODDS_API_MARKETS (optional, default `spreads`)
-THE_ODDS_API_BOOKMAKERS (optional comma list, default `draftkings,betmgm`)
+THE_ODDS_API_BOOKMAKERS (optional comma list, default `draftkings,betmgm,fanduel,caesars`)
+THE_ODDS_API_FALLBACK_BOOKMAKERS (optional fallback pass if preferred books miss lines)
+THE_ODDS_API_RETRIES (optional, default `3`)
+THE_ODDS_API_RETRY_DELAY_MS (optional, default `700`)
 ```
 
 Trigger it from your scheduler before hitting `/api/sports-edges` so the UI reads fresh numbers from Supabase.
+
+### LLM Advisor telemetry ingest
+
+Use `POST /api/llm-advisor/metrics` to parse local LLM Advisor artifacts and upsert them into:
+- `llm_advisor_backtest_runs`
+- `llm_advisor_backtest_trades`
+- `llm_advisor_runtime_heartbeats`
+
+Required env vars:
+
+```
+LLM_ADVISOR_CRON_SECRET=...
+LLM_ADVISOR_DAILY_NEWS_DIR=../llm-advisor/data/daily_news
+```
+
+Example cron call:
+
+```bash
+curl -X POST http://localhost:3000/api/llm-advisor/metrics \
+  -H "x-cron-secret: $LLM_ADVISOR_CRON_SECRET"
+```
+
+The dashboard endpoint `GET /api/llm-advisor/metrics` reads Supabase first and falls back to local files when tables are empty or unavailable.

@@ -23,6 +23,7 @@ class RealDailyBiasPredictor:
         self.models = {}
         self.label_encoders = {}
         self.target_time = target_time
+        self.data_notes = {}
         
     def load_models(self):
         """Load the actual ICTML models from the repo"""
@@ -57,50 +58,86 @@ class RealDailyBiasPredictor:
             print(f"❌ Error loading models: {e}")
             return False
     
-    def get_market_data(self, symbol: str, days: int = 60) -> pd.DataFrame:
+    def get_market_data(self, symbol: str, days: int = 90) -> pd.DataFrame:
         """Fetch real market data using yfinance"""
         try:
             ticker = yf.Ticker(symbol)
             if self.target_time:
-                # Fetch data for the day of target_time
-                start_date = self.target_time.date() - timedelta(days=1)
-                end_date = self.target_time.date() + timedelta(days=1)
-                # Fetch 5-min data for the current day
-                data_5m = ticker.history(start=start_date, end=end_date, interval='5m')
-                # Fetch daily data for previous days
-                data_daily = ticker.history(start=start_date, end=end_date, interval='1d')
-                # Find the first 5-min candle after 9:30am (i.e., 9:30–9:35am)
-                est = self.est_tz
-                candle_time = self.target_time.replace(hour=9, minute=35, second=0, microsecond=0)
-                candle_str = candle_time.strftime('%Y-%m-%d %H:%M:%S')
-                # Find the 5-min candle ending at 9:35am
-                candle = data_5m.loc[data_5m.index.strftime('%Y-%m-%d %H:%M:%S') == candle_str]
-                if not candle.empty:
-                    print(f"Fetched {symbol} 5-min 9:30–9:35am candle for {candle_str}:")
-                    print(candle)
-                else:
-                    print(f"❌ 5-min 9:30–9:35am candle not found for {symbol} on {candle_str}")
-                # For feature calculation, append the 5-min candle as the 'current day' to the daily data
-                # Use previous day's daily data + today's 5-min bar
-                if not candle.empty and not data_daily.empty:
-                    # Use the last row of daily data as previous day
-                    prev_day = data_daily.iloc[-2]
-                    # Build a DataFrame with prev_day and the 5-min candle as current_day
-                    prev_day_df = pd.DataFrame([prev_day])
-                    candle_df = candle.copy()
-                    candle_df.index = [candle_time]  # ensure index is correct
-                    # Align columns to match daily data
-                    for col in prev_day_df.columns:
-                        if col not in candle_df.columns:
-                            candle_df[col] = None
-                    # Reorder columns
-                    candle_df = candle_df[prev_day_df.columns]
-                    combined = pd.concat([prev_day_df, candle_df])
-                    combined.columns = [col.lower() for col in combined.columns]
-                    return combined
-                else:
-                    print(f"❌ Not enough data for {symbol} to build feature DataFrame.")
+                trade_date = self.target_time.date()
+                daily_start = trade_date - timedelta(days=days + 10)
+                daily_end = trade_date + timedelta(days=1)
+
+                data_daily = ticker.history(start=daily_start, end=daily_end, interval='1d')
+                if data_daily.empty or len(data_daily) < 20:
+                    print(f"❌ Insufficient daily history for {symbol}.")
                     return None
+
+                intraday_start = trade_date - timedelta(days=3)
+                intraday_end = trade_date + timedelta(days=1)
+                data_5m = ticker.history(start=intraday_start, end=intraday_end, interval='5m')
+
+                if not data_5m.empty and data_5m.index.tz is None:
+                    data_5m.index = data_5m.index.tz_localize('UTC')
+                if not data_5m.empty:
+                    data_5m.index = data_5m.index.tz_convert(self.est_tz)
+
+                selected_bar = None
+                if not data_5m.empty:
+                    same_day = data_5m[data_5m.index.date == trade_date]
+                    if not same_day.empty:
+                        target_cutoff = self.target_time
+                        market_open = self.est_tz.localize(
+                            datetime.combine(trade_date, datetime.min.time())
+                        ).replace(hour=9, minute=35, second=0, microsecond=0)
+                        valid_window = same_day[(same_day.index >= market_open) & (same_day.index <= target_cutoff)]
+                        if not valid_window.empty:
+                            selected_bar = valid_window.iloc[0]
+
+                daily_lower = data_daily.copy()
+                daily_lower.columns = [col.lower() for col in daily_lower.columns]
+                daily_lower['trade_date'] = daily_lower.index.date
+                history_rows = daily_lower[daily_lower['trade_date'] < trade_date].tail(days)
+
+                if history_rows.empty or len(history_rows) < 20:
+                    print(f"❌ Not enough history rows before {trade_date} for {symbol}.")
+                    return None
+
+                if selected_bar is not None:
+                    current_row = pd.Series(
+                        {
+                            'open': float(selected_bar['Open']),
+                            'high': float(selected_bar['High']),
+                            'low': float(selected_bar['Low']),
+                            'close': float(selected_bar['Close']),
+                            'volume': float(selected_bar['Volume'])
+                        },
+                        name=self.target_time
+                    )
+                    note = f"intraday-5m-{selected_bar.name.strftime('%Y-%m-%d %H:%M %Z')}"
+                else:
+                    same_day_daily = daily_lower[daily_lower['trade_date'] == trade_date]
+                    if same_day_daily.empty:
+                        # Fallback: use most recent available daily row and mark stale
+                        same_day_daily = daily_lower.tail(1)
+                    latest_daily = same_day_daily.iloc[-1]
+                    current_row = pd.Series(
+                        {
+                            'open': float(latest_daily['open']),
+                            'high': float(latest_daily['high']),
+                            'low': float(latest_daily['low']),
+                            'close': float(latest_daily['close']),
+                            'volume': float(latest_daily['volume'])
+                        },
+                        name=self.target_time
+                    )
+                    note = f"daily-fallback-{str(latest_daily['trade_date'])}"
+
+                combined = history_rows[['open', 'high', 'low', 'close', 'volume']].copy()
+                current_df = pd.DataFrame([current_row])
+                combined = pd.concat([combined, current_df], axis=0)
+                combined.columns = [col.lower() for col in combined.columns]
+                self.data_notes[symbol] = note
+                return combined
             else:
                 end_date = datetime.now()
                 start_date = end_date - timedelta(days=days)
@@ -112,6 +149,7 @@ class RealDailyBiasPredictor:
             if len(data) < 5:
                 print(f"❌ Insufficient data for {symbol}: {len(data)} days")
                 return None
+            self.data_notes[symbol] = f"daily-{data.index[-1].date()}"
             print(f"✅ Fetched {len(data)} rows of data for {symbol}")
             return data
         except Exception as e:
@@ -279,7 +317,8 @@ class RealDailyBiasPredictor:
                 'current_price': current_price,
                 'previous_close': previous_close,
                 'gap_pct': gap_pct,
-                'probabilities': prediction['probabilities']
+                'probabilities': prediction['probabilities'],
+                'data_source': self.data_notes.get(symbol, 'unknown')
             }
             
             bias = prediction['predicted_bias'].upper()
@@ -293,7 +332,11 @@ class RealDailyBiasPredictor:
         return {
             'lastUpdated': now.isoformat(),
             'date': now.strftime('%Y-%m-%d'),
-            'predictions': predictions
+            'predictions': predictions,
+            'metadata': {
+                'target_time': self.target_time.isoformat() if self.target_time else None,
+                'symbols_processed': list(predictions.keys())
+            }
         }
     
     def generate_sample_data(self):

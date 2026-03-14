@@ -18,10 +18,12 @@ interface Project {
   id: string
   title: string
   description: string
+  category: 'flagship' | 'additional'
   type: 'desktop' | 'mobile'
   image: string
   images?: string[]
   technologies: string[]
+  proofPoints?: string[]
   isInteractive?: boolean
   caseStudyUrl?: string
 }
@@ -60,6 +62,7 @@ const mockProjects: Project[] = [
     id: 'nba-hof-predictor',
     title: 'NBA Hall of Fame Predictor 🏀',
     description: 'Interactive machine learning model that predicts NBA players\' Hall of Fame chances with 99% accuracy. Features real-time player lookup and detailed prediction analysis using XGBoost trained on 5,250+ players since 1976. Try entering any NBA player name!',
+    category: 'flagship',
     type: 'desktop',
     image: '/images/projects/nba-hof-top-20.png', // Placeholder for behind-the-scenes
     images: [
@@ -70,12 +73,15 @@ const mockProjects: Project[] = [
       '/images/projects/nba-hof-mvp-chart.png'
     ],
     technologies: ['Python', 'XGBoost', 'Next.js', 'TypeScript', 'Basketball Analytics'],
-    isInteractive: true
+    proofPoints: ['5,250+ historical player careers', 'Interactive probability search for any player', 'Feature-level model reasoning on each prediction'],
+    isInteractive: true,
+    caseStudyUrl: '/projects/nba-hof'
   },
   {
     id: 'ictml-trading-system',
     title: 'ICTML Advanced Trading System 📈',
     description: 'Real-time machine learning trading system achieving 84.4% accuracy in daily market bias prediction for QQQ, SPY, and IWM. Features ensemble models, premium session filtering (9:30-12:00 EST), and daily bias probability vectors.',
+    category: 'flagship',
     type: 'desktop',
     image: '/images/projects/ICTML_accuracies.png',
     images: [
@@ -84,12 +90,15 @@ const mockProjects: Project[] = [
       '/images/projects/ICTML_matrices.png'    // Confusion matrices
     ],
     technologies: ['Python', 'XGBoost', 'Scikit-learn', 'Ensemble Methods'],
-    isInteractive: true
+    proofPoints: ['84.4% daily market-bias classification accuracy', 'Live QQQ/SPY/IWM probability vectors', 'Automated prediction refresh before market open'],
+    isInteractive: true,
+    caseStudyUrl: '/projects/ictml'
   },
   {
     id: 'sports-edge',
     title: 'Sports Edge: NFL/NBA Betting Analysis 🏈',
     description: 'Machine learning pipeline that computes model spreads and home win probabilities for NFL/NBA games, compares against sportsbook lines, and identifies betting edges. Features real-time odds integration, feature engineering (rest days, form metrics, opponent strength), and automated daily predictions.',
+    category: 'flagship',
     type: 'desktop',
     image: '/images/projects/project3-1.JPG',
     images: [
@@ -97,6 +106,7 @@ const mockProjects: Project[] = [
       '/images/projects/project3-2.JPG'
     ],
     technologies: ['Python', 'Scikit-learn', 'LightGBM', 'Supabase', 'Next.js', 'Sports Analytics'],
+    proofPoints: ['BigQuery as source of truth + Supabase serving layer', 'Automated daily/weekly prediction pipeline', 'Live portfolio card pulling sportsbook deltas'],
     isInteractive: true,
     caseStudyUrl: '/projects/sports-edge'
   },
@@ -104,10 +114,12 @@ const mockProjects: Project[] = [
     id: 'llm-advisor',
     title: 'LLM Advisor: Agentic Trading System 🤖',
     description: 'Autonomous trading agent that uses Google Gemini 1.5 Flash to analyze market sentiment and adjust statistical mean-reversion thresholds in real-time. Features automated risk management, backtesting engine, and Alpaca trade execution.',
+    category: 'flagship',
     type: 'desktop',
     image: '/images/projects/llm-advisor-dashboard.png', // Placeholder
     images: [],
     technologies: ['Python', 'Gemini API', 'Alpaca', 'Pandas', 'Backtesting'],
+    proofPoints: ['Hybrid ML + LLM trading decision stack', 'Risk controls with drawdown guardrails', 'Backtesting workflow tied to execution rules'],
     isInteractive: false,
     caseStudyUrl: '/projects/llm-advisor'
   },
@@ -115,6 +127,7 @@ const mockProjects: Project[] = [
     id: 'mancala-ai',
     title: 'Mancala AI with Game Theory (Try to beat the AI!)',
     description: 'Intelligent Mancala game implementing minimax algorithm with alpha-beta pruning optimization. The AI evaluates game states 5 moves ahead, achieving 70-80% win rate against random opponents with 10x performance improvement through pruning. Features Monte Carlo simulation analysis for strategic validation.',
+    category: 'additional',
     type: 'desktop',
     image: '/images/projects/mancala-output.png', // Placeholder - will need actual game screenshots
     images: [
@@ -132,6 +145,7 @@ const mockProjects: Project[] = [
     id: 'houseclusters',
     title: 'Advanced Data Cluster Sorting',
     description: 'Project for my Advanced Data Science class. This project was a individual effort to sort data into clusters based on their similarity. We used a variety of data structures and algorithms to achieve this.',
+    category: 'additional',
     type: 'desktop',
     image: '/images/projects/project3-1.JPG',
     images: [
@@ -144,6 +158,7 @@ const mockProjects: Project[] = [
     id: 'project1',
     title: 'CU Boulder Police Department Heatmap',
     description: 'A simple heatmap of the CU Boulder Police Department data and its most common location occurrences.',
+    category: 'additional',
     type: 'desktop',
     image: '/images/projects/project1-1.JPG',
     images: [
@@ -156,6 +171,7 @@ const mockProjects: Project[] = [
     id: 'simplefitness',
     title: 'Simple Fitness (Tracking App!)',
     description: 'A native iOS app for tracking strength training and cardio workouts. Built with Swift and CoreData, this was a fun introduction to iOS development and its ecosystem compatibility. This was more a fun project just to learn more about iOS development and its language capabilities. ',
+    category: 'additional',
     type: 'mobile',
     image: '/images/projects/simplefitness-1.png',
     images: [
@@ -167,6 +183,10 @@ const mockProjects: Project[] = [
     technologies: ['Xcode', 'Swift', 'CoreData']
   }
 ]
+
+const flagshipProjects = mockProjects.filter((project) => project.category === 'flagship')
+const additionalProjects = mockProjects.filter((project) => project.category === 'additional')
+const orderedProjects = [...flagshipProjects, ...additionalProjects]
 
 export function WorkSection() {
   const observerRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -182,30 +202,28 @@ export function WorkSection() {
   const [nbaPredictions, setNbaPredictions] = useState<Record<string, PlayerPrediction>>({})
 
   useEffect(() => {
-    const observers = mockProjects.map((_, index) => {
-      return new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('opacity-100', 'translate-y-0')
-              entry.target.classList.remove('opacity-0', 'translate-y-10')
-            }
-          })
-        },
-        {
-          threshold: 0.1,
-          rootMargin: '-50px'
-        }
-      )
-    })
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('opacity-100', 'translate-y-0')
+            entry.target.classList.remove('opacity-0', 'translate-y-10')
+          }
+        })
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '-50px'
+      }
+    )
 
-    observerRefs.current.forEach((ref, index) => {
-      if (ref) observers[index].observe(ref)
+    observerRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref)
     })
 
     return () => {
-      observerRefs.current.forEach((ref, index) => {
-        if (ref) observers[index].unobserve(ref)
+      observerRefs.current.forEach((ref) => {
+        if (ref) observer.unobserve(ref)
       })
     }
   }, [])
@@ -299,9 +317,13 @@ export function WorkSection() {
       <section id="work" className="min-h-screen bg-background-alt py-24">
         <div className="max-w-6xl mx-auto px-4 md:px-8">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">Selected Work</h2>
+          <p className="max-w-3xl text-lg text-muted-foreground mb-16">
+            Production-oriented machine learning and data systems are my core focus. These flagship projects represent the strongest
+            examples of modeling, automation, and full-stack delivery.
+          </p>
 
           <div className="space-y-64">
-            {mockProjects.map((project, index) => (
+            {orderedProjects.map((project, index) => (
               <div
                 key={project.id}
                 ref={el => {
@@ -309,6 +331,22 @@ export function WorkSection() {
                 }}
                 className="opacity-0 translate-y-10 transition-all duration-1000 ease-out"
               >
+                {index === 0 && (
+                  <div className="mb-12">
+                    <h3 className="text-2xl md:text-3xl font-semibold text-foreground">Flagship Systems</h3>
+                    <p className="text-muted-foreground mt-2">
+                      End-to-end systems with measurable outcomes, live interfaces, and automated data pipelines.
+                    </p>
+                  </div>
+                )}
+                {index === flagshipProjects.length && (
+                  <div className="mb-12 border-t border-border pt-12">
+                    <h3 className="text-2xl md:text-3xl font-semibold text-foreground">Additional Projects</h3>
+                    <p className="text-muted-foreground mt-2">
+                      Smaller builds and experiments that highlight breadth across data science, frontend, and algorithmic thinking.
+                    </p>
+                  </div>
+                )}
                 <div className={`grid grid-cols-1 gap-16 ${project.type === 'desktop'
                     ? ''
                     : 'md:grid-cols-2 md:items-center'
@@ -331,6 +369,16 @@ export function WorkSection() {
                         <p className="text-muted-foreground mb-8">
                           {project.description}
                         </p>
+                        {project.proofPoints && project.proofPoints.length > 0 && (
+                          <ul className="space-y-2 mb-8 text-sm text-foreground/85">
+                            {project.proofPoints.map((point) => (
+                              <li key={point} className="flex items-start gap-2">
+                                <span className="text-accent mt-[2px]">-</span>
+                                <span>{point}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
                         <div className="flex flex-wrap gap-2 mb-8">
                           {project.technologies.map((tech) => (
                             <span

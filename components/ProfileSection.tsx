@@ -19,11 +19,11 @@ export function ProfileSection() {
           <Logo size={48} clickable className="translate-y-[8px]" />
         </div>
         <p className="text-xl md:text-2xl text-foreground/80 mb-6">Software/ML Engineer</p>
-        <p className="max-w-lg mx-auto text-foreground/70">
-          I am a full stack developer with an interest in data analysis and machine learning.
+        <p className="max-w-2xl mx-auto text-foreground/70">
+          I build production-focused ML and data products end to end, from feature pipelines and model inference
+          to APIs, frontend delivery, and automated monitoring.
         </p>
       </div>
     </section>
   )
 }
-

@@ -10,6 +10,7 @@ interface BiasData {
   current_price: number
   previous_close: number
   gap_pct: number
+  data_source?: string
   probabilities: {
     bearish: number
     bullish: number
@@ -106,6 +107,9 @@ export function DailyBiasDisplay() {
           <p className="text-sm text-muted-foreground">
             Predictions for {biasData.date}
           </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Last updated: {new Date(biasData.lastUpdated).toLocaleString('en-US')}
+          </p>
         </div>
 
         {/* Three Vertical Cards - 80% Height */}
@@ -185,6 +189,11 @@ export function DailyBiasDisplay() {
               <div className="text-center pt-3 border-t border-border/30">
                 <div className="text-xs text-muted-foreground">Previous Close</div>
                 <div className="text-sm font-semibold">${prediction.previous_close.toFixed(2)}</div>
+                {prediction.data_source && (
+                  <div className="text-[11px] text-muted-foreground mt-1">
+                    Source: {prediction.data_source}
+                  </div>
+                )}
               </div>
             </div>
           ))}

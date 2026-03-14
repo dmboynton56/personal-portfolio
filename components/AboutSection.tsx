@@ -5,32 +5,20 @@ export function AboutSection() {
         <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">About Me</h2>
         <div className="space-y-6 text-lg text-muted-foreground">
           <p>
-            Hey, I am Drew Boynton. I have had a passion for almost everything tech
-            since I was a kid. I can remember playing video games with my friends and
-            then looking up YouTube videos and reading about how the tech world worked.
+            I am a software and machine learning engineer focused on building systems that hold up in production,
+            not just in notebooks. My strongest work combines data engineering, model development, and product delivery.
           </p>
           <p>
-            In middle school, I was always on the computer. I would create 3D models for my
-            minecraft character and make graphics that, at the time, I thought were pretty cool.
+            Most of my recent projects are end-to-end pipelines: data ingestion, feature generation,
+            model scoring, API layers, and frontend experiences that expose model outputs in a usable way.
+            I regularly work with Python, TypeScript, BigQuery, Supabase/Postgres, and cloud-based AI tooling.
           </p>
           <p>
-            In high school, I started to learn how to code. I remember watching a YouTube series
-            about creating a game in Unity. Then, I took some start classes in high school, and realized
-            that I loved it. You could create anything and everything, and make an impact on the world.
-          </p>
-          <p>
-            At this point, I've taken a multitude of classes in college. I've designed and developed a couple
-            of websites, and I've worked on a few projects. I've also taken a lot of classes in AI and machine learning.
-            I've learned a lot about the tech world, and I'm excited to see where it takes me.
-          </p>
-          <p>
-            As I've gone from an active student to a college graduate, my desire to join the tech world has only increased. 
-            This website showcases some of the projects I've worked on, and some of the things I've learned. My contact
-            information is at the bottom of the page, so feel free to reach out!
+            This portfolio highlights projects where I can demonstrate measurable outcomes, architectural decisions,
+            and operational tradeoffs. If you are evaluating for DS/ML/SWE roles, the flagship systems are the best place to start.
           </p>
         </div>
       </div>
     </section>
   )
 }
-
