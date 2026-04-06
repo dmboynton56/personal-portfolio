@@ -3,21 +3,21 @@
 import React from 'react'
 import { ProjectLayout } from '@/components/ProjectLayout'
 import { Trophy, BarChart3, Search, Database, Cpu, CheckCircle2 } from 'lucide-react'
+import { useProjectMetrics } from '@/hooks/useProjectMetrics'
 
 export default function NbaHofPage() {
-  const metrics = [
-    { label: 'Model Accuracy', value: '99%', icon: <CheckCircle2 className="w-4 h-4 text-emerald-500" />, trend: 'up' },
-    { label: 'Player Histories', value: '5,250+', icon: <Database className="w-4 h-4 text-blue-500" /> },
-    { label: 'Lookup Experience', value: 'Interactive', icon: <Search className="w-4 h-4 text-amber-500" /> },
-    { label: 'Model Family', value: 'XGBoost', icon: <Cpu className="w-4 h-4 text-purple-500" /> }
-  ] as const
+  const { metrics, isLoading, error } = useProjectMetrics('nba-hof')
 
   return (
     <ProjectLayout
       title="NBA Hall of Fame Predictor"
       description="An interactive ML system that estimates Hall of Fame probability from career outcomes, peak performance indicators, and awards profile. The interface lets users query players and inspect model-backed reasoning."
       tags={['Python', 'XGBoost', 'Next.js', 'TypeScript', 'Sports Analytics']}
-      metrics={metrics}
+      metrics={metrics?.metrics}
+      metricsSource={metrics?.source}
+      metricsGeneratedAt={metrics?.generatedAt}
+      isLoadingMetrics={isLoading}
+      metricsError={error}
       heroImage={
         <div className="w-full h-full p-8 flex items-center justify-center bg-zinc-950 rounded-xl border border-zinc-800">
           <div className="max-w-md w-full space-y-4">

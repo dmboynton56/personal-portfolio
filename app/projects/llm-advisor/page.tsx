@@ -156,22 +156,23 @@ export default function LlmAdvisorPage() {
         {
           label: 'Last Feed Update',
           value: formatAge(metricsData?.heartbeat.ageSeconds ?? null),
-          icon: <Clock3 className="w-4 h-4 text-sky-400" />
+          iconName: 'clock'
         },
         {
           label: 'P/L (7d)',
           value: formatCurrency(metricsData?.pnl.change7d ?? null),
-          icon: <TrendingUp className="w-4 h-4 text-emerald-500" />
+          iconName: 'trendingUp',
+          trend: (metricsData?.pnl.change7d ?? 0) > 0 ? 'up' : (metricsData?.pnl.change7d ?? 0) < 0 ? 'down' : 'neutral'
         },
         {
           label: 'Success Rate',
           value: formatPercent(metricsData?.trades.successRate ?? null),
-          icon: <Gauge className="w-4 h-4 text-blue-500" />
+          iconName: 'gauge'
         },
         {
           label: 'Risk/Reward',
           value: formatRatio(metricsData?.trades.rrOverall ?? null),
-          icon: <Shield className="w-4 h-4 text-yellow-500" />
+          iconName: 'shield'
         }
       ] as const,
     [metricsData]
@@ -184,6 +185,10 @@ export default function LlmAdvisorPage() {
       tags={['Python', 'Gemini API', 'Alpaca', 'Pandas', 'Backtesting']}
       repoUrl="https://github.com/dmboynton56/llm-advisor"
       metrics={topMetrics}
+      metricsSource={metricsData?.source}
+      metricsGeneratedAt={metricsData?.generatedAt}
+      isLoadingMetrics={isLoading}
+      metricsError={loadError}
       heroImage={
         <div className="flex flex-col items-center justify-center h-full w-full text-zinc-500 bg-zinc-900/50">
           <Bot className="w-24 h-24 mb-4 text-emerald-500" />

@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
+  if (!supabase) {
+    return NextResponse.json({ error: 'Supabase not configured' }, { status: 500 });
+  }
   // Fetch the stats (assuming a single row)
   const { data, error } = await supabase
     .from('mancala_stats')
@@ -18,7 +18,11 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  if (!supabase) {
+    return NextResponse.json({ error: 'Supabase not configured' }, { status: 500 });
+  }
   const body = await req.json();
+  // ... rest of the code ...
   // body: { winner: 1 | 2 | 0 }
   // Fetch the current stats row
   const { data, error } = await supabase

@@ -4,13 +4,8 @@ import { ArrowLeft, Github, ExternalLink, Calendar, BarChart2, Radio, Activity, 
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-
-interface Metric {
-    label: string
-    value: string
-    icon?: React.ReactNode
-    trend?: 'up' | 'down' | 'neutral'
-}
+import { ProjectMetric, MetricSource, getIcon } from '@/lib/metrics'
+import { track } from '@vercel/analytics'
 
 interface ProjectLayoutProps {
     title: string
@@ -18,9 +13,13 @@ interface ProjectLayoutProps {
     tags: string[]
     repoUrl?: string
     liveUrl?: string
-    metrics?: Metric[] | readonly Metric[]
+    metrics?: ProjectMetric[] | readonly ProjectMetric[]
+    metricsSource?: MetricSource
+    metricsGeneratedAt?: string
     children: React.ReactNode
     heroImage?: React.ReactNode // Pass a component or image for the right side of hero
+    isLoadingMetrics?: boolean
+    metricsError?: string | null
 }
 
 export function ProjectLayout({
@@ -30,8 +29,12 @@ export function ProjectLayout({
     repoUrl,
     liveUrl,
     metrics,
+    metricsSource,
+    metricsGeneratedAt,
     children,
     heroImage,
+    isLoadingMetrics,
+    metricsError,
 }: ProjectLayoutProps) {
     return (
         <div className="min-h-screen bg-background text-foreground">
@@ -72,7 +75,7 @@ export function ProjectLayout({
 
                         <div className="flex gap-4">
                             {liveUrl && (
-                                <Button asChild size="lg" className="shine-border group/btn">
+                                <Button asChild size="lg" className="shine-border group/btn" onClick={() => track('view_live_clicked', { project: title })}>
                                     <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="relative z-10 flex items-center justify-center text-foreground/80 group-hover/btn:text-foreground transition-colors">
                                         <ExternalLink className="w-4 h-4 mr-2" />
                                         View Live
@@ -80,7 +83,7 @@ export function ProjectLayout({
                                 </Button>
                             )}
                             {repoUrl && (
-                                <Button asChild variant="outline" size="lg">
+                                <Button asChild variant="outline" size="lg" onClick={() => track('view_code_clicked', { project: title })}>
                                     <a href={repoUrl} target="_blank" rel="noopener noreferrer">
                                         <Github className="w-4 h-4 mr-2" />
                                         View Code
@@ -97,23 +100,66 @@ export function ProjectLayout({
                     </div>
                 </div>
 
-                {/* Metrics Grid (if provided) */}
-                {metrics && metrics.length > 0 && (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
-                        {metrics.map((metric, index) => (
-                            <div
-                                key={index}
-                                className="bg-card border border-border p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow"
-                            >
-                                <div className="flex items-center text-muted-foreground mb-2">
-                                    {metric.icon || <Activity className="w-4 h-4 mr-2" />}
-                                    <span className="text-sm font-medium ml-2">{metric.label}</span>
+                {/* Metrics Grid */}
+                {(metrics || isLoadingMetrics || metricsError) && (
+                    <div className="mb-16">
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-xl font-semibold">Key Performance Indicators</h2>
+                            {metricsSource && (
+                                <div className="text-xs text-muted-foreground flex items-center gap-2">
+                                    <span className={cn(
+                                        "px-2 py-0.5 rounded-full border",
+                                        metricsSource === 'supabase' ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500" :
+                                            metricsSource === 'local-files' ? "bg-amber-500/10 border-amber-500/20 text-amber-500" :
+                                                "bg-zinc-500/10 border-zinc-500/20 text-zinc-500"
+                                    )}>
+                                        {metricsSource.toUpperCase().replace('-', ' ')}
+                                    </span>
+                                    {metricsGeneratedAt && (
+                                        <span>Updated {new Date(metricsGeneratedAt).toLocaleString()}</span>
+                                    )}
                                 </div>
-                                <div className="text-2xl md:text-3xl font-bold">
-                                    {metric.value}
-                                </div>
+                            )}
+                        </div>
+
+                        {metricsError ? (
+                            <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-4 rounded-xl text-sm">
+                                {metricsError}
                             </div>
-                        ))}
+                        ) : isLoadingMetrics ? (
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-pulse">
+                                {[1, 2, 3, 4].map((i) => (
+                                    <div key={i} className="bg-card border border-border p-6 rounded-xl h-28" />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                {metrics?.map((metric, index) => (
+                                    <div
+                                        key={index}
+                                        className="bg-card border border-border p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group"
+                                    >
+                                        <div className="flex items-center text-muted-foreground mb-2">
+                                            {getIcon(metric.iconName, <Activity className="w-4 h-4 mr-2" />)}
+                                            <span className="text-sm font-medium ml-2">{metric.label}</span>
+                                        </div>
+                                        <div className="text-2xl md:text-3xl font-bold flex items-baseline gap-2">
+                                            {metric.value}
+                                            {metric.trend && (
+                                                <span className={cn(
+                                                    "text-xs font-medium",
+                                                    metric.trend === 'up' ? "text-emerald-500" :
+                                                        metric.trend === 'down' ? "text-red-500" :
+                                                            "text-muted-foreground"
+                                                )}>
+                                                    {metric.trend === 'up' ? '↑' : metric.trend === 'down' ? '↓' : '→'}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 )}
 

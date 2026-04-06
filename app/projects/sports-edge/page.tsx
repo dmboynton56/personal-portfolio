@@ -5,22 +5,22 @@ import { ProjectLayout } from '@/components/ProjectLayout'
 import SportsEdgeCard from '@/components/SportsEdgeCard'
 import { SportsEdgeChat } from '@/components/SportsEdgeChat'
 import { Activity, Database, Server, TrendingUp, Cpu, LineChart } from 'lucide-react'
+import { useProjectMetrics } from '@/hooks/useProjectMetrics'
 
 export default function SportsEdgePage() {
-    const metrics = [
-        { label: 'Win Rate (7d)', value: '62.5%', icon: <TrendingUp className="w-4 h-4 text-emerald-500" />, trend: 'up' },
-        { label: 'Predictions', value: '1,240+', icon: <Activity className="w-4 h-4 text-blue-500" /> },
-        { label: 'Data Points', value: '850K', icon: <Database className="w-4 h-4 text-purple-500" /> },
-        { label: 'Pipeline', value: '100% Auto', icon: <Server className="w-4 h-4 text-orange-500" /> },
-    ] as const
+    const { metrics, isLoading, error } = useProjectMetrics('sports-edge')
 
     return (
         <ProjectLayout
             title="Sports Edge"
             description="An automated machine learning pipeline that predicts NBA and NFL outcomes by analyzing advanced metrics, rest situations, and market inefficiencies."
             tags={['Python', 'BigQuery', 'GCP', 'Next.js', 'LightGBM', 'Supabase']}
-            repoUrl="https://github.com/dmboynton56/sports-edge" // Assuming repo URL
-            metrics={metrics}
+            repoUrl="https://github.com/dmboynton56/sports-edge"
+            metrics={metrics?.metrics}
+            metricsSource={metrics?.source}
+            metricsGeneratedAt={metrics?.generatedAt}
+            isLoadingMetrics={isLoading}
+            metricsError={error}
             heroImage={
                 <div className="relative w-full h-full flex items-center justify-center bg-zinc-950 rounded-xl overflow-hidden border border-zinc-800">
                     {/* Visual representation of the live card */}

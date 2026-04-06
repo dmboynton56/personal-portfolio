@@ -1,0 +1,20 @@
+{
+    "sports-edge": [
+        { "label": "Win Rate (7d)", "value": "62.5%", "iconName": "trendingUp", "trend": "up" },
+        { "label": "Predictions", "value": "1,240+", "iconName": "activity" },
+        { "label": "Data Points", "value": "850K", "iconName": "database" },
+        { "label": "Pipeline", "value": "100% Auto", "iconName": "server" }
+    ],
+    "nba-hof": [
+        { "label": "Model Accuracy", "value": "99%", "iconName": "checkCircle", "trend": "up" },
+        { "label": "Player Histories", "value": "5,250+", "iconName": "database" },
+        { "label": "Lookup Experience", "value": "Interactive", "iconName": "search" },
+        { "label": "Model Family", "value": "XGBoost", "iconName": "cpu" }
+    ],
+    "ictml": [
+        { "label": "Daily Bias Accuracy", "value": "84.4%", "iconName": "lineChart", "trend": "up" },
+        { "label": "Symbols", "value": "QQQ • SPY • IWM", "iconName": "brainCircuit" },
+        { "label": "Inference Window", "value": "9:30-12:00 EST", "iconName": "clock" },
+        { "label": "Pipeline Mode", "value": "Daily Automated", "iconName": "workflow" }
+    ]
+}

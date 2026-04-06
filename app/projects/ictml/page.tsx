@@ -3,14 +3,10 @@
 import React from 'react'
 import { ProjectLayout } from '@/components/ProjectLayout'
 import { BrainCircuit, Clock3, LineChart, ShieldAlert, Workflow, Database } from 'lucide-react'
+import { useProjectMetrics } from '@/hooks/useProjectMetrics'
 
 export default function IctmlPage() {
-  const metrics = [
-    { label: 'Daily Bias Accuracy', value: '84.4%', icon: <LineChart className="w-4 h-4 text-emerald-500" />, trend: 'up' },
-    { label: 'Symbols', value: 'QQQ • SPY • IWM', icon: <BrainCircuit className="w-4 h-4 text-blue-500" /> },
-    { label: 'Inference Window', value: '9:30-12:00 EST', icon: <Clock3 className="w-4 h-4 text-amber-500" /> },
-    { label: 'Pipeline Mode', value: 'Daily Automated', icon: <Workflow className="w-4 h-4 text-violet-500" /> }
-  ] as const
+  const { metrics, isLoading, error } = useProjectMetrics('ictml')
 
   return (
     <ProjectLayout
@@ -18,7 +14,11 @@ export default function IctmlPage() {
       description="A daily market-bias system that combines historical feature engineering, ensemble modeling, and scheduled inference to classify bullish, bearish, or choppy regimes before execution."
       tags={['Python', 'XGBoost', 'Scikit-learn', 'Pandas', 'Automation']}
       repoUrl="https://github.com/dmboynton56/ICTML"
-      metrics={metrics}
+      metrics={metrics?.metrics}
+      metricsSource={metrics?.source}
+      metricsGeneratedAt={metrics?.generatedAt}
+      isLoadingMetrics={isLoading}
+      metricsError={error}
       heroImage={
         <div className="w-full h-full p-8 flex items-center justify-center bg-zinc-950 rounded-xl border border-zinc-800">
           <div className="w-full max-w-xl space-y-4">
