@@ -1,52 +1,52 @@
 {
-  "lastUpdated": "2026-04-21T11:53:42.644637-04:00",
-  "date": "2026-04-21",
+  "lastUpdated": "2026-04-22T11:52:32.848325-04:00",
+  "date": "2026-04-22",
   "predictions": {
     "QQQ": {
       "symbol": "QQQ",
       "predicted_bias": "choppy",
-      "confidence": 0.5904557248197687,
-      "current_price": 646.7698974609375,
-      "previous_close": 646.7899780273438,
-      "gap_pct": -0.0031046502092524804,
+      "confidence": 0.5067749582084656,
+      "current_price": 649.0598754882812,
+      "previous_close": 644.3300170898438,
+      "gap_pct": 0.7340738865155153,
       "probabilities": {
-        "bearish": 0.23484719565980627,
-        "bullish": 0.17469707952042512,
-        "choppy": 0.5904557248197687
+        "bearish": 0.21265342087666853,
+        "bullish": 0.28057162091486576,
+        "choppy": 0.5067749582084656
       },
-      "data_source": "intraday-5m-2026-04-21 09:35 EDT"
+      "data_source": "intraday-5m-2026-04-22 09:35 EDT"
     },
     "SPY": {
       "symbol": "SPY",
       "predicted_bias": "choppy",
-      "confidence": 0.5847063466391276,
-      "current_price": 709.0399169921875,
-      "previous_close": 708.719970703125,
-      "gap_pct": 0.045144246287441216,
+      "confidence": 0.520129113630804,
+      "current_price": 708.9000244140625,
+      "previous_close": 704.0800170898438,
+      "gap_pct": 0.6845823212170067,
       "probabilities": {
-        "bearish": 0.17618718870785577,
-        "bullish": 0.239106464653017,
-        "choppy": 0.5847063466391276
+        "bearish": 0.24873166871940824,
+        "bullish": 0.23113921764978795,
+        "choppy": 0.520129113630804
       },
-      "data_source": "intraday-5m-2026-04-21 09:35 EDT"
+      "data_source": "intraday-5m-2026-04-22 09:35 EDT"
     },
     "IWM": {
       "symbol": "IWM",
-      "predicted_bias": "choppy",
-      "confidence": 0.4704794482310591,
-      "current_price": 278.389892578125,
-      "previous_close": 277.3500061035156,
-      "gap_pct": 0.3749365248693224,
+      "predicted_bias": "bullish",
+      "confidence": 0.41226468934953575,
+      "current_price": 277.70001220703125,
+      "previous_close": 274.510009765625,
+      "gap_pct": 1.1620714465493827,
       "probabilities": {
-        "bearish": 0.2873028963349663,
-        "bullish": 0.24221765543397464,
-        "choppy": 0.4704794482310591
+        "bearish": 0.28996478654116586,
+        "bullish": 0.41226468934953575,
+        "choppy": 0.29777052410929866
       },
-      "data_source": "intraday-5m-2026-04-21 09:35 EDT"
+      "data_source": "intraday-5m-2026-04-22 09:35 EDT"
     }
   },
   "metadata": {
-    "target_time": "2026-04-21T09:35:00-04:00",
+    "target_time": "2026-04-22T09:35:00-04:00",
     "symbols_processed": [
       "QQQ",
       "SPY",
