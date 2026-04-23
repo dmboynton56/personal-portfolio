@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { promises as fs, type Dirent } from 'fs'
 import path from 'path'
+import { ApiEnvelope, STALE_THRESHOLDS, toApiMeta } from '@/lib/freshness'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -17,6 +18,7 @@ const cronSecret =
   process.env.LLM_ADVISOR_CRON_SECRET ?? process.env.SPORTS_EDGE_CRON_SECRET
 
 const LOCAL_CACHE_MS = 30_000
+const IS_PRODUCTION = process.env.NODE_ENV === 'production'
 
 type DashboardSource = 'supabase' | 'local-files' | 'empty'
 
@@ -643,14 +645,20 @@ export async function GET(req: NextRequest) {
     const sourceParam = req.nextUrl.searchParams.get('source')
     const forceLocal = sourceParam === 'local'
     const forceSupabase = sourceParam === 'supabase'
+    const canUseLocalFallback = !IS_PRODUCTION
 
-    if (forceLocal) {
+    if (forceLocal && canUseLocalFallback) {
       const local = await loadLocalArtifacts(false)
       const source: DashboardSource =
         local.runs.length || local.trades.length || local.heartbeats.length
           ? 'local-files'
           : 'empty'
-      return NextResponse.json(buildPayload(source, local))
+      const payload = buildPayload(source, local)
+      const response: ApiEnvelope<LlmAdvisorMetricsPayload> = {
+        data: payload,
+        meta: toApiMeta(payload.generatedAt, source, STALE_THRESHOLDS.llmAdvisor)
+      }
+      return NextResponse.json(response)
     }
 
     if (!forceLocal) {
@@ -661,13 +669,40 @@ export async function GET(req: NextRequest) {
           supabaseArtifacts.trades.length ||
           supabaseArtifacts.heartbeats.length)
       ) {
-        return NextResponse.json(buildPayload('supabase', supabaseArtifacts))
+        const payload = buildPayload('supabase', supabaseArtifacts)
+        const response: ApiEnvelope<LlmAdvisorMetricsPayload> = {
+          data: payload,
+          meta: toApiMeta(payload.generatedAt, 'supabase', STALE_THRESHOLDS.llmAdvisor)
+        }
+        return NextResponse.json(response)
       }
       if (forceSupabase) {
-        return NextResponse.json(
-          buildPayload('empty', { runs: [], trades: [], heartbeats: [], dataDir: null })
-        )
+        const payload = buildPayload('empty', {
+          runs: [],
+          trades: [],
+          heartbeats: [],
+          dataDir: null
+        })
+        const response: ApiEnvelope<LlmAdvisorMetricsPayload> = {
+          data: payload,
+          meta: toApiMeta(payload.generatedAt, 'empty', STALE_THRESHOLDS.llmAdvisor)
+        }
+        return NextResponse.json(response)
       }
+    }
+
+    if (!canUseLocalFallback) {
+      const payload = buildPayload('empty', {
+        runs: [],
+        trades: [],
+        heartbeats: [],
+        dataDir: null
+      })
+      const response: ApiEnvelope<LlmAdvisorMetricsPayload> = {
+        data: payload,
+        meta: toApiMeta(payload.generatedAt, 'empty', STALE_THRESHOLDS.llmAdvisor)
+      }
+      return NextResponse.json(response)
     }
 
     const local = await loadLocalArtifacts(false)
@@ -675,7 +710,12 @@ export async function GET(req: NextRequest) {
       local.runs.length || local.trades.length || local.heartbeats.length
         ? 'local-files'
         : 'empty'
-    return NextResponse.json(buildPayload(localSource, local))
+    const payload = buildPayload(localSource, local)
+    const response: ApiEnvelope<LlmAdvisorMetricsPayload> = {
+      data: payload,
+      meta: toApiMeta(payload.generatedAt, localSource, STALE_THRESHOLDS.llmAdvisor)
+    }
+    return NextResponse.json(response)
   } catch (error) {
     console.error('LLM advisor metrics GET error', error)
     return NextResponse.json(

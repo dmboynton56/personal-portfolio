@@ -3,16 +3,37 @@ import { supabase, isMissingTableError } from '@/lib/supabase'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { ProjectMetricsPayload, ProjectMetric, MetricSource } from '@/lib/metrics'
+import { ApiEnvelope, toApiMeta, STALE_THRESHOLDS } from '@/lib/freshness'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-async function loadFallbackMetrics(project: string): Promise<ProjectMetric[] | null> {
+type FallbackProjectEntry =
+    | ProjectMetric[]
+    | {
+        generatedAt?: string
+        metrics?: ProjectMetric[]
+    }
+
+async function loadFallbackMetrics(project: string): Promise<{
+    metrics: ProjectMetric[]
+    generatedAt: string | null
+} | null> {
     try {
         const fallbackPath = path.resolve(process.cwd(), 'public/data/project_metrics_fallback.json')
         const fileContent = await fs.readFile(fallbackPath, 'utf8')
-        const allFallbacks = JSON.parse(fileContent)
-        return allFallbacks[project] || null
+        const allFallbacks = JSON.parse(fileContent) as Record<string, FallbackProjectEntry>
+        const entry = allFallbacks[project]
+        if (!entry) return null
+
+        if (Array.isArray(entry)) {
+            return { metrics: entry, generatedAt: null }
+        }
+
+        return {
+            metrics: Array.isArray(entry.metrics) ? entry.metrics : [],
+            generatedAt: typeof entry.generatedAt === 'string' ? entry.generatedAt : null
+        }
     } catch (error) {
         console.warn(`Failed to load fallback metrics for ${project}:`, error)
         return null
@@ -57,9 +78,9 @@ export async function GET(
         if (source === 'empty') {
             const fallback = await loadFallbackMetrics(project)
             if (fallback) {
-                metrics = fallback
+                metrics = fallback.metrics
                 source = 'local-files'
-                lastUpdated = new Date().toISOString() // Or some default
+                lastUpdated = fallback.generatedAt
             }
         }
 
@@ -69,7 +90,16 @@ export async function GET(
             metrics
         }
 
-        return NextResponse.json(payload)
+        const response: ApiEnvelope<ProjectMetricsPayload> = {
+            data: payload,
+            meta: toApiMeta(
+                payload.generatedAt,
+                source as 'supabase' | 'local-files' | 'empty',
+                STALE_THRESHOLDS.projectMetrics
+            )
+        }
+
+        return NextResponse.json(response)
     } catch (error) {
         console.error(`Error in project-metrics GET for ${project}:`, error)
         return NextResponse.json(

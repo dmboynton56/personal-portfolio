@@ -9,6 +9,7 @@ import {
   useState
 } from 'react'
 import type { SportsEdgePayload, NflGameEdge, NbaGameEdge } from '@/lib/sportsEdgeData'
+import type { ApiEnvelope } from '@/lib/freshness'
 import { calculateEdge } from '@/lib/sportsEdgeData'
 import { NflTeamLogo } from './NflTeamLogo'
 import { getTeamShortName } from '@/lib/nflTeams'
@@ -59,7 +60,10 @@ export default function SportsEdgeCard() {
           throw new Error(errorMessage)
         }
         if (requestId !== requestIdRef.current) return
-        const payload = payloadJson as SportsEdgePayload
+        const payload =
+          payloadJson && typeof payloadJson === 'object' && 'data' in payloadJson
+            ? (payloadJson as ApiEnvelope<SportsEdgePayload>).data
+            : (payloadJson as SportsEdgePayload)
         setData(payload)
         setErr(null)
         setAvailableWeeks(payload.nfl.availableWeeks ?? [])

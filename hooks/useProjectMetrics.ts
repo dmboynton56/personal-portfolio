@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { ProjectMetricsPayload } from '@/lib/metrics'
+import { ApiEnvelope } from '@/lib/freshness'
 
 export function useProjectMetrics(projectId: string) {
     const [metrics, setMetrics] = useState<ProjectMetricsPayload | null>(null)
@@ -17,7 +18,11 @@ export function useProjectMetrics(projectId: string) {
                 if (!response.ok) {
                     throw new Error(`Failed to load metrics for ${projectId}`)
                 }
-                const data: ProjectMetricsPayload = await response.json()
+                const payload = await response.json() as ProjectMetricsPayload | ApiEnvelope<ProjectMetricsPayload>
+                const data: ProjectMetricsPayload =
+                    payload && typeof payload === 'object' && 'data' in payload
+                        ? (payload as ApiEnvelope<ProjectMetricsPayload>).data
+                        : (payload as ProjectMetricsPayload)
                 if (isMounted) {
                     setMetrics(data)
                     setError(null)

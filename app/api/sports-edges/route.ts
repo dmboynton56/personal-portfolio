@@ -6,6 +6,7 @@ import {
   NflGameEdge,
   NbaGameEdge
 } from '@/lib/sportsEdgeData'
+import { ApiEnvelope, ApiSource, STALE_THRESHOLDS, toApiMeta } from '@/lib/freshness'
 
 const supabaseUrl = process.env.SUPABASE_URL
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -655,6 +656,7 @@ export async function GET(request: NextRequest) {
       : undefined
   const normalizedDate = dateParam || undefined
 
+  let responseSource: ApiSource = 'fallback-cache'
   let payload: SportsEdgePayload = {
     ...sportsEdgeMockData,
     nfl: {
@@ -680,6 +682,7 @@ export async function GET(request: NextRequest) {
       // Load NFL edges
       const nflEdges = await loadNflEdges({ week: normalizedWeek })
       if (nflEdges) {
+        responseSource = 'supabase'
         payload = {
           ...payload,
           nfl: {
@@ -713,6 +716,7 @@ export async function GET(request: NextRequest) {
       // Load NBA edges
       const nbaEdges = await loadNbaEdges({ date: normalizedDate })
       if (nbaEdges) {
+        responseSource = 'supabase'
         payload = {
           ...payload,
           nba: {
@@ -754,7 +758,22 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  return NextResponse.json(payload, {
+  const updatedAtCandidates = [
+    payload.nfl.updatedAt,
+    payload.nba.updatedAt
+  ]
+    .map((ts) => Date.parse(ts))
+    .filter((ms) => Number.isFinite(ms)) as number[]
+  const newestUpdatedAt = updatedAtCandidates.length
+    ? new Date(Math.max(...updatedAtCandidates)).toISOString()
+    : new Date().toISOString()
+
+  const response: ApiEnvelope<SportsEdgePayload> = {
+    data: payload,
+    meta: toApiMeta(newestUpdatedAt, responseSource, STALE_THRESHOLDS.sportsEdge)
+  }
+
+  return NextResponse.json(response, {
     headers: {
       'Cache-Control': 'public, s-maxage=21600, stale-while-revalidate=43200'
     }

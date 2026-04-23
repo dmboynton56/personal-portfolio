@@ -14,6 +14,7 @@ import {
   Terminal,
   TrendingUp
 } from 'lucide-react'
+import { ApiEnvelope } from '@/lib/freshness'
 
 type LlmAdvisorMetricsPayload = {
   source: 'supabase' | 'local-files' | 'empty'
@@ -121,11 +122,18 @@ export default function LlmAdvisorPage() {
         const response = await fetch('/api/llm-advisor/metrics', {
           cache: 'no-store'
         })
-        const payload = (await response.json()) as LlmAdvisorMetricsPayload & {
-          error?: string
-        }
+        const rawPayload = (await response.json()) as
+          | ApiEnvelope<LlmAdvisorMetricsPayload>
+          | (LlmAdvisorMetricsPayload & {
+              error?: string
+            })
+        const payload =
+          rawPayload && typeof rawPayload === 'object' && 'data' in rawPayload
+            ? rawPayload.data
+            : (rawPayload as LlmAdvisorMetricsPayload & { error?: string })
+        const errorPayload = rawPayload as { error?: string }
         if (!response.ok) {
-          throw new Error(payload.error ?? 'Failed to load LLM Advisor metrics')
+          throw new Error(errorPayload.error ?? 'Failed to load LLM Advisor metrics')
         }
         if (cancelled) return
         setMetricsData(payload)
@@ -181,7 +189,7 @@ export default function LlmAdvisorPage() {
   return (
     <ProjectLayout
       title="LLM Advisor"
-      description="An autonomous trading agent that combines statistical mean reversion with LLM-based sentiment analysis for risk management."
+      description="An autonomous trading system that combines STDEV mean-reversion signals with Gemini market-analysis overlays and strict execution risk controls."
       tags={['Python', 'Gemini API', 'Alpaca', 'Pandas', 'Backtesting']}
       repoUrl="https://github.com/dmboynton56/llm-advisor"
       metrics={topMetrics}
@@ -210,8 +218,8 @@ export default function LlmAdvisorPage() {
               <h3 className="text-xl font-semibold">1. Sentiment Analysis</h3>
             </div>
             <p className="text-muted-foreground">
-              Every 15 minutes, the system feeds headlines and market context into <strong>Gemini 1.5 Flash</strong>.
-              The LLM outputs a market-state score and risk multipliers used by execution guards.
+              Every 15 minutes (runtime default), the loop runs market analysis with <strong>Gemini 3 Flash</strong>.
+              It returns threshold multipliers and confidence signals that adjust technical gates without bypassing hard risk limits.
             </p>
           </div>
 
@@ -221,8 +229,8 @@ export default function LlmAdvisorPage() {
               <h3 className="text-xl font-semibold">2. Statistical Execution</h3>
             </div>
             <p className="text-muted-foreground">
-              The core engine calculates Z-scores on price action. If the Z-score exceeds the
-              dynamically adjusted threshold, it executes mean reversion trades via Alpaca.
+              The execution engine computes rolling mu/sigma/z-score states and evaluates MR/TC setups
+              against configured thresholds before sending bracketed orders through Alpaca.
             </p>
           </div>
         </div>
@@ -231,7 +239,7 @@ export default function LlmAdvisorPage() {
       <section className="space-y-6">
         <h2 className="text-3xl font-bold">Live Monitoring Dashboard</h2>
         <p className="text-lg text-muted-foreground">
-          This section is now backed by a real telemetry API using Supabase storage with local artifact fallback.
+          This dashboard is fed by the telemetry API (`supabase` first, local artifact fallback), and every metric below is computed from saved runs/trades/heartbeats.
         </p>
         <div className="rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
           <div>
@@ -248,6 +256,27 @@ export default function LlmAdvisorPage() {
           )}
           {isLoading && !metricsData && (
             <div>Loading telemetry...</div>
+          )}
+        </div>
+        <div className="rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
+          <div className="grid gap-2 md:grid-cols-2">
+            <div>
+              Coverage window: <span className="text-foreground">{metricsData?.coverage.daysInSample ?? 0} run day(s)</span>
+            </div>
+            <div>
+              Trades indexed: <span className="text-foreground">{metricsData?.coverage.tradeCount ?? 0}</span>
+            </div>
+            <div>
+              Runtime loops seen: <span className="text-foreground">{metricsData?.heartbeat.loopCount ?? 'N/A'}</span>
+            </div>
+            <div>
+              Feed mode: <span className="text-foreground">{metricsData?.heartbeat.backtest == null ? 'Unknown' : metricsData.heartbeat.backtest ? 'Backtest stream' : 'Live stream'}</span>
+            </div>
+          </div>
+          {metricsData?.coverage.dataDir && (
+            <div className="mt-2 text-xs">
+              Local artifact path: <span className="text-foreground">{metricsData.coverage.dataDir}</span>
+            </div>
           )}
         </div>
 
@@ -377,30 +406,30 @@ export default function LlmAdvisorPage() {
       <section className="space-y-6">
         <h2 className="text-3xl font-bold">Automated Risk Manager</h2>
         <p className="text-lg text-muted-foreground">
-          Safety logic includes hard-coded circuit breakers that override AI decisions at configured drawdown thresholds.
+          The runtime configuration enforces strict limits before execution: bounded risk per trade, minimum reward/risk, fixed session windows, and end-of-day flattening.
         </p>
         <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden text-sm">
           <div className="bg-zinc-950 px-4 py-2 border-b border-zinc-800 flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50" />
             <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50" />
             <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50" />
-            <span className="ml-2 text-zinc-500 font-mono text-xs">risk_manager.py</span>
+            <span className="ml-2 text-zinc-500 font-mono text-xs">src/core/config.py + config/thresholds.py</span>
           </div>
           <pre className="p-4 overflow-x-auto font-mono text-zinc-300">
-            {`def check_risk_parameters(current_pnl, max_drawdown_limit):
-    """
-    Hard stop if we exceed daily loss limit.
-    """
-    if current_pnl < -max_drawdown_limit:
-        logger.critical(f"Daily stop loss hit: {current_pnl}")
-        return {
-            "can_trade": False,
-            "action": "LIQUIDATE_ALL",
-            "reason": "MAX_DRAWDOWN_HIT"
-        }
+            {`# Runtime defaults (overridable via env)
+max_risk_per_trade_percent = 1.0
+min_risk_reward_ratio = 1.5
+trading_window_start = "09:30"
+trading_window_end = "12:00"
+end_of_day_close_time = "15:50"
 
-    # ... other checks (exposure, volatility) ...
-    return {"can_trade": True}`}
+# Base STDEV thresholds
+mr_arm_z = 1.2
+mr_trigger_z = 0.6
+tc_arm_z = 1.8
+tc_trigger_z = 0.6
+atr_multiplier_sl = 1.4
+atr_percentile_cap = 85.0`}
           </pre>
         </div>
       </section>
@@ -409,8 +438,9 @@ export default function LlmAdvisorPage() {
         <h2 className="text-3xl font-bold">Data Caveat</h2>
         <div className="rounded-xl border border-border bg-card p-5">
           <p className="text-muted-foreground">
-            Current metrics are sourced from backtest artifacts and live-loop telemetry. Once real broker fills are persisted into the same schema,
-            the dashboard will reflect true production P/L instead of backtest-only trade outcomes.
+            Metrics shown here are evidence-backed but mixed-source. If the feed mode is <strong>Backtest stream</strong>,
+            P/L and win-rate reflect historical simulation artifacts; if it is <strong>Live stream</strong>,
+            values come from persisted runtime telemetry. Deep-dive claims are restricted to what is currently materialized in those sources.
           </p>
         </div>
       </section>
