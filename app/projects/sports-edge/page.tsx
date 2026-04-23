@@ -13,7 +13,7 @@ export default function SportsEdgePage() {
     return (
         <ProjectLayout
             title="Sports Edge"
-            description="An automated machine learning pipeline that predicts NBA and NFL outcomes by analyzing advanced metrics, rest situations, and market inefficiencies."
+            description="A production sports modeling pipeline with BigQuery as source-of-truth, Supabase serving, and documented outputs across NBA, NFL, PGA, and CBB workflows."
             tags={['Python', 'BigQuery', 'GCP', 'Next.js', 'LightGBM', 'Supabase']}
             repoUrl="https://github.com/dmboynton56/sports-edge"
             metrics={metrics?.metrics}
@@ -40,7 +40,7 @@ export default function SportsEdgePage() {
                                 <Database className="w-8 h-8 text-blue-500" />
                             </div>
                             <h3 className="font-semibold">Data Ingestion</h3>
-                            <p className="text-sm text-muted-foreground w-48">Scraping NBA/NFL APIs & Odds APIs daily via GitHub Actions.</p>
+                            <p className="text-sm text-muted-foreground w-48">Daily GitHub Actions refresh league schedules, odds, and curated artifacts into BigQuery.</p>
                         </div>
                         <div className="hidden md:block h-px w-16 bg-border" />
                         <div className="space-y-2">
@@ -48,7 +48,7 @@ export default function SportsEdgePage() {
                                 <Cpu className="w-8 h-8 text-purple-500" />
                             </div>
                             <h3 className="font-semibold">Feature Engineering</h3>
-                            <p className="text-sm text-muted-foreground w-48">Rolling averages, rest calc, and situational spots processed in BigQuery.</p>
+                            <p className="text-sm text-muted-foreground w-48">League-specific feature builders compute rolling form, rest, and matchup context for scoring.</p>
                         </div>
                         <div className="hidden md:block h-px w-16 bg-border" />
                         <div className="space-y-2">
@@ -56,7 +56,7 @@ export default function SportsEdgePage() {
                                 <LineChart className="w-8 h-8 text-emerald-500" />
                             </div>
                             <h3 className="font-semibold">Inference</h3>
-                            <p className="text-sm text-muted-foreground w-48">LightGBM models score games & push predictions to Supabase.</p>
+                            <p className="text-sm text-muted-foreground w-48">Model outputs are produced in Python, then synced to Supabase for web experiences and API access.</p>
                         </div>
                     </div>
                 </div>
@@ -66,40 +66,87 @@ export default function SportsEdgePage() {
             <section className="space-y-6">
                 <h2 className="text-3xl font-bold">Pipeline Logic</h2>
                 <p className="text-lg text-muted-foreground">
-                    The core pipeline handles everything from checking data freshness to ensuring idempotent writes in BigQuery.
-                    Here is how we handle the daily NBA prediction flow:
+                    The daily refresh is fully scripted in GitHub Actions and runs every day at 13:00 UTC.
+                    This is the production job skeleton that orchestrates data, features, inference, and serving sync:
                 </p>
                 <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden text-sm">
                     <div className="bg-zinc-950 px-4 py-2 border-b border-zinc-800 flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50" />
                         <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50" />
                         <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50" />
-                        <span className="ml-2 text-zinc-500 font-mono text-xs">refresh_nba.py</span>
+                        <span className="ml-2 text-zinc-500 font-mono text-xs">.github/workflows/daily-refresh.yml</span>
                     </div>
                     <pre className="p-4 overflow-x-auto font-mono text-zinc-300">
-                        {`def main() -> None:
-    load_dotenv()
-    args = _parse_args()
-    client = bigquery.Client(project=args.project)
+                        {`schedule:
+  - cron: "0 13 * * *"  # 13:00 UTC daily
 
-    target_date = args.date or datetime.now(tz=timezone.utc).date()
-    # ... setup context ...
-
-    games_df = _query_games(client, args.project, target_date)
-    if games_df.empty:
-        # Fallback to API if BigQuery is empty
-        games_df = fetch_nba_games_for_date(target_date.strftime("%Y-%m-%d"), raise_on_error=True)
-
-    # ... load historical data ...
-    
-    # Predictor handles feature building automatically
-    predictor = GamePredictor("NBA", model_version=args.model_version)
-    predictions = predictor.predict_batch(games_df, historical_games, game_logs=game_logs)
-    
-    # ... result processing & BQ write ...
-    _delete_existing_predictions(client, args.project, predictions["game_id"].dropna().tolist(), args.model_version)
-    # ... Write to BigQuery ...`}
+steps:
+  - python scripts/backfill_nba_raw.py ...
+  - python scripts/backfill_nfl_raw.py ...
+  - python scripts/build_feature_snapshots.py --league NBA ...
+  - python scripts/build_feature_snapshots.py --league NFL ...
+  - python -m src.pipeline.refresh_nba --model-version v3
+  - python -m src.pipeline.refresh_nfl --model-version v1
+  - python scripts/sync_bq_to_supabase.py --league NBA --append
+  - python scripts/sync_bq_to_supabase.py --league NFL --append
+  - python scripts/sync_odds.py ...`}
                     </pre>
+                </div>
+            </section>
+
+            <section className="space-y-6">
+                <h2 className="text-3xl font-bold">Observed Output Snapshot</h2>
+                <p className="text-lg text-muted-foreground">
+                    These values come from committed artifacts in the repository (not synthetic placeholders).
+                </p>
+                <div className="grid md:grid-cols-2 gap-4">
+                    <div className="bg-card border border-border rounded-xl p-5">
+                        <div className="flex items-center gap-2 mb-2">
+                            <Activity className="w-4 h-4 text-emerald-500" />
+                            <h3 className="font-semibold">PGA Simulation Run</h3>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                            Latest meta bundle records <strong>80 players</strong> and <strong>50,000 simulations</strong> with an as-of date of <strong>2026-04-07</strong>.
+                        </p>
+                    </div>
+                    <div className="bg-card border border-border rounded-xl p-5">
+                        <div className="flex items-center gap-2 mb-2">
+                            <TrendingUp className="w-4 h-4 text-blue-500" />
+                            <h3 className="font-semibold">Serving and Freshness</h3>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                            The web dashboard export includes a generated timestamp and per-player outputs (expected SG, sim win/top-k rates, model heads, and probability estimates).
+                        </p>
+                    </div>
+                    <div className="bg-card border border-border rounded-xl p-5">
+                        <div className="flex items-center gap-2 mb-2">
+                            <Server className="w-4 h-4 text-purple-500" />
+                            <h3 className="font-semibold">Automation Contract</h3>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                            Production refresh executes daily at 13:00 UTC and runs both NBA and NFL generation before syncing to Supabase.
+                        </p>
+                    </div>
+                    <div className="bg-card border border-border rounded-xl p-5">
+                        <div className="flex items-center gap-2 mb-2">
+                            <Database className="w-4 h-4 text-amber-500" />
+                            <h3 className="font-semibold">CBB + PGA Context</h3>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                            CBB and PGA documentation/workflows are integrated in `data-core/docs` and cache artifacts, so project knowledge is broader than only NBA/NFL.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section className="space-y-6">
+                <h2 className="text-3xl font-bold">Benchmark vs Live Metrics</h2>
+                <div className="rounded-xl border border-border bg-card p-5 text-muted-foreground">
+                    <p>
+                        Deep-dive claims are split into two classes: <strong>observed live artifacts</strong> (workflow schedules, generated dashboards, cached model outputs)
+                        and <strong>benchmark targets</strong> (for example, CBB log-loss bands in planning docs). Benchmarks are treated as goals/comparators, not as
+                        claimed production performance unless tied to a dated output artifact.
+                    </p>
                 </div>
             </section>
 

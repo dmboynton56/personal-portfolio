@@ -1,10 +1,13 @@
 {
-    "sports-edge": [
-        { "label": "Win Rate (7d)", "value": "62.5%", "iconName": "trendingUp", "trend": "up" },
-        { "label": "Predictions", "value": "1,240+", "iconName": "activity" },
-        { "label": "Data Points", "value": "850K", "iconName": "database" },
-        { "label": "Pipeline", "value": "100% Auto", "iconName": "server" }
-    ],
+    "sports-edge": {
+        "generatedAt": "2026-04-07T17:16:30.644158+00:00",
+        "metrics": [
+            { "label": "PGA Simulations", "value": "50,000", "iconName": "activity" },
+            { "label": "Masters Field", "value": "80 players", "iconName": "database" },
+            { "label": "Refresh Cadence", "value": "13:00 UTC daily", "iconName": "clock" },
+            { "label": "Coverage", "value": "NBA • NFL • PGA • CBB", "iconName": "workflow" }
+        ]
+    },
     "nba-hof": [
         { "label": "Model Accuracy", "value": "99%", "iconName": "checkCircle", "trend": "up" },
         { "label": "Player Histories", "value": "5,250+", "iconName": "database" },
