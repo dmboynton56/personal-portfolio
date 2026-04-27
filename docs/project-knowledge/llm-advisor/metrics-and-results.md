@@ -47,11 +47,11 @@ source_paths:
 
 ## Metric: Dashboard telemetry source contract
 
-- current_value: `supabase` -> `local-files` -> `empty` fallback order
+- current_value: production uses `supabase` -> `empty`/`degraded`; non-production can use `local-files` fallback
 - interpretation: deep-dive metrics source-of-truth hierarchy
 - provenance: `personal-portfolio/app/api/llm-advisor/metrics/route.ts`
-- freshness: 2026-04-07
-- caveats: numbers are only as complete as ingested artifacts/tables
+- freshness: 2026-04-24
+- caveats: `degraded` indicates upstream read failures, while `empty` indicates no telemetry materialized yet
 
 ## Derived metrics (available but computed at query time)
 

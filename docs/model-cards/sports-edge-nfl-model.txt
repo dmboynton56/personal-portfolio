@@ -24,9 +24,9 @@ Estimate fair spread and home win probability for NFL games, then compare agains
 - Injury/availability proxies when available
 
 ## Data Freshness and Cadence
-- Odds can be hydrated via `/api/sports-edges/odds`
+- Odds are hydrated by the `sports-edge` daily refresh workflow (`data-core/scripts/sync_odds.py`)
 - Predictions are loaded from `model_predictions` and sorted by latest `asof_ts`
-- UI refreshes periodically and can be warmed by scheduled cron POST
+- UI refreshes periodically as a read-only consumer of Supabase
 
 ## Validation and Monitoring
 - Weekly hit-rate checks against completed games

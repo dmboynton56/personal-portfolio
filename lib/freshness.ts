@@ -1,6 +1,11 @@
 export type SloBucket = 'green' | 'yellow' | 'red'
 
-export type ApiSource = 'supabase' | 'local-files' | 'fallback-cache' | 'empty'
+export type ApiSource =
+  | 'supabase'
+  | 'local-files'
+  | 'fallback-cache'
+  | 'empty'
+  | 'degraded'
 
 export type FreshnessThreshold = {
   greenHours: number
@@ -15,9 +20,12 @@ export const STALE_THRESHOLDS: Record<string, FreshnessThreshold> = {
 }
 
 export type ApiMeta = {
-  updatedAt: string
+  updatedAt: string | null
   sloBucket: SloBucket
   source: ApiSource
+  degraded?: boolean
+  message?: string
+  errorId?: string
 }
 
 export type ApiEnvelope<T> = {
@@ -43,12 +51,19 @@ export const computeSloBucket = (
 export const toApiMeta = (
   updatedAt: string | null | undefined,
   source: ApiSource,
-  threshold: FreshnessThreshold
+  threshold: FreshnessThreshold,
+  options?: {
+    degraded?: boolean
+    message?: string
+    errorId?: string
+  }
 ): ApiMeta => {
-  const safeUpdatedAt = updatedAt ?? new Date().toISOString()
   return {
-    updatedAt: safeUpdatedAt,
+    updatedAt: updatedAt ?? null,
     source,
-    sloBucket: computeSloBucket(safeUpdatedAt, threshold)
+    sloBucket: computeSloBucket(updatedAt, threshold),
+    degraded: options?.degraded,
+    message: options?.message,
+    errorId: options?.errorId
   }
 }

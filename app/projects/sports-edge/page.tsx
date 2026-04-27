@@ -151,6 +151,31 @@ steps:
             </section>
 
             <section className="space-y-6">
+                <h2 className="text-3xl font-bold">Notebook Analyses</h2>
+                <p className="text-lg text-muted-foreground">
+                    Week-2 notebook publishing is being rolled out so every key metric on this page links to full reproducible analysis.
+                </p>
+                <div className="grid md:grid-cols-2 gap-4">
+                    <a href="/notebooks/nfl_backtest_2025.html" className="rounded-xl border border-border bg-card p-4 hover:border-blue-500/50 transition-colors">
+                        <h3 className="font-semibold">NFL Backtest 2025</h3>
+                        <p className="text-sm text-muted-foreground mt-1">Backtest metrics, ATS performance, and model diagnostics.</p>
+                    </a>
+                    <a href="/notebooks/nba_backtest_2025.html" className="rounded-xl border border-border bg-card p-4 hover:border-blue-500/50 transition-colors">
+                        <h3 className="font-semibold">NBA Backtest 2025-26</h3>
+                        <p className="text-sm text-muted-foreground mt-1">No-leakage backtest and threshold strategy review.</p>
+                    </a>
+                    <a href="/notebooks/nfl_calibration.html" className="rounded-xl border border-border bg-card p-4 hover:border-blue-500/50 transition-colors">
+                        <h3 className="font-semibold">NFL Calibration</h3>
+                        <p className="text-sm text-muted-foreground mt-1">Reliability curves and calibration error tracking.</p>
+                    </a>
+                    <a href="/notebooks/nba_calibration.html" className="rounded-xl border border-border bg-card p-4 hover:border-blue-500/50 transition-colors">
+                        <h3 className="font-semibold">NBA Calibration</h3>
+                        <p className="text-sm text-muted-foreground mt-1">Probabilistic calibration checks and drift analysis.</p>
+                    </a>
+                </div>
+            </section>
+
+            <section className="space-y-6">
                 <h2 className="text-3xl font-bold">Ask the Data</h2>
                 <p className="text-lg text-muted-foreground">
                     This MVP assistant routes questions to SQL for current results and to project documentation for methodology,

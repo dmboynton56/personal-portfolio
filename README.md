@@ -24,7 +24,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY
 SPORTS_EDGE_CRON_SECRET
 ```
 
-To keep the `/api/sports-edges` route warm (and to provide a hook for future batch jobs), a scheduled GitHub Action (`.github/workflows/ping-sports-edge-api.yml`) POSTs to the same endpoint by hitting your deployed URL stored in the `SPORTS_EDGE_CRON_URL` repo secret together with the shared `SPORTS_EDGE_CRON_SECRET`.
+Sports Edge odds and final-score writes now run exclusively from the `sports-edge` repository workflows. This portfolio repo is a read-only consumer of the Supabase tables.
 
 ## Sports Edge Chat + RAG MVP
 

@@ -11,24 +11,26 @@ source_paths:
 
 ## Source tiers
 
-## Tier 1: Supabase telemetry tables
+## Tier 1: Supabase telemetry tables (production path)
 
 Used when available for backtest runs, trades, and runtime heartbeats.
 
-## Tier 2: Local artifacts
+## Tier 2: Local artifacts (non-production fallback only)
 
 Fallback source from:
 
 - `data/daily_news/<date>/processed/backtest_results.json`
 - `data/daily_news/<date>/processed/live_loop_log.jsonl`
 
-## Tier 3: Empty state
+## Tier 3: Empty/degraded states
 
-Returned when neither Supabase nor local artifacts contain usable data.
+- `empty`: no telemetry rows are available yet.
+- `degraded`: telemetry read failed upstream; response includes an error id for logs.
 
 ## Freshness rules
 
 - `generatedAt` indicates payload build time, not trade event time.
+- API `meta.updatedAt` tracks latest telemetry event timestamp used for SLO bucketing.
 - `anchorDate` is the latest run date represented in aggregated metrics.
 - heartbeat age is derived from latest heartbeat timestamp and current server time.
 

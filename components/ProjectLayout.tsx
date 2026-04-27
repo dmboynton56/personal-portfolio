@@ -111,6 +111,7 @@ export function ProjectLayout({
                                         "px-2 py-0.5 rounded-full border",
                                         metricsSource === 'supabase' ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-500" :
                                             metricsSource === 'local-files' ? "bg-amber-500/10 border-amber-500/20 text-amber-500" :
+                                                metricsSource === 'degraded' ? "bg-red-500/10 border-red-500/20 text-red-500" :
                                                 "bg-zinc-500/10 border-zinc-500/20 text-zinc-500"
                                     )}>
                                         {metricsSource.toUpperCase().replace('-', ' ')}

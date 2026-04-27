@@ -39,23 +39,11 @@ If you run `supabase start`, the same migration file can be applied against the 
 
 ### Odds API hydration
 
-Use the new POST endpoint at `/api/sports-edges/odds` (protected by the same `SPORTS_EDGE_CRON_SECRET`) to fetch spreads from [The Odds API](https://the-odds-api.com/) and write them into the `games.book_spread` column. Configure the request via:
-
-```
-THE_ODDS_API_KEY
-THE_ODDS_API_REGIONS (optional, default `us`)
-THE_ODDS_API_MARKETS (optional, default `spreads`)
-THE_ODDS_API_BOOKMAKERS (optional comma list, default `draftkings,betmgm,fanduel,caesars`)
-THE_ODDS_API_FALLBACK_BOOKMAKERS (optional fallback pass if preferred books miss lines)
-THE_ODDS_API_RETRIES (optional, default `3`)
-THE_ODDS_API_RETRY_DELAY_MS (optional, default `700`)
-```
-
-Trigger it from your scheduler before hitting `/api/sports-edges` so the UI reads fresh numbers from Supabase.
+Odds ingestion now runs in the `sports-edge` repository (`data-core/scripts/sync_odds.py` inside `daily-refresh.yml`). This portfolio project no longer exposes a writer endpoint for odds updates.
 
 ### LLM Advisor telemetry ingest
 
-Use `POST /api/llm-advisor/metrics` to parse local LLM Advisor artifacts and upsert them into:
+Use `POST /api/llm-advisor/metrics` in local/non-production debugging to parse local LLM Advisor artifacts and upsert them into:
 - `llm_advisor_backtest_runs`
 - `llm_advisor_backtest_trades`
 - `llm_advisor_runtime_heartbeats`
@@ -74,4 +62,4 @@ curl -X POST http://localhost:3000/api/llm-advisor/metrics \
   -H "x-cron-secret: $LLM_ADVISOR_CRON_SECRET"
 ```
 
-The dashboard endpoint `GET /api/llm-advisor/metrics` reads Supabase first and falls back to local files when tables are empty or unavailable.
+The dashboard endpoint `GET /api/llm-advisor/metrics` is Supabase-only in production. Local file fallback is enabled only in non-production environments for debugging.

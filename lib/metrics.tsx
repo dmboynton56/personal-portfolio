@@ -20,7 +20,13 @@ import {
     ShieldAlert
 } from 'lucide-react'
 
-export type MetricSource = 'supabase' | 'local-files' | 'fallback-cache' | 'static' | 'empty'
+export type MetricSource =
+    | 'supabase'
+    | 'local-files'
+    | 'fallback-cache'
+    | 'static'
+    | 'empty'
+    | 'degraded'
 export type MetricTrend = 'up' | 'down' | 'neutral'
 
 export interface ProjectMetric {

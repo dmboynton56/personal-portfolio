@@ -11,5 +11,5 @@ export const supabase =
 export const isMissingTableError = (error: unknown) => {
   if (!error || typeof error !== 'object') return false
   const maybeCode = (error as { code?: string }).code
-  return maybeCode === '42P01'
+  return maybeCode === '42P01' || maybeCode === 'PGRST205'
 }

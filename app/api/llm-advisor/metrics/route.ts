@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { promises as fs, type Dirent } from 'fs'
 import path from 'path'
+import { randomUUID } from 'crypto'
 import { ApiEnvelope, STALE_THRESHOLDS, toApiMeta } from '@/lib/freshness'
 
 export const runtime = 'nodejs'
@@ -14,13 +15,18 @@ const supabase =
     ? createClient(supabaseUrl, supabaseServiceRoleKey)
     : null
 
-const cronSecret =
-  process.env.LLM_ADVISOR_CRON_SECRET ?? process.env.SPORTS_EDGE_CRON_SECRET
+const cronSecret = process.env.LLM_ADVISOR_CRON_SECRET
 
-const LOCAL_CACHE_MS = 30_000
-const IS_PRODUCTION = process.env.NODE_ENV === 'production'
+const SUPABASE_CACHE_TTL_MS = 60_000
+const EMPTY_CACHE_TTL_MS = 15_000
+const LOCAL_CACHE_TTL_MS = 120_000
+const IS_PRODUCTION =
+  process.env.VERCEL === '1' || process.env.NODE_ENV === 'production'
 
-type DashboardSource = 'supabase' | 'local-files' | 'empty'
+type DashboardSource = 'supabase' | 'local-files' | 'empty' | 'degraded'
+
+const EMPTY_TELEMETRY_MESSAGE =
+  'No LLM Advisor telemetry is available yet. Data will appear after the next successful EOD aggregate.'
 
 type NormalizedRun = {
   runDate: string
@@ -114,10 +120,23 @@ type LlmAdvisorMetricsPayload = {
   }
 }
 
+type SupabaseFetchResult =
+  | { status: 'ok'; artifacts: Artifacts }
+  | { status: 'missing' }
+  | { status: 'error'; errorId: string }
+
 let localCache:
   | {
       expiresAt: number
       artifacts: Artifacts
+    }
+  | null = null
+
+let responseCache:
+  | {
+      key: string
+      expiresAt: number
+      response: ApiEnvelope<LlmAdvisorMetricsPayload>
     }
   | null = null
 
@@ -174,7 +193,7 @@ const getRunDateMs = (runDate: string): number | null => {
 const isMissingTableError = (error: unknown) => {
   if (!error || typeof error !== 'object') return false
   const maybeCode = (error as { code?: string }).code
-  return maybeCode === '42P01'
+  return maybeCode === '42P01' || maybeCode === 'PGRST205'
 }
 
 const resolveDailyNewsDir = () => {
@@ -348,7 +367,7 @@ const loadLocalArtifacts = async (force = false): Promise<Artifacts> => {
   try {
     entries = await fs.readdir(dataDir, { withFileTypes: true })
   } catch {
-    localCache = { expiresAt: Date.now() + LOCAL_CACHE_MS, artifacts }
+    localCache = { expiresAt: Date.now() + LOCAL_CACHE_TTL_MS, artifacts }
     return artifacts
   }
 
@@ -390,15 +409,84 @@ const loadLocalArtifacts = async (force = false): Promise<Artifacts> => {
   }
 
   localCache = {
-    expiresAt: Date.now() + LOCAL_CACHE_MS,
+    expiresAt: Date.now() + LOCAL_CACHE_TTL_MS,
     artifacts
   }
 
   return artifacts
 }
 
-const fetchSupabaseArtifacts = async (): Promise<Artifacts | null> => {
-  if (!supabase) return null
+const hasArtifactContent = (artifacts: Artifacts): boolean =>
+  artifacts.runs.length > 0 ||
+  artifacts.trades.length > 0 ||
+  artifacts.heartbeats.length > 0
+
+const computeTelemetryUpdatedAt = (artifacts: Artifacts): string | null => {
+  const candidates: number[] = []
+
+  for (const heartbeat of artifacts.heartbeats) {
+    const parsed = Date.parse(heartbeat.heartbeatTs)
+    if (!Number.isNaN(parsed)) candidates.push(parsed)
+  }
+
+  for (const trade of artifacts.trades) {
+    const parsed = Date.parse(trade.exitTime ?? trade.entryTime ?? '')
+    if (!Number.isNaN(parsed)) candidates.push(parsed)
+  }
+
+  for (const run of artifacts.runs) {
+    const parsed = Date.parse(`${run.runDate}T23:59:59.000Z`)
+    if (!Number.isNaN(parsed)) candidates.push(parsed)
+  }
+
+  if (!candidates.length) return null
+  return new Date(Math.max(...candidates)).toISOString()
+}
+
+const buildEnvelope = (
+  source: DashboardSource,
+  artifacts: Artifacts,
+  options?: {
+    degraded?: boolean
+    message?: string
+    errorId?: string
+  }
+): ApiEnvelope<LlmAdvisorMetricsPayload> => {
+  const payload = buildPayload(source, artifacts)
+  const telemetryUpdatedAt = computeTelemetryUpdatedAt(artifacts)
+  return {
+    data: payload,
+    meta: toApiMeta(telemetryUpdatedAt, source, STALE_THRESHOLDS.llmAdvisor, options)
+  }
+}
+
+const getCachedResponse = (key: string, force = false) => {
+  if (force || !responseCache) return null
+  if (responseCache.key !== key) return null
+  if (responseCache.expiresAt <= Date.now()) return null
+  return responseCache.response
+}
+
+const setCachedResponse = (
+  key: string,
+  source: DashboardSource,
+  response: ApiEnvelope<LlmAdvisorMetricsPayload>
+) => {
+  const ttlMs =
+    source === 'supabase'
+      ? SUPABASE_CACHE_TTL_MS
+      : source === 'empty'
+        ? EMPTY_CACHE_TTL_MS
+        : LOCAL_CACHE_TTL_MS
+  responseCache = {
+    key,
+    expiresAt: Date.now() + ttlMs,
+    response
+  }
+}
+
+const fetchSupabaseArtifacts = async (): Promise<SupabaseFetchResult> => {
+  if (!supabase) return { status: 'missing' }
 
   const [runsResult, tradesResult, heartbeatResult] = await Promise.all([
     supabase
@@ -428,14 +516,16 @@ const fetchSupabaseArtifacts = async (): Promise<Artifacts | null> => {
       isMissingTableError(tradesResult.error) ||
       isMissingTableError(heartbeatResult.error)
     ) {
-      return null
+      return { status: 'missing' }
     }
+    const errorId = randomUUID().slice(0, 8)
     console.warn('LLM advisor Supabase metrics fetch error', {
+      errorId,
       runsError: runsResult.error,
       tradesError: tradesResult.error,
       heartbeatError: heartbeatResult.error
     })
-    return null
+    return { status: 'error', errorId }
   }
 
   const runs: NormalizedRun[] = (runsResult.data ?? [])
@@ -499,10 +589,13 @@ const fetchSupabaseArtifacts = async (): Promise<Artifacts | null> => {
     .filter((row): row is NormalizedHeartbeat => Boolean(row))
 
   return {
-    runs,
-    trades,
-    heartbeats,
-    dataDir: null
+    status: 'ok',
+    artifacts: {
+      runs,
+      trades,
+      heartbeats,
+      dataDir: null
+    }
   }
 }
 
@@ -643,83 +736,116 @@ const chunk = <T,>(items: T[], size: number): T[][] => {
 export async function GET(req: NextRequest) {
   try {
     const sourceParam = req.nextUrl.searchParams.get('source')
+    const forceRefresh = req.nextUrl.searchParams.get('force') === 'true'
     const forceLocal = sourceParam === 'local'
     const forceSupabase = sourceParam === 'supabase'
     const canUseLocalFallback = !IS_PRODUCTION
+    const cacheKey = `${sourceParam ?? 'default'}:${canUseLocalFallback}`
+    const cached = getCachedResponse(cacheKey, forceRefresh)
+    if (cached) {
+      return NextResponse.json(cached)
+    }
 
     if (forceLocal && canUseLocalFallback) {
       const local = await loadLocalArtifacts(false)
       const source: DashboardSource =
-        local.runs.length || local.trades.length || local.heartbeats.length
+        hasArtifactContent(local)
           ? 'local-files'
           : 'empty'
-      const payload = buildPayload(source, local)
-      const response: ApiEnvelope<LlmAdvisorMetricsPayload> = {
-        data: payload,
-        meta: toApiMeta(payload.generatedAt, source, STALE_THRESHOLDS.llmAdvisor)
-      }
+      const response = buildEnvelope(source, local)
+      setCachedResponse(cacheKey, source, response)
       return NextResponse.json(response)
     }
 
     if (!forceLocal) {
-      const supabaseArtifacts = await fetchSupabaseArtifacts()
+      const supabaseResult = await fetchSupabaseArtifacts()
       if (
-        supabaseArtifacts &&
-        (supabaseArtifacts.runs.length ||
-          supabaseArtifacts.trades.length ||
-          supabaseArtifacts.heartbeats.length)
+        supabaseResult.status === 'ok' &&
+        hasArtifactContent(supabaseResult.artifacts)
       ) {
-        const payload = buildPayload('supabase', supabaseArtifacts)
-        const response: ApiEnvelope<LlmAdvisorMetricsPayload> = {
-          data: payload,
-          meta: toApiMeta(payload.generatedAt, 'supabase', STALE_THRESHOLDS.llmAdvisor)
-        }
+        const response = buildEnvelope('supabase', supabaseResult.artifacts)
+        setCachedResponse(cacheKey, 'supabase', response)
         return NextResponse.json(response)
       }
+
+      if (supabaseResult.status === 'error') {
+        const response = buildEnvelope(
+          'degraded',
+          {
+            runs: [],
+            trades: [],
+            heartbeats: [],
+            dataDir: null
+          },
+          {
+            degraded: true,
+            message:
+              'Telemetry provider read failed. Retry soon or inspect server logs with this error ID.',
+            errorId: supabaseResult.errorId
+          }
+        )
+        setCachedResponse(cacheKey, 'degraded', response)
+        return NextResponse.json(response, { status: 503 })
+      }
+
       if (forceSupabase) {
-        const payload = buildPayload('empty', {
-          runs: [],
-          trades: [],
-          heartbeats: [],
-          dataDir: null
-        })
-        const response: ApiEnvelope<LlmAdvisorMetricsPayload> = {
-          data: payload,
-          meta: toApiMeta(payload.generatedAt, 'empty', STALE_THRESHOLDS.llmAdvisor)
-        }
+        const response = buildEnvelope(
+          'empty',
+          {
+            runs: [],
+            trades: [],
+            heartbeats: [],
+            dataDir: null
+          },
+          { message: EMPTY_TELEMETRY_MESSAGE }
+        )
+        setCachedResponse(cacheKey, 'empty', response)
         return NextResponse.json(response)
       }
     }
 
     if (!canUseLocalFallback) {
-      const payload = buildPayload('empty', {
-        runs: [],
-        trades: [],
-        heartbeats: [],
-        dataDir: null
-      })
-      const response: ApiEnvelope<LlmAdvisorMetricsPayload> = {
-        data: payload,
-        meta: toApiMeta(payload.generatedAt, 'empty', STALE_THRESHOLDS.llmAdvisor)
-      }
+      const response = buildEnvelope(
+        'empty',
+        {
+          runs: [],
+          trades: [],
+          heartbeats: [],
+          dataDir: null
+        },
+        { message: EMPTY_TELEMETRY_MESSAGE }
+      )
+      setCachedResponse(cacheKey, 'empty', response)
       return NextResponse.json(response)
     }
 
     const local = await loadLocalArtifacts(false)
     const localSource: DashboardSource =
-      local.runs.length || local.trades.length || local.heartbeats.length
+      hasArtifactContent(local)
         ? 'local-files'
         : 'empty'
-    const payload = buildPayload(localSource, local)
-    const response: ApiEnvelope<LlmAdvisorMetricsPayload> = {
-      data: payload,
-      meta: toApiMeta(payload.generatedAt, localSource, STALE_THRESHOLDS.llmAdvisor)
-    }
+    const response = buildEnvelope(localSource, local)
+    setCachedResponse(cacheKey, localSource, response)
     return NextResponse.json(response)
   } catch (error) {
+    const errorId = randomUUID().slice(0, 8)
     console.error('LLM advisor metrics GET error', error)
     return NextResponse.json(
-      { error: 'Failed to build LLM advisor metrics.' },
+      buildEnvelope(
+        'degraded',
+        {
+          runs: [],
+          trades: [],
+          heartbeats: [],
+          dataDir: null
+        },
+        {
+          degraded: true,
+          message:
+            'Telemetry response could not be built. Retry soon or inspect server logs with this error ID.',
+          errorId
+        }
+      ),
       { status: 500 }
     )
   }

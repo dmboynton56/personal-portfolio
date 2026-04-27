@@ -14,10 +14,10 @@ import {
   Terminal,
   TrendingUp
 } from 'lucide-react'
-import { ApiEnvelope } from '@/lib/freshness'
+import { ApiEnvelope, ApiMeta } from '@/lib/freshness'
 
 type LlmAdvisorMetricsPayload = {
-  source: 'supabase' | 'local-files' | 'empty'
+  source: 'supabase' | 'local-files' | 'empty' | 'degraded'
   generatedAt: string
   anchorDate: string | null
   heartbeat: {
@@ -99,6 +99,7 @@ const formatTimestamp = (value: string | null) => {
 const formatSource = (source: LlmAdvisorMetricsPayload['source']) => {
   if (source === 'supabase') return 'Supabase'
   if (source === 'local-files') return 'Local backtest files'
+  if (source === 'degraded') return 'Telemetry degraded'
   return 'No telemetry'
 }
 
@@ -111,6 +112,7 @@ const getAgentState = (metrics: LlmAdvisorMetricsPayload | null) => {
 
 export default function LlmAdvisorPage() {
   const [metricsData, setMetricsData] = useState<LlmAdvisorMetricsPayload | null>(null)
+  const [metricsMeta, setMetricsMeta] = useState<ApiMeta | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
 
@@ -123,21 +125,29 @@ export default function LlmAdvisorPage() {
           cache: 'no-store'
         })
         const rawPayload = (await response.json()) as
-          | ApiEnvelope<LlmAdvisorMetricsPayload>
-          | (LlmAdvisorMetricsPayload & {
-              error?: string
-            })
-        const payload =
+          | (ApiEnvelope<LlmAdvisorMetricsPayload> & { error?: string })
+          | { error?: string }
+        const envelope =
           rawPayload && typeof rawPayload === 'object' && 'data' in rawPayload
-            ? rawPayload.data
-            : (rawPayload as LlmAdvisorMetricsPayload & { error?: string })
+            ? (rawPayload as ApiEnvelope<LlmAdvisorMetricsPayload>)
+            : null
+        const payload = envelope?.data ?? null
+        const meta = envelope?.meta ?? null
         const errorPayload = rawPayload as { error?: string }
-        if (!response.ok) {
-          throw new Error(errorPayload.error ?? 'Failed to load LLM Advisor metrics')
-        }
         if (cancelled) return
-        setMetricsData(payload)
-        setLoadError(null)
+        if (payload) {
+          setMetricsData(payload)
+          setMetricsMeta(meta)
+        }
+        if (!response.ok) {
+          setLoadError(
+            meta?.message ??
+              errorPayload.error ??
+              'Failed to load LLM Advisor metrics'
+          )
+          return
+        }
+        setLoadError(meta?.message ?? null)
       } catch (error) {
         if (cancelled) return
         const message =
@@ -194,7 +204,7 @@ export default function LlmAdvisorPage() {
       repoUrl="https://github.com/dmboynton56/llm-advisor"
       metrics={topMetrics}
       metricsSource={metricsData?.source}
-      metricsGeneratedAt={metricsData?.generatedAt}
+      metricsGeneratedAt={metricsMeta?.updatedAt ?? metricsData?.generatedAt}
       isLoadingMetrics={isLoading}
       metricsError={loadError}
       heroImage={
@@ -239,11 +249,14 @@ export default function LlmAdvisorPage() {
       <section className="space-y-6">
         <h2 className="text-3xl font-bold">Live Monitoring Dashboard</h2>
         <p className="text-lg text-muted-foreground">
-          This dashboard is fed by the telemetry API (`supabase` first, local artifact fallback), and every metric below is computed from saved runs/trades/heartbeats.
+          This dashboard is fed by the telemetry API. Production serves Supabase telemetry only, while local file fallback is reserved for non-production debugging.
         </p>
         <div className="rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
           <div>
             Data source: <span className="text-foreground">{formatSource(metricsData?.source ?? 'empty')}</span>
+          </div>
+          <div>
+            Telemetry as-of: <span className="text-foreground">{formatTimestamp(metricsMeta?.updatedAt ?? null)}</span>
           </div>
           <div>
             Last generated: <span className="text-foreground">{formatTimestamp(metricsData?.generatedAt ?? null)}</span>
@@ -251,6 +264,16 @@ export default function LlmAdvisorPage() {
           <div>
             Anchor date: <span className="text-foreground">{metricsData?.anchorDate ?? 'N/A'}</span>
           </div>
+          {metricsMeta?.sloBucket && (
+            <div>
+              Freshness bucket: <span className="text-foreground uppercase">{metricsMeta.sloBucket}</span>
+            </div>
+          )}
+          {metricsMeta?.errorId && (
+            <div>
+              Error ID: <span className="text-foreground font-mono">{metricsMeta.errorId}</span>
+            </div>
+          )}
           {loadError && (
             <div className="text-red-400">Telemetry load warning: {loadError}</div>
           )}
@@ -258,6 +281,16 @@ export default function LlmAdvisorPage() {
             <div>Loading telemetry...</div>
           )}
         </div>
+        {metricsData?.source === 'empty' && (
+          <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-200">
+            No telemetry is available yet. This panel will populate after the next successful end-of-day aggregate.
+          </div>
+        )}
+        {metricsData?.source === 'degraded' && (
+          <div className="rounded-xl border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-200">
+            Telemetry provider is currently degraded. Data may be stale or incomplete until upstream reads recover.
+          </div>
+        )}
         <div className="rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
           <div className="grid gap-2 md:grid-cols-2">
             <div>
@@ -431,6 +464,31 @@ tc_trigger_z = 0.6
 atr_multiplier_sl = 1.4
 atr_percentile_cap = 85.0`}
           </pre>
+        </div>
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="text-3xl font-bold">Notebook Analyses</h2>
+        <p className="text-lg text-muted-foreground">
+          Week-2 notebook work is now scaffolded to publish reproducible analysis artifacts for this project.
+        </p>
+        <div className="grid md:grid-cols-2 gap-4">
+          <a href="/notebooks/trade_journal.html" className="rounded-xl border border-border bg-card p-4 hover:border-emerald-500/50 transition-colors">
+            <h3 className="font-semibold">Trade Journal</h3>
+            <p className="text-sm text-muted-foreground mt-1">Per-trade narrative context and outcomes.</p>
+          </a>
+          <a href="/notebooks/pnl_attribution.html" className="rounded-xl border border-border bg-card p-4 hover:border-emerald-500/50 transition-colors">
+            <h3 className="font-semibold">PnL Attribution</h3>
+            <p className="text-sm text-muted-foreground mt-1">P&L breakdown by symbol, regime, and exits.</p>
+          </a>
+          <a href="/notebooks/threshold_sensitivity.html" className="rounded-xl border border-border bg-card p-4 hover:border-emerald-500/50 transition-colors">
+            <h3 className="font-semibold">Threshold Sensitivity</h3>
+            <p className="text-sm text-muted-foreground mt-1">Grid search of MR/TC thresholds and risk multipliers.</p>
+          </a>
+          <a href="/notebooks/premarket_bias_evaluation.html" className="rounded-xl border border-border bg-card p-4 hover:border-emerald-500/50 transition-colors">
+            <h3 className="font-semibold">Premarket Bias Evaluation</h3>
+            <p className="text-sm text-muted-foreground mt-1">Bias hit-rate and calibration against realized direction.</p>
+          </a>
         </div>
       </section>
 

@@ -18,6 +18,15 @@ const parseIso = (value: unknown): string | null => {
   return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString()
 }
 
+const maxIso = (...values: Array<string | null>): string | null => {
+  const timestamps = values
+    .filter((value): value is string => Boolean(value))
+    .map((value) => Date.parse(value))
+    .filter((value) => !Number.isNaN(value))
+  if (!timestamps.length) return null
+  return new Date(Math.max(...timestamps)).toISOString()
+}
+
 export async function GET() {
   if (!supabase) {
     return NextResponse.json({
@@ -55,7 +64,7 @@ export async function GET() {
   const surfaces: SurfaceHealth[] = []
   const now = new Date().toISOString()
 
-  const [predictions, heartbeats, projectMetrics, dailyBias] = await Promise.all([
+  const [predictions, heartbeats, llmRuns, llmTrades, projectMetrics, dailyBias] = await Promise.all([
     supabase
       .from('model_predictions')
       .select('asof_ts')
@@ -65,6 +74,16 @@ export async function GET() {
       .from('llm_advisor_runtime_heartbeats')
       .select('heartbeat_ts')
       .order('heartbeat_ts', { ascending: false })
+      .limit(1),
+    supabase
+      .from('llm_advisor_backtest_runs')
+      .select('run_date')
+      .order('run_date', { ascending: false })
+      .limit(1),
+    supabase
+      .from('llm_advisor_backtest_trades')
+      .select('exit_time,entry_time')
+      .order('exit_time', { ascending: false })
       .limit(1),
     supabase
       .from('project_metrics')
@@ -98,7 +117,15 @@ export async function GET() {
   )
   pushSurface(
     'llm-advisor',
-    parseIso(heartbeats.data?.[0]?.heartbeat_ts),
+    maxIso(
+      parseIso(heartbeats.data?.[0]?.heartbeat_ts),
+      parseIso(llmTrades.data?.[0]?.exit_time ?? llmTrades.data?.[0]?.entry_time),
+      parseIso(
+        typeof llmRuns.data?.[0]?.run_date === 'string'
+          ? `${llmRuns.data[0].run_date}T23:59:59.000Z`
+          : null
+      )
+    ),
     STALE_THRESHOLDS.llmAdvisor
   )
   pushSurface(
