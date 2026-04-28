@@ -8,7 +8,6 @@ import { DeviceFrameset } from 'react-device-frameset'
 import '@/styles/device-frames.css'
 import { BorderBeam } from '@/components/ui/border-beam'
 import { NBAHofDisplay } from './NBAHofDisplay'
-import { DailyBiasDisplay } from './DailyBiasDisplay'
 import { SportsEdgeDisplay } from './SportsEdgeDisplay'
 import MancalaGame from './MancalaGame'
 import { Button } from '@/components/ui/button'
@@ -61,7 +60,7 @@ const mockProjects: Project[] = [
   {
     id: 'nba-hof-predictor',
     title: 'NBA Hall of Fame Predictor 🏀',
-    description: 'Interactive machine learning model that predicts NBA players\' Hall of Fame chances with 99% accuracy. Features real-time player lookup and detailed prediction analysis using XGBoost trained on 5,250+ players since 1976. Try entering any NBA player name!',
+    description: 'Interactive machine learning model that estimates NBA players\' Hall of Fame chances from career production, peak impact, longevity, and award history. Features real-time player lookup and detailed prediction analysis using XGBoost trained on 5,250+ players since 1976. Try entering any NBA player name!',
     category: 'flagship',
     type: 'desktop',
     image: '/images/projects/nba-hof-top-20.png', // Placeholder for behind-the-scenes
@@ -76,23 +75,6 @@ const mockProjects: Project[] = [
     proofPoints: ['5,250+ historical player careers', 'Interactive probability search for any player', 'Feature-level model reasoning on each prediction'],
     isInteractive: true,
     caseStudyUrl: '/projects/nba-hof'
-  },
-  {
-    id: 'ictml-trading-system',
-    title: 'ICTML Advanced Trading System 📈',
-    description: 'Real-time machine learning trading system achieving 84.4% accuracy in daily market bias prediction for QQQ, SPY, and IWM. Features ensemble models, premium session filtering (9:30-12:00 EST), and daily bias probability vectors.',
-    category: 'flagship',
-    type: 'desktop',
-    image: '/images/projects/ICTML_accuracies.png',
-    images: [
-      '/images/projects/ICTML_accuracies.png', // Model performance metrics
-      '/images/projects/ICTML_features.png',   // Feature importance analysis
-      '/images/projects/ICTML_matrices.png'    // Confusion matrices
-    ],
-    technologies: ['Python', 'XGBoost', 'Scikit-learn', 'Ensemble Methods'],
-    proofPoints: ['84.4% daily market-bias classification accuracy', 'Live QQQ/SPY/IWM probability vectors', 'Automated prediction refresh before market open'],
-    isInteractive: true,
-    caseStudyUrl: '/projects/ictml'
   },
   {
     id: 'sports-edge',
@@ -113,13 +95,12 @@ const mockProjects: Project[] = [
   {
     id: 'llm-advisor',
     title: 'LLM Advisor: Agentic Trading System 🤖',
-    description: 'Autonomous trading agent that uses Google Gemini 1.5 Flash to analyze market sentiment and adjust statistical mean-reversion thresholds in real-time. Features automated risk management, backtesting engine, and Alpaca trade execution.',
+    description: 'Autonomous trading agent that uses Gemini to analyze market context, adjust mean-reversion thresholds, and execute with guardrails. The premarket bias work from ICTML is being folded into this system so the portfolio tells one trading-advisor story.',
     category: 'flagship',
     type: 'desktop',
     image: '/images/projects/llm-advisor-dashboard.png', // Placeholder
-    images: [],
     technologies: ['Python', 'Gemini API', 'Alpaca', 'Pandas', 'Backtesting'],
-    proofPoints: ['Hybrid ML + LLM trading decision stack', 'Risk controls with drawdown guardrails', 'Backtesting workflow tied to execution rules'],
+    proofPoints: ['ICTML premarket bias fold-in in progress', 'Hybrid ML + LLM trading decision stack', 'Risk controls tied to execution rules'],
     isInteractive: false,
     caseStudyUrl: '/projects/llm-advisor'
   },
@@ -442,24 +423,6 @@ export function WorkSection() {
                         </div>
                         <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
                       </div>
-                    ) : project.isInteractive && project.id === 'ictml-trading-system' ? (
-                      // Interactive ICTML Daily Bias
-                      <div
-                        onClick={() => handleImageClick(project)}
-                        className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
-                      >
-                        <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
-                          <DeviceFrameset device="MacBook Pro" color="silver">
-                            <div className="relative w-[1280px] h-[800px] bg-background">
-                              <div className="absolute inset-[8px] overflow-hidden">
-                                <DailyBiasDisplay />
-                              </div>
-                            </div>
-                            <div className="bottom-bar" />
-                          </DeviceFrameset>
-                        </div>
-                        <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
-                      </div>
                     ) : project.isInteractive && project.id === 'sports-edge' ? (
                       // Interactive Sports Edge (no carousel)
                       <div
@@ -478,6 +441,45 @@ export function WorkSection() {
                           </DeviceFrameset>
                         </div>
                         <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
+                      </div>
+                    ) : project.id === 'llm-advisor' ? (
+                      <div className="relative transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group">
+                        <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
+                          <DeviceFrameset device="MacBook Pro" color="silver">
+                            <div className="relative w-[1280px] h-[800px] overflow-hidden bg-zinc-950">
+                              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.24),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(16,185,129,0.18),transparent_34%)]" />
+                              <div className="absolute inset-0 grid grid-cols-12 grid-rows-6 gap-4 p-12 opacity-35">
+                                {Array.from({ length: 24 }).map((_, tileIndex) => (
+                                  <div key={tileIndex} className="rounded-xl border border-white/10 bg-white/[0.03]" />
+                                ))}
+                              </div>
+                              <div className="relative z-10 flex h-full items-center justify-center p-20">
+                                <div className="max-w-3xl rounded-3xl border border-white/12 bg-black/55 p-12 text-center shadow-2xl backdrop-blur">
+                                  <div className="mx-auto mb-6 inline-flex rounded-full border border-amber-400/40 bg-amber-400/10 px-4 py-2 text-sm font-semibold uppercase tracking-[0.25em] text-amber-200">
+                                    Work in progress
+                                  </div>
+                                  <h4 className="mb-5 text-5xl font-bold text-white">
+                                    LLM Advisor rebuild underway
+                                  </h4>
+                                  <p className="mx-auto max-w-2xl text-xl leading-relaxed text-zinc-300">
+                                    Folding ICTML premarket bias into the live advisor stack, then shipping one dashboard for signals,
+                                    guardrails, backtests, and execution telemetry.
+                                  </p>
+                                  <div className="mt-10 grid grid-cols-3 gap-4 text-left">
+                                    {['Premarket bias', 'LLM thresholds', 'Execution metrics'].map((label) => (
+                                      <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+                                        <div className="mb-3 h-2 w-16 rounded-full bg-accent" />
+                                        <div className="text-lg font-semibold text-white">{label}</div>
+                                        <div className="mt-2 text-sm text-zinc-400">Coming into one project surface</div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="bottom-bar" />
+                          </DeviceFrameset>
+                        </div>
                       </div>
                     ) : (
                       // Standard image display
@@ -566,20 +568,19 @@ export function WorkSection() {
                     </div>
                   )}
 
-                  {/* ICTML Info - appears below MacBook for ICTML project */}
-                  {project.isInteractive && project.id === 'ictml-trading-system' && (
-                    <div className="mt-8 relative max-w-2xl mx-auto text-center">
-                      <p className="text-center text-sm text-muted-foreground">
-                        Live daily bias predictions for QQQ, SPY, and IWM • 84.4% accuracy • Updated daily at 9:30 AM EST • Click the screen above to see model analysis
-                      </p>
-                    </div>
-                  )}
-
                   {/* Sports Edge Info - appears below MacBook for Sports Edge project */}
                   {project.isInteractive && project.id === 'sports-edge' && (
                     <div className="mt-8 relative max-w-2xl mx-auto text-center">
                       <p className="text-center text-sm text-muted-foreground">
                         Live NFL/NBA game predictions vs sportsbook lines • Examine the spreads in the screen above to see model analysis
+                      </p>
+                    </div>
+                  )}
+
+                  {project.id === 'llm-advisor' && (
+                    <div className="mt-8 relative max-w-2xl mx-auto text-center">
+                      <p className="text-center text-sm text-muted-foreground">
+                        ICTML is being folded into this project. Public dashboard polish is in progress while the signal and execution layers consolidate.
                       </p>
                     </div>
                   )}

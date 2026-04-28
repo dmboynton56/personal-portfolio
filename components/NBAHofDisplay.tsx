@@ -80,8 +80,8 @@ export function NBAHofDisplay({ prediction, isLoading, searchQuery, noResults }:
           </p>
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div className="bg-background/50 p-3 rounded-lg">
-              <div className="text-lg font-bold text-green-600">99%</div>
-              <div className="text-muted-foreground">Accuracy</div>
+              <div className="text-lg font-bold text-green-600">XGBoost</div>
+              <div className="text-muted-foreground">Model</div>
             </div>
             <div className="bg-background/50 p-3 rounded-lg">
               <div className="text-lg font-bold text-blue-600">5,250+</div>

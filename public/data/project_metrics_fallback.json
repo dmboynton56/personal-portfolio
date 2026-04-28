@@ -9,7 +9,7 @@
         ]
     },
     "nba-hof": [
-        { "label": "Model Accuracy", "value": "99%", "iconName": "checkCircle", "trend": "up" },
+        { "label": "Feature Basis", "value": "Career + Peak", "iconName": "barChart" },
         { "label": "Player Histories", "value": "5,250+", "iconName": "database" },
         { "label": "Lookup Experience", "value": "Interactive", "iconName": "search" },
         { "label": "Model Family", "value": "XGBoost", "iconName": "cpu" }

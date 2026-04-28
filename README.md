@@ -21,10 +21,9 @@ SUPABASE_URL
 SUPABASE_SERVICE_ROLE_KEY
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY
-SPORTS_EDGE_CRON_SECRET
 ```
 
-Sports Edge odds and final-score writes now run exclusively from the `sports-edge` repository workflows. This portfolio repo is a read-only consumer of the Supabase tables.
+Sports Edge odds, game, prediction, and final-score writes now run exclusively from the `sports-edge` repository workflows. This portfolio repo is a read-only consumer of the Supabase tables through `GET /api/sports-edges`; it does not expose a Sports Edge writer or cron POST endpoint.
 
 ## Sports Edge Chat + RAG MVP
 

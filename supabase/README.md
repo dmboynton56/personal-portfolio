@@ -10,7 +10,6 @@ This folder keeps the SQL migrations that provision the `games`, `odds_snapshots
   - `SUPABASE_SERVICE_ROLE_KEY`
   - `NEXT_PUBLIC_SUPABASE_URL`
   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-  - `SPORTS_EDGE_CRON_SECRET` (used by the GitHub Action cron POST, see below)
 
 ## Apply the schema
 1. Authenticate the CLI:
@@ -40,6 +39,10 @@ If you run `supabase start`, the same migration file can be applied against the 
 ### Odds API hydration
 
 Odds ingestion now runs in the `sports-edge` repository (`data-core/scripts/sync_odds.py` inside `daily-refresh.yml`). This portfolio project no longer exposes a writer endpoint for odds updates.
+
+### Sports Edge serving API
+
+The portfolio serves Sports Edge data through `GET /api/sports-edges`. That route reads Supabase `games` and `model_predictions` and returns a cacheable payload for the project page. Sports Edge writes for `games`, `odds_snapshots`, `model_predictions`, and final scores are owned by the `sports-edge` repository workflows.
 
 ### LLM Advisor telemetry ingest
 

@@ -198,7 +198,7 @@ export function NBAHofPredictor() {
           <span className="text-xs bg-accent/20 text-accent px-2 py-1 rounded-full">XGBoost ML</span>
         </h3>
         <p className="text-sm text-muted-foreground mt-1">
-          99% accuracy • 5,250+ players • Real career data analysis
+          5,250+ players • Career outcomes • Model-backed reasoning
         </p>
       </div>
 

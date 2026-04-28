@@ -15,8 +15,6 @@ const supabase =
     ? createClient(supabaseUrl, supabaseServiceRoleKey)
     : null
 
-const cronSecret = process.env.SPORTS_EDGE_CRON_SECRET
-
 const DEFAULT_LOOKBACK_DAYS = Number(
   process.env.SPORTS_EDGE_LOOKBACK_DAYS ?? 1
 )
@@ -778,49 +776,4 @@ export async function GET(request: NextRequest) {
       'Cache-Control': 'public, s-maxage=21600, stale-while-revalidate=43200'
     }
   })
-}
-
-export async function POST(req: NextRequest) {
-  try {
-    if (!cronSecret) {
-      console.error('SPORTS_EDGE_CRON_SECRET is not configured')
-      return NextResponse.json(
-        { error: 'Cron secret is not configured' },
-        { status: 500 }
-      )
-    }
-
-    const providedSecret = req.headers.get('x-cron-secret')
-    if (providedSecret !== cronSecret) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    // For now the cron POST simply warms the Supabase view and returns counts.
-    if (!supabase) {
-      return NextResponse.json({
-        ok: true,
-        note: 'Supabase not configured; cron ping acknowledged.',
-        timestamp: new Date().toISOString()
-      })
-    }
-
-    const nflEdges = await loadNflEdges()
-    return NextResponse.json({
-      ok: true,
-      rowCount: nflEdges?.games.length ?? 0,
-      window: nflEdges
-        ? {
-            start: nflEdges.window.start.toISOString(),
-            end: nflEdges.window.end.toISOString()
-          }
-        : null,
-      timestamp: new Date().toISOString()
-    })
-  } catch (error) {
-    console.error('Cron API error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
-  }
 }
