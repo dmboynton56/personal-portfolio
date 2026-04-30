@@ -115,7 +115,9 @@ export default function SportsEdgeCard() {
   const sortedGames: NflGameEdge[] = useMemo(() => {
     if (!data?.nfl.games) return []
     return [...data.nfl.games].sort((a, b) => {
-      const diff = Math.abs(calculateEdge(b)) - Math.abs(calculateEdge(a))
+      const edgeA = calculateEdge(a)
+      const edgeB = calculateEdge(b)
+      const diff = Math.abs(edgeB ?? 0) - Math.abs(edgeA ?? 0)
       return diff === 0
         ? Date.parse(a.kickoffUtc) - Date.parse(b.kickoffUtc)
         : diff
@@ -184,7 +186,9 @@ export default function SportsEdgeCard() {
   const sortedNbaGames: NbaGameEdge[] = useMemo(() => {
     if (!data?.nba.games) return []
     return [...data.nba.games].sort((a, b) => {
-      const diff = Math.abs(calculateEdge(b)) - Math.abs(calculateEdge(a))
+      const edgeA = calculateEdge(a)
+      const edgeB = calculateEdge(b)
+      const diff = Math.abs(edgeB ?? 0) - Math.abs(edgeA ?? 0)
       return diff === 0
         ? Date.parse(a.tipoffUtc) - Date.parse(b.tipoffUtc)
         : diff
@@ -214,7 +218,8 @@ export default function SportsEdgeCard() {
 
   const formatPercent = (value: number) => `${(value * 100).toFixed(1)}%`
 
-  const edgeBadge = (edge: number) => {
+  const edgeBadge = (edge: number | null) => {
+    if (edge == null) return { label: 'No line', className: 'text-muted-foreground' }
     const absEdge = Math.abs(edge)
     if (absEdge >= 4) return { label: 'Fire', className: 'text-emerald-400' }
     if (absEdge >= 2.5) return { label: 'Signal', className: 'text-lime-300' }
@@ -222,7 +227,8 @@ export default function SportsEdgeCard() {
     return { label: 'Watch', className: 'text-muted-foreground' }
   }
 
-  const formatSpread = (value: number) => (value > 0 ? `+${value.toFixed(1)}` : value.toFixed(1))
+  const formatSpread = (value: number | null) =>
+    value == null ? 'N/A' : value > 0 ? `+${value.toFixed(1)}` : value.toFixed(1)
 
   if (isLoading) {
     return (
@@ -331,7 +337,7 @@ export default function SportsEdgeCard() {
               {sortedGames.map((game) => {
                 const edge = calculateEdge(game)
                 const badge = edgeBadge(edge)
-                const favoredTeam = edge >= 0 ? game.homeTeam : game.awayTeam
+                const favoredTeam = edge == null ? null : edge >= 0 ? game.homeTeam : game.awayTeam
                 return (
                   <div
                     key={game.gameId}
@@ -370,7 +376,7 @@ export default function SportsEdgeCard() {
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Book spread</span>
                         <span className="font-semibold text-foreground">
-                          {game.bookSpread > 0 ? `+${game.bookSpread.toFixed(1)}` : game.bookSpread.toFixed(1)}
+                          {formatSpread(game.bookSpread)}
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
@@ -408,10 +414,16 @@ export default function SportsEdgeCard() {
                         </div>
                       )}
                     </div>
-                    <div className="mt-3 rounded-lg bg-foreground/5 p-2 text-sm font-semibold text-foreground">
-                      Edge {edge > 0 ? '+' : ''}
-                      {edge.toFixed(1)} pts toward {favoredTeam}
-                    </div>
+                    {edge == null ? (
+                      <div className="mt-3 rounded-lg bg-foreground/5 p-2 text-sm font-semibold text-muted-foreground">
+                        Edge unavailable until a sportsbook line is synced.
+                      </div>
+                    ) : (
+                      <div className="mt-3 rounded-lg bg-foreground/5 p-2 text-sm font-semibold text-foreground">
+                        Edge {edge > 0 ? '+' : ''}
+                        {edge.toFixed(1)} pts toward {favoredTeam}
+                      </div>
+                    )}
                     <p className="mt-2 text-xs text-muted-foreground">{game.note}</p>
                     <div className="mt-auto pt-3 text-[10px] uppercase text-muted-foreground">
                       Update {formatUpdatedAt(game.predictionUpdated)} • {game.modelVersion}
@@ -474,7 +486,7 @@ export default function SportsEdgeCard() {
               {sortedNbaGames.map((game) => {
                 const edge = calculateEdge(game)
                 const badge = edgeBadge(edge)
-                const favoredTeam = edge >= 0 ? game.homeTeam : game.awayTeam
+                const favoredTeam = edge == null ? null : edge >= 0 ? game.homeTeam : game.awayTeam
                 return (
                   <div
                     key={game.gameId}
@@ -505,7 +517,7 @@ export default function SportsEdgeCard() {
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">Book spread</span>
                         <span className="font-semibold text-foreground">
-                          {game.bookSpread > 0 ? `+${game.bookSpread.toFixed(1)}` : game.bookSpread.toFixed(1)}
+                          {formatSpread(game.bookSpread)}
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
@@ -543,10 +555,16 @@ export default function SportsEdgeCard() {
                         </div>
                       )}
                     </div>
-                    <div className="mt-3 rounded-lg bg-foreground/5 p-2 text-sm font-semibold text-foreground">
-                      Edge {edge > 0 ? '+' : ''}
-                      {edge.toFixed(1)} pts toward {favoredTeam}
-                    </div>
+                    {edge == null ? (
+                      <div className="mt-3 rounded-lg bg-foreground/5 p-2 text-sm font-semibold text-muted-foreground">
+                        Edge unavailable until a sportsbook line is synced.
+                      </div>
+                    ) : (
+                      <div className="mt-3 rounded-lg bg-foreground/5 p-2 text-sm font-semibold text-foreground">
+                        Edge {edge > 0 ? '+' : ''}
+                        {edge.toFixed(1)} pts toward {favoredTeam}
+                      </div>
+                    )}
                     <p className="mt-2 text-xs text-muted-foreground">{game.note}</p>
                     <div className="mt-auto pt-3 text-[10px] uppercase text-muted-foreground">
                       Update {formatUpdatedAt(game.predictionUpdated)} • {game.modelVersion}

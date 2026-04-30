@@ -3,7 +3,7 @@ export type NflGameEdge = {
   homeTeam: string
   awayTeam: string
   kickoffUtc: string
-  bookSpread: number
+  bookSpread: number | null
   modelSpread: number
   homeWinProb: number
   modelVersion: string
@@ -19,7 +19,7 @@ export type NbaGameEdge = {
   homeTeam: string
   awayTeam: string
   tipoffUtc: string
-  bookSpread: number
+  bookSpread: number | null
   modelSpread: number
   homeWinProb: number
   modelVersion: string
@@ -166,6 +166,8 @@ export const sportsEdgeMockData: SportsEdgePayload = {
 }
 
 export const calculateEdge = (game: NflGameEdge | NbaGameEdge) =>
-  Number((game.modelSpread - game.bookSpread).toFixed(1))
+  game.bookSpread == null
+    ? null
+    : Number((game.modelSpread - game.bookSpread).toFixed(1))
 
 export const formatPercentage = (value: number) => `${(value * 100).toFixed(1)}%`
