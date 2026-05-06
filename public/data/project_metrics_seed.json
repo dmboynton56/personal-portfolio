@@ -1,0 +1,26 @@
+[
+  {
+    "project_id": "sports-edge",
+    "metric_key": "daily_refresh_note",
+    "label": "Notebook pipeline",
+    "value": "Publish HTML into public/notebooks/ from sports-edge publish workflow",
+    "icon_name": "LineChart",
+    "trend": "neutral"
+  },
+  {
+    "project_id": "llm-advisor",
+    "metric_key": "backtest_roll_summary_cmd",
+    "label": "Multi-day backtest rollup",
+    "value": "llm-advisor: python scripts/aggregate_backtest_results.py → notebooks/_exported/backtest_roll_summary.json (gitignored); publish HTML via publish-notebooks workflow",
+    "icon_name": "Activity",
+    "trend": "neutral"
+  },
+  {
+    "project_id": "llm-advisor",
+    "metric_key": "eod_artifact_layout",
+    "label": "EOD telemetry layout",
+    "value": "GitHub EOD downloads Live artifact at repo root; run_eod_aggregate normalizes nested data/daily_news paths",
+    "icon_name": "Database",
+    "trend": "neutral"
+  }
+]
