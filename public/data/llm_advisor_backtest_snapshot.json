@@ -1,0 +1,58 @@
+{
+  "schema": "llm_advisor_portfolio_snapshot_v1",
+  "generated_at": "2026-05-06T04:20:00.000Z",
+  "repository": "https://github.com/dmboynton56/llm-advisor",
+  "experiment": {
+    "title": "SPY intraday STDEV strategy replay (technical stack)",
+    "symbols": ["SPY"],
+    "session_dates_et": ["2025-04-30", "2025-05-01", "2025-05-02"],
+    "premarket_context": false,
+    "gemini_periodic_overlay": false,
+    "commands": [
+      "python scripts/run_backtest.py --date 2025-04-30 --symbols SPY --fast 1",
+      "python scripts/run_backtest.py --date 2025-05-01 --symbols SPY --fast 1",
+      "python scripts/run_backtest.py --date 2025-05-02 --symbols SPY --fast 1",
+      "python scripts/aggregate_backtest_results.py"
+    ],
+    "caveats": [
+      "Each day uses MockOrderManager with ~$100k starting equity and is replayed independently; total_pnl_sum is the sum of per-day P/L, not a compounded equity curve.",
+      "Without premarket artifacts, the loop disables news/bias context and does not run the production Gemini periodic overlay — this measures the STDEV execution core only.",
+      "Past simulation does not imply future live performance."
+    ]
+  },
+  "rollup": {
+    "schema": "llm_advisor_backtest_rollup_v1",
+    "n_days": 3,
+    "first_date": "2025-04-30",
+    "last_date": "2025-05-02",
+    "total_pnl_sum": 628.355,
+    "avg_daily_pnl": 209.4517,
+    "median_daily_pnl": 244.595,
+    "total_closed_trades": 29,
+    "avg_win_rate_daily": 0.470588,
+    "days": [
+      {
+        "date": "2025-04-30",
+        "total_pnl": 244.59500000010166,
+        "closed_trades": 17,
+        "win_rate": 0.4117647058823529
+      },
+      {
+        "date": "2025-05-01",
+        "total_pnl": -2205.6649999999413,
+        "closed_trades": 6,
+        "win_rate": 0.3333333333333333
+      },
+      {
+        "date": "2025-05-02",
+        "total_pnl": 2589.425000000073,
+        "closed_trades": 6,
+        "win_rate": 0.6666666666666666
+      }
+    ]
+  },
+  "linkedin_snippets": [
+    "Replayed the STDEV day-trading engine on SPY for three historical sessions (2025-04-30 → 2025-05-02): 29 bracketed mock fills, combined daily P/L about +$628 on a fixed per-day bankroll (not compounded).",
+    "This batch isolates the technical MR/TC + risk stack — no premarket bias file and no in-session Gemini overlay, so it is an execution-core baseline rather than full production behavior."
+  ]
+}

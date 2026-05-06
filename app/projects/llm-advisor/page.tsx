@@ -16,6 +16,32 @@ import {
 } from 'lucide-react'
 import { ApiEnvelope, ApiMeta } from '@/lib/freshness'
 
+type LlmAdvisorBacktestSnapshot = {
+  schema: string
+  generated_at: string
+  repository?: string
+  experiment: {
+    title: string
+    symbols: string[]
+    session_dates_et: string[]
+    premarket_context: boolean
+    gemini_periodic_overlay: boolean
+    commands: string[]
+    caveats: string[]
+  }
+  rollup: {
+    n_days: number
+    first_date?: string
+    last_date?: string
+    total_pnl_sum: number
+    avg_daily_pnl: number | null
+    total_closed_trades: number
+    avg_win_rate_daily: number | null
+    days?: Array<{ date: string; total_pnl: number; closed_trades: number; win_rate: number | null }>
+  }
+  linkedin_snippets: string[]
+}
+
 type LlmAdvisorMetricsPayload = {
   source: 'supabase' | 'local-files' | 'empty' | 'degraded'
   generatedAt: string
@@ -115,6 +141,8 @@ export default function LlmAdvisorPage() {
   const [metricsMeta, setMetricsMeta] = useState<ApiMeta | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
+  const [snapshot, setSnapshot] = useState<LlmAdvisorBacktestSnapshot | null>(null)
+  const [snapshotError, setSnapshotError] = useState<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -165,6 +193,32 @@ export default function LlmAdvisorPage() {
     return () => {
       cancelled = true
       window.clearInterval(interval)
+    }
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    const loadSnap = async () => {
+      try {
+        const res = await fetch('/data/llm_advisor_backtest_snapshot.json', { cache: 'no-store' })
+        if (!res.ok) {
+          throw new Error(`Snapshot HTTP ${res.status}`)
+        }
+        const json = (await res.json()) as LlmAdvisorBacktestSnapshot
+        if (!cancelled) {
+          setSnapshot(json)
+          setSnapshotError(null)
+        }
+      } catch (e) {
+        if (!cancelled) {
+          setSnapshot(null)
+          setSnapshotError(e instanceof Error ? e.message : 'Failed to load snapshot')
+        }
+      }
+    }
+    loadSnap()
+    return () => {
+      cancelled = true
     }
   }, [])
 
@@ -490,6 +544,115 @@ atr_percentile_cap = 85.0`}
             <p className="text-sm text-muted-foreground mt-1">Bias hit-rate and calibration against realized direction.</p>
           </a>
         </div>
+      </section>
+
+      <section className="space-y-6">
+        <h2 className="text-3xl font-bold">Offline simulation snapshot</h2>
+        <p className="text-lg text-muted-foreground">
+          Versioned JSON under{' '}
+          <code className="text-sm bg-muted px-1 rounded">public/data/llm_advisor_backtest_snapshot.json</code> —
+          reproducible headline stats for portfolio / LinkedIn, with explicit limitations (technical replay only; no LLM overlay in this batch).
+        </p>
+        {snapshotError && (
+          <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-200">
+            Snapshot unavailable: {snapshotError}
+          </div>
+        )}
+        {snapshot && (
+          <div className="space-y-4">
+            <div className="rounded-xl border border-border bg-card p-5 space-y-3">
+              <p className="text-sm text-muted-foreground">{snapshot.experiment.title}</p>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                  <p className="text-xs uppercase text-muted-foreground">Sessions</p>
+                  <p className="text-xl font-semibold">{snapshot.rollup.n_days} day(s)</p>
+                  <p className="text-xs text-muted-foreground">{snapshot.experiment.session_dates_et.join(' → ')}</p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase text-muted-foreground">Sum daily P/L</p>
+                  <p className="text-xl font-semibold">{formatCurrency(snapshot.rollup.total_pnl_sum)}</p>
+                  <p className="text-xs text-muted-foreground">Independent daily resets — not compounded.</p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase text-muted-foreground">Closed trades</p>
+                  <p className="text-xl font-semibold">{snapshot.rollup.total_closed_trades}</p>
+                </div>
+                <div>
+                  <p className="text-xs uppercase text-muted-foreground">Avg daily win rate</p>
+                  <p className="text-xl font-semibold">
+                    {formatPercent(snapshot.rollup.avg_win_rate_daily ?? null)}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-3 text-xs">
+                <span
+                  className={
+                    snapshot.experiment.premarket_context ? 'text-emerald-400' : 'text-muted-foreground'
+                  }
+                >
+                  Premarket context: {snapshot.experiment.premarket_context ? 'yes' : 'no'}
+                </span>
+                <span
+                  className={
+                    snapshot.experiment.gemini_periodic_overlay ? 'text-emerald-400' : 'text-muted-foreground'
+                  }
+                >
+                  Gemini overlay: {snapshot.experiment.gemini_periodic_overlay ? 'yes' : 'no'}
+                </span>
+                <span className="text-muted-foreground">
+                  Generated {formatTimestamp(snapshot.generated_at)}
+                </span>
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-5 space-y-3">
+              <h3 className="font-semibold text-emerald-200">Copy-ready (LinkedIn)</h3>
+              <ul className="list-disc pl-5 space-y-2 text-sm text-muted-foreground">
+                {snapshot.linkedin_snippets.map((line, idx) => (
+                  <li key={idx}>{line}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="rounded-xl border border-red-500/30 bg-red-500/5 p-5 space-y-2">
+              <h3 className="font-semibold text-red-200">Read before you quote</h3>
+              <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
+                {snapshot.experiment.caveats.map((c, idx) => (
+                  <li key={idx}>{c}</li>
+                ))}
+              </ul>
+            </div>
+
+            <details className="rounded-xl border border-border bg-card p-4 text-sm">
+              <summary className="cursor-pointer font-medium">Per-session breakdown</summary>
+              <div className="mt-3 space-y-2">
+                {(snapshot.rollup.days ?? []).map((d) => (
+                  <div key={d.date} className="flex flex-wrap justify-between gap-2 border border-border rounded px-3 py-2">
+                    <span className="font-mono">{d.date}</span>
+                    <span>{formatCurrency(d.total_pnl)}</span>
+                    <span className="text-muted-foreground">{d.closed_trades} trades</span>
+                    <span>{formatPercent(d.win_rate ?? null)} win rate</span>
+                  </div>
+                ))}
+              </div>
+            </details>
+
+            <details className="rounded-xl border border-border bg-card p-4 text-sm">
+              <summary className="cursor-pointer font-medium">Reproduce locally</summary>
+              <pre className="mt-3 overflow-x-auto font-mono text-xs text-muted-foreground whitespace-pre-wrap">
+                {snapshot.experiment.commands.join('\n')}
+              </pre>
+              {snapshot.repository && (
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Repo:{' '}
+                  <a href={snapshot.repository} className="text-emerald-400 underline">
+                    {snapshot.repository}
+                  </a>
+                </p>
+              )}
+            </details>
+          </div>
+        )}
       </section>
 
       <section className="space-y-6">

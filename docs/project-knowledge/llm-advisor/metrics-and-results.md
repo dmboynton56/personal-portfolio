@@ -1,15 +1,27 @@
 ---
 project: llm-advisor
-last_verified: 2026-04-07
+last_verified: 2026-05-06
 source_paths:
   - /home/dmboynton/projects/llm-advisor/src/core/config.py
   - /home/dmboynton/projects/llm-advisor/config/thresholds.py
   - /home/dmboynton/projects/llm-advisor/.github/workflows/premarket.yml
   - /home/dmboynton/projects/llm-advisor/.github/workflows/live_loop.yml
   - /home/dmboynton/projects/personal-portfolio/app/api/llm-advisor/metrics/route.ts
+  - /home/dmboynton/projects/personal-portfolio/public/data/llm_advisor_backtest_snapshot.json
+  - /home/dmboynton/projects/llm-advisor/scripts/run_backtest.py
+  - /home/dmboynton/projects/llm-advisor/scripts/aggregate_backtest_results.py
 ---
 
 # LLM Advisor Metrics and Results
+
+## Metric: Offline SPY simulation snapshot (2026-05-06)
+
+- **Artifact:** `personal-portfolio/public/data/llm_advisor_backtest_snapshot.json`
+- **Window:** three NYSE sessions `2025-04-30`, `2025-05-01`, `2025-05-02` (ET calendar dates), symbol **SPY** only.
+- **Headline numbers:** `total_closed_trades = 29`, sum of per-day simulated P/L `total_pnl_sum ≈ +$628` across the three independent daily replays (see **caveats** in JSON — not compounded equity).
+- **Mode:** technical STDEV replay with **no** premarket context and **no** Gemini periodic overlay (production stack adds both).
+- **Repro:** commands listed under `experiment.commands` in the JSON.
+- **Caveats:** read `experiment.caveats` in the JSON before quoting externally (LinkedIn/portfolio).
 
 ## Observed metrics
 

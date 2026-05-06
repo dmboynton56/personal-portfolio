@@ -9,7 +9,12 @@
   },
   {
     "project_id": "llm-advisor",
-    "metric_key": "backtest_roll_summary_cmd",
+    "metric_key": "spy_sim_apr30_may02_2025",
+    "label": "Offline SPY replay (3 sessions)",
+    "value": "+$628 sum daily sim P/L · 29 trades · technical stack only (see llm_advisor_backtest_snapshot.json)",
+    "icon_name": "TrendingUp",
+    "trend": "up"
+  },
     "label": "Multi-day backtest rollup",
     "value": "llm-advisor: python scripts/aggregate_backtest_results.py → notebooks/_exported/backtest_roll_summary.json (gitignored); publish HTML via publish-notebooks workflow",
     "icon_name": "Activity",
