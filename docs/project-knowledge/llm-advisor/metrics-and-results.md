@@ -35,7 +35,7 @@ source_paths:
 
 ## Metric: Session window
 
-- current_value: 09:30-12:00 ET, EOD close 15:50 ET
+- current_value: 07:30-12:00 ET, EOD close 15:50 ET
 - interpretation: allowed trade-entry session plus forced flattening time
 - provenance: `llm-advisor/src/core/config.py`
 - freshness: 2026-04-07
@@ -51,7 +51,7 @@ source_paths:
 
 ## Metric: Workflow schedule
 
-- current_value: premarket 13:30 UTC weekdays; live loop 14:30 UTC weekdays
+- current_value: premarket ~7:20 ET (`20 11` / `20 12` UTC weekdays); live loop ~7:30 ET (`30 11` / `30 12` UTC weekdays)
 - interpretation: expected automation timing in GitHub Actions
 - provenance: `llm-advisor/.github/workflows/premarket.yml`, `llm-advisor/.github/workflows/live_loop.yml`
 - freshness: 2026-04-07

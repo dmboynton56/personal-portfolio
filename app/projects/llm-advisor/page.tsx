@@ -506,7 +506,7 @@ export default function LlmAdvisorPage() {
             {`# Runtime defaults (overridable via env)
 max_risk_per_trade_percent = 1.0
 min_risk_reward_ratio = 1.5
-trading_window_start = "09:30"
+trading_window_start = "07:30"
 trading_window_end = "12:00"
 end_of_day_close_time = "15:50"
 
