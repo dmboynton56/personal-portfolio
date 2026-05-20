@@ -97,6 +97,9 @@ export const getGoogleAccessToken = async (): Promise<string | null> => {
   }
 }
 
+export const getGeminiModelId = () =>
+  process.env.GEMINI_MODEL_ID || 'gemini-2.5-flash-lite'
+
 export const generateGeminiText = async ({
   prompt,
   temperature = 0.2,
@@ -108,7 +111,7 @@ export const generateGeminiText = async ({
 }): Promise<string | null> => {
   const projectId = process.env.GCP_PROJECT_ID
   const location = process.env.GCP_LOCATION || 'us-central1'
-  const modelId = process.env.GEMINI_MODEL_ID || 'gemini-2.0-flash-001'
+  const modelId = getGeminiModelId()
   if (!projectId) return null
 
   const accessToken = await getGoogleAccessToken()

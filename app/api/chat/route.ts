@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { generateGeminiText } from '@/lib/chatbot/google'
+import { generateGeminiText, getGeminiModelId } from '@/lib/chatbot/google'
 import { getScopeConfig } from '@/lib/chatbot/scopes'
 import type {
   ChatApiResponse,
@@ -438,7 +438,7 @@ export async function POST(request: NextRequest) {
     const response: ChatApiResponse = {
       answer,
       intent,
-      model: 'gemini-2.0-flash-scoped',
+      model: getGeminiModelId(),
       scope,
       citations: dedupeCitations(citations).slice(0, 8)
     }
