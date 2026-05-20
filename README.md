@@ -36,7 +36,7 @@ The Sports Edge project page now includes a hybrid chat assistant:
 Core files:
 
 - `app/api/chat/route.ts`
-- `components/SportsEdgeChat.tsx`
+- `components/chat/ChatPanel.tsx`, `components/chat/ProjectChat.tsx`, `components/chat/PortfolioChatWidget.tsx`
 - `docs/data-dictionary.md`
 - `docs/metric-definitions.md`
 - `docs/model-cards/`
@@ -85,6 +85,8 @@ npm run build:rag-embeddings
 ```
 
 The embedding script writes `public/data/rag_embeddings.json`. Runtime retrieval uses cosine similarity when that file exists and falls back to token overlap if the file is missing or the embedding request fails.
+
+**After you add or edit files under `docs/`** (for example [`docs/project-knowledge/portfolio-overview.md`](docs/project-knowledge/portfolio-overview.md)), re-run **`build:rag-manifest`** and **`build:rag-embeddings`** so default-scope chat and project-scoped RAG both see the new chunks. The default portfolio chat scope includes all of `docs/project-knowledge/`, `docs/model-cards/`, `docs/project-postmortems/`, and the shared root `.txt` references in `docs/`.
 
 ## Contact
 

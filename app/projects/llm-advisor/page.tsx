@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react'
 import { ProjectLayout } from '@/components/ProjectLayout'
+import { ProjectChat } from '@/components/chat/ProjectChat'
 import Image from 'next/image'
 import {
   Activity,
@@ -261,6 +262,16 @@ export default function LlmAdvisorPage() {
       metricsGeneratedAt={metricsMeta?.updatedAt ?? metricsData?.generatedAt}
       isLoadingMetrics={isLoading}
       metricsError={loadError}
+      belowHero={
+        <section className="space-y-6">
+          <h2 className="text-3xl font-bold">Ask the Data</h2>
+          <p className="text-lg text-muted-foreground">
+            This assistant answers from LLM Advisor documentation and Supabase telemetry. Ask about run health,
+            risk controls, signal flow, or how live metrics relate to the write-ups on this page.
+          </p>
+          <ProjectChat scope="llm-advisor" />
+        </section>
+      }
       heroImage={
         <div className="flex flex-col items-center justify-center h-full w-full text-zinc-500 bg-zinc-900/50">
           <Bot className="w-24 h-24 mb-4 text-emerald-500" />

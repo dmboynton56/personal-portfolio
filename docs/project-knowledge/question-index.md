@@ -1,15 +1,23 @@
 ---
 project: cross-project
-last_verified: 2026-04-07
+last_verified: 2026-05-20
 source_paths:
   - /home/dmboynton/projects/personal-portfolio/docs/project-knowledge/llm-advisor
   - /home/dmboynton/projects/personal-portfolio/docs/project-knowledge/sports-edge
   - /home/dmboynton/projects/personal-portfolio/docs/project-knowledge/evidence-register.md
+  - /home/dmboynton/projects/personal-portfolio/docs/project-knowledge/portfolio-overview.md
 ---
 
 # Project Knowledge Question Index
 
 ## LLM Advisor question routing
+
+## Why is the project “under construction” or “work in progress” on the portfolio?
+
+Use:
+
+- `docs/project-knowledge/llm-advisor/faq.md`
+- `docs/project-knowledge/llm-advisor/overview.md` (section on portfolio deep-dive status)
 
 ## How does LLM Advisor work end to end?
 
@@ -57,6 +65,16 @@ Use:
 - `docs/project-knowledge/evidence-register.md`
 
 ## Cross-project routing
+
+## What projects appear on this portfolio / homepage / showcase?
+
+Use:
+
+- `docs/project-knowledge/portfolio-overview.md` (canonical list: flagships + additional carousel projects)
+
+Optional context:
+
+- `docs/faq.txt`
 
 ## What claims are safe to publish on deep-dive pages?
 

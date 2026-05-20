@@ -270,11 +270,14 @@ const sourceMatchesScope = (
   }
 
   return (
+    source.startsWith('docs/project-knowledge/') ||
+    source.startsWith('docs/model-cards/') ||
+    source.startsWith('docs/project-postmortems/') ||
     source === 'docs/faq.txt' ||
     source === 'docs/metric-definitions.txt' ||
     source === 'docs/limitations-and-risk.txt' ||
-    source === 'docs/project-knowledge/evidence-register.md' ||
-    source === 'docs/project-knowledge/question-index.md'
+    source === 'docs/data-dictionary.txt' ||
+    source === 'docs/warehouse-schema.txt'
   )
 }
 
@@ -304,7 +307,17 @@ const isSchemaQuery = (query: string) =>
     query
   )
 
+const isPortfolioOverviewQuery = (query: string) =>
+  /\b(portfolio|showcases?|projects?\b|work samples?|case studies?|flagships?|deep dives?|carousel|on this site|this site)\b/i.test(
+    query
+  ) ||
+  /\bwhat\b.*\b(include|projects?|showcase|built|offer|have)\b/i.test(query)
+
 const sourceBoost = (source: string, query: string) => {
+  if (isPortfolioOverviewQuery(query)) {
+    if (source === 'docs/project-knowledge/portfolio-overview.md') return 8
+    if (source === 'docs/project-knowledge/question-index.md') return 2
+  }
   if (isSchemaQuery(query)) {
     if (source === 'docs/warehouse-schema.txt') return 6
     if (source === 'docs/metric-definitions.txt') return 5

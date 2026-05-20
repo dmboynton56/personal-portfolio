@@ -12,8 +12,8 @@ export function ContactSection() {
               src="/images/general/profile-picture.jpg"
               alt="Profile"
               fill
+              sizes="64px"
               className="object-cover"
-              unoptimized
             />
           </div>
           <h2 className="text-4xl md:text-6xl lg:text-7xl text-footer-foreground font-light">

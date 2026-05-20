@@ -1,6 +1,6 @@
 ---
 project: llm-advisor
-last_verified: 2026-04-07
+last_verified: 2026-05-20
 source_paths:
   - /home/dmboynton/projects/llm-advisor/src/live/loop.py
   - /home/dmboynton/projects/llm-advisor/src/core/config.py
@@ -8,6 +8,17 @@ source_paths:
 ---
 
 # LLM Advisor FAQ
+
+## Why does the portfolio show this project as under construction or work in progress?
+
+The deep dive and homepage carousel intentionally show a **work in progress / rebuild** state because:
+
+1. **ICTML premarket bias** is being **folded into** the **LLM Advisor** live stack — one public narrative instead of two.
+2. The product goal is **one consolidated dashboard** for signals, guardrails, backtests, and execution telemetry.
+3. **Premarket bias**, **LLM thresholds**, and **execution metrics** are each moving **into one project surface** (as shown on the marketing mock).
+4. **Public dashboard polish** is ongoing while **signal and execution layers** consolidate.
+
+This is **product and platform consolidation**, not a claim that the underlying design is absent from the repo. For whether *today’s* telemetry numbers are live or empty, use data-sources-and-freshness and Supabase/API status — that is separate from the “under construction” label.
 
 ## How often does LLM analysis run?
 

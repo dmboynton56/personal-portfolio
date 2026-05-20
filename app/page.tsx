@@ -3,6 +3,7 @@ import { ProfileSection } from '@/components/ProfileSection'
 import { AboutSection } from '@/components/AboutSection'
 import { WorkSection } from '@/components/WorkSection'
 import { ContactSection } from '@/components/ContactSection'
+import { PortfolioChatWidget } from '@/components/chat/PortfolioChatWidget'
 import { AuroraBackground } from '@/components/ui/aurora-background'
 
 export default function Page() {
@@ -21,6 +22,7 @@ export default function Page() {
       <AboutSection />
       <WorkSection />
       <ContactSection />
+      <PortfolioChatWidget />
     </main>
   )
 }

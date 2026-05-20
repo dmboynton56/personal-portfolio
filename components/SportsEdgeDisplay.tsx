@@ -5,7 +5,11 @@ import SportsEdgeCard from './SportsEdgeCard'
 import { ProjectCarousel } from './ProjectCarousel'
 import { ImageIcon } from 'lucide-react'
 
-export function SportsEdgeDisplay() {
+type SportsEdgeDisplayProps = {
+  enabled?: boolean
+}
+
+export function SportsEdgeDisplay({ enabled = true }: SportsEdgeDisplayProps) {
   const [showCarousel, setShowCarousel] = useState(false)
 
   const stopPropagation = (event: MouseEvent<HTMLDivElement>) => {
@@ -44,7 +48,7 @@ export function SportsEdgeDisplay() {
 
         {/* Sports Edge Card */}
         <div className="flex-1 min-h-0">
-          <SportsEdgeCard />
+          <SportsEdgeCard enabled={enabled} />
         </div>
       </div>
 

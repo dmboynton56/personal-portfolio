@@ -16,6 +16,8 @@ interface ProjectLayoutProps {
     metrics?: ProjectMetric[] | readonly ProjectMetric[]
     metricsSource?: MetricSource
     metricsGeneratedAt?: string
+    /** Renders after the title/description/hero grid and before KPIs (e.g. project chat). */
+    belowHero?: React.ReactNode
     children: React.ReactNode
     heroImage?: React.ReactNode // Pass a component or image for the right side of hero
     isLoadingMetrics?: boolean
@@ -31,6 +33,7 @@ export function ProjectLayout({
     metrics,
     metricsSource,
     metricsGeneratedAt,
+    belowHero,
     children,
     heroImage,
     isLoadingMetrics,
@@ -99,6 +102,8 @@ export function ProjectLayout({
                         )}
                     </div>
                 </div>
+
+                {belowHero && <div className="mb-16">{belowHero}</div>}
 
                 {/* Metrics Grid */}
                 {(metrics || isLoadingMetrics || metricsError) && (

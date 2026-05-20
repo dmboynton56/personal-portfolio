@@ -238,24 +238,34 @@ const buildFallbackAnswer = ({
   docsResult,
   metricResult,
   warehouseResult,
-  scopeGuard
+  scopeGuard,
+  voice
 }: {
   docsResult?: SearchDocsOutput
   metricResult?: GetModelMetricsOutput
   warehouseResult?: QueryWarehouseOutput
   scopeGuard?: string
+  voice: 'narrative' | 'data'
 }) => {
   if (scopeGuard) {
-    return `Short answer: ${scopeGuard}\n\nEvidence:\n- Scope registry: this chat request is constrained to the selected project scope.\n\nCaveat:\nAsk the same question in the matching project scope to use that project's docs or telemetry.`
+    return `${scopeGuard} Open the chat on the matching project page if you want answers that use that project's docs or live data.`
   }
 
   if (metricResult) {
-    return `Short answer: ${metricResult.message ?? `${metricResult.metric}: ${metricResult.value}`}\n\nEvidence:\n- ${metricResult.source}: ${metricResult.metric}, generated ${metricResult.generatedAt}\n\nCaveat:\nThis answer is limited to the retrieved metric payload.`
+    const msg = metricResult.message ?? `${metricResult.metric}: ${metricResult.value}`
+    const when = metricResult.generatedAt
+      ? ` As of ${new Date(metricResult.generatedAt).toLocaleString()}, this is what the saved metrics feed shows.`
+      : ''
+    return `Here's the latest from the metrics connection: ${msg}.${when} That comes from the ${metricResult.source} feed—not a guess.`
   }
 
   if (warehouseResult) {
-    const source = warehouseResult.sql ? 'BigQuery warehouse query' : 'BigQuery'
-    return `Short answer: ${warehouseResult.message ?? `The query returned ${warehouseResult.rowCount} rows.`}\n\nEvidence:\n- ${source}\n\nCaveat:\nThis answer is limited to the retrieved warehouse rows.`
+    const summary =
+      warehouseResult.message ??
+      (warehouseResult.rowCount > 0
+        ? `The warehouse returned ${warehouseResult.rowCount} row(s) for your question.`
+        : 'The warehouse query came back with no rows.')
+    return `${summary} This is from the queried sports data, not general knowledge.`
   }
 
   if (docsResult?.snippets.length) {
@@ -264,11 +274,21 @@ const buildFallbackAnswer = ({
       .replace(/^#{1,6}\s+/gm, '')
       .replace(/\s+/g, ' ')
       .trim()
-      .slice(0, 420)
-    return `Short answer: ${excerpt || `I found relevant project documentation in ${first.source}.`}\n\nEvidence:\n- Doc: ${first.title} (${first.source})\n\nCaveat:\nThe answer is limited to the retrieved documentation.`
+      .slice(0, 560)
+
+    if (voice === 'narrative') {
+      return (
+        excerpt ||
+        'I found relevant material in the project write-ups linked on this site—take a look at the source links below if you want the full detail.'
+      )
+    }
+
+    return `${excerpt || 'Here is what the retrieved documentation says.'} Supporting references are listed below.`
   }
 
-  return 'Short answer: I could not find project-specific evidence for that question.\n\nEvidence:\n- No docs or data matched the request.\n\nCaveat:\nI am not filling the gap with an invented answer.'
+  return voice === 'narrative'
+    ? "I don't have anything in the project materials I can see that answers that directly—worth asking a more specific question or checking the deep-dive sections on the page."
+    : "I couldn't find matching numbers or rows for that request in the data I can query right now."
 }
 
 const generateAnswer = async ({
@@ -289,11 +309,34 @@ const generateAnswer = async ({
   scopeGuard?: string
 }) => {
   const evidence = formatEvidence({ docsResult, metricResult, warehouseResult })
+  const responseVoice: 'narrative' | 'data' =
+    metricResult || warehouseResult ? 'data' : 'narrative'
+
   const recentHistory =
     history
       ?.slice(-6)
       .map((entry) => `${entry.role.toUpperCase()}: ${entry.content}`)
       .join('\n') || 'No prior conversation.'
+
+  const narrativeRules = `
+RESPONSE RULES (portfolio visitor — explanations and docs only):
+1. Use only TOOL EVIDENCE. Do not invent metrics, tables, trades, run status, SQL, or claims not supported by the evidence.
+2. Write in clear, conversational plain English (one or two short paragraphs, or a few tight bullets). This is a portfolio website, not an internal incident report.
+3. Do NOT use section labels like "Short answer:", "Evidence:", or "Caveat:". Do NOT paste filenames, repo paths, or "docs/..." strings — the chat UI already shows source links as citations.
+4. For questions about why something is "under construction," "in progress," or the product story: explain using the documentation excerpts. Do NOT lead with empty telemetry, missing Supabase, or "no data available" unless the user explicitly asked about live metrics, dashboards, or today's run status.
+5. Mention missing data or limitations only when it truly changes what a visitor should believe—and keep it to one short sentence.
+6. If there is no useful evidence, say briefly that the materials you can see don't cover it — do not invent filler.
+7. Never show SQL unless the user explicitly asks for it.
+`.trim()
+
+  const dataRules = `
+RESPONSE RULES (data-backed: metrics and/or warehouse in evidence):
+1. Use only TOOL EVIDENCE for numbers and factual claims.
+2. Lead with the takeaway in plain language (what the numbers mean for the user). Do NOT use section labels like "Short answer:", "Evidence:", or "Caveat:".
+3. You may add one short sentence that figures come from saved telemetry or a warehouse query, with approximate timing from the evidence if present. Do not dump JSON, raw rows, or file paths — citations appear in the UI.
+4. If the metric or query came back empty, say that plainly in one sentence without dramatizing.
+5. Never show SQL unless the user explicitly asks for it.
+`.trim()
 
   const prompt = `
 ${systemPrompt}
@@ -307,21 +350,22 @@ ${recentHistory}
 TOOL EVIDENCE:
 ${evidence}
 
-RESPONSE RULES:
-1. Answer only from TOOL EVIDENCE. Do not invent metrics, tables, trades, predictions, run status, or citations.
-2. Start with "Short answer:" and give the direct answer.
-3. Then include "Evidence:" with bullets naming the exact doc/data sources used.
-4. Then include "Caveat:" with one or two important limits, especially missing telemetry or betting/model risk.
-5. If evidence is missing or empty, say exactly what is missing and do not fill the gap with general claims.
-6. Never show SQL unless the user explicitly asks for it.
+${responseVoice === 'data' ? dataRules : narrativeRules}
 `
 
   return (
     (await generateGeminiText({
       prompt,
-      temperature: 0.2,
+      temperature: responseVoice === 'narrative' ? 0.35 : 0.25,
       maxOutputTokens: 1000
-    })) || buildFallbackAnswer({ docsResult, metricResult, warehouseResult, scopeGuard })
+    })) ||
+    buildFallbackAnswer({
+      docsResult,
+      metricResult,
+      warehouseResult,
+      scopeGuard,
+      voice: responseVoice
+    })
   )
 }
 
@@ -337,6 +381,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { scope, config } = getScopeConfig(body.scope)
+    const docsTopK = scope === 'default' ? 6 : 4
     const intent = detectIntent(message)
     const isDocsQuestion = includesKeyword(message, docsKeywords)
     const isMetricQuestion = includesKeyword(message, metricKeywords)
@@ -398,7 +443,7 @@ export async function POST(request: NextRequest) {
         query: message,
         project: config.docFilters.project,
         league: config.docFilters.league,
-        topK: 4
+        topK: docsTopK
       })
       citations.push(...docsResult.citations)
     }
@@ -414,7 +459,7 @@ export async function POST(request: NextRequest) {
         query: message,
         project: config.docFilters.project,
         league: config.docFilters.league,
-        topK: 4
+        topK: docsTopK
       })
       citations.push(...docsResult.citations)
     }

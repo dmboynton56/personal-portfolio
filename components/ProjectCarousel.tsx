@@ -71,6 +71,7 @@ export function ProjectCarousel({ images, onClose, projectType, initialImage }: 
                         src={src}
                         alt={`Project image ${idx + 1}`}
                         fill
+                        sizes="(max-width: 768px) min(100vw, 896px), min(896px, 85vw)"
                         className="object-contain"
                         priority={idx === getInitialSlide()}
                       />
@@ -85,6 +86,7 @@ export function ProjectCarousel({ images, onClose, projectType, initialImage }: 
                             src={src}
                             alt={`Project image ${idx + 1}`}
                             fill
+                            sizes="(max-width: 768px) min(100vw, 896px), min(896px, 85vw)"
                             className="object-contain"
                             style={{ padding: '2px' }}
                             priority={idx === getInitialSlide()}

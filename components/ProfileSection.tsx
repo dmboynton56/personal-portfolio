@@ -10,6 +10,7 @@ export function ProfileSection() {
             src="/images/general/profile-picture.jpg"
             alt="Drew Boynton"
             fill
+            sizes="(max-width: 768px) 192px, 192px"
             className="rounded-full object-cover shadow-xl"
             priority
           />

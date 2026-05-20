@@ -41,4 +41,7 @@ next-env.d.ts
 # Cursor
 .cursorrules
 
+# Local Puppeteer/Playwright Chrome cache
+chrome/
+
 .env

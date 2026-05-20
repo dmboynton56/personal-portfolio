@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-20T18:36:30.989Z",
+  "generatedAt": "2026-05-20T19:51:07.573Z",
   "chunks": [
     {
       "id": "docs/data-dictionary.txt#0",
@@ -435,30 +435,35 @@
     {
       "id": "docs/project-knowledge/llm-advisor/faq.md#1",
       "source": "docs/project-knowledge/llm-advisor/faq.md",
-      "charCount": 125
+      "charCount": 953
     },
     {
       "id": "docs/project-knowledge/llm-advisor/faq.md#2",
       "source": "docs/project-knowledge/llm-advisor/faq.md",
-      "charCount": 194
+      "charCount": 125
     },
     {
       "id": "docs/project-knowledge/llm-advisor/faq.md#3",
       "source": "docs/project-knowledge/llm-advisor/faq.md",
-      "charCount": 174
+      "charCount": 194
     },
     {
       "id": "docs/project-knowledge/llm-advisor/faq.md#4",
       "source": "docs/project-knowledge/llm-advisor/faq.md",
-      "charCount": 187
+      "charCount": 174
     },
     {
       "id": "docs/project-knowledge/llm-advisor/faq.md#5",
       "source": "docs/project-knowledge/llm-advisor/faq.md",
-      "charCount": 189
+      "charCount": 187
     },
     {
       "id": "docs/project-knowledge/llm-advisor/faq.md#6",
+      "source": "docs/project-knowledge/llm-advisor/faq.md",
+      "charCount": 189
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/faq.md#7",
       "source": "docs/project-knowledge/llm-advisor/faq.md",
       "charCount": 191
     },
@@ -530,30 +535,35 @@
     {
       "id": "docs/project-knowledge/llm-advisor/overview.md#3",
       "source": "docs/project-knowledge/llm-advisor/overview.md",
-      "charCount": 347
+      "charCount": 1670
     },
     {
       "id": "docs/project-knowledge/llm-advisor/overview.md#4",
       "source": "docs/project-knowledge/llm-advisor/overview.md",
-      "charCount": 11
+      "charCount": 347
     },
     {
       "id": "docs/project-knowledge/llm-advisor/overview.md#5",
       "source": "docs/project-knowledge/llm-advisor/overview.md",
-      "charCount": 117
+      "charCount": 11
     },
     {
       "id": "docs/project-knowledge/llm-advisor/overview.md#6",
       "source": "docs/project-knowledge/llm-advisor/overview.md",
-      "charCount": 137
+      "charCount": 117
     },
     {
       "id": "docs/project-knowledge/llm-advisor/overview.md#7",
       "source": "docs/project-knowledge/llm-advisor/overview.md",
-      "charCount": 124
+      "charCount": 137
     },
     {
       "id": "docs/project-knowledge/llm-advisor/overview.md#8",
+      "source": "docs/project-knowledge/llm-advisor/overview.md",
+      "charCount": 124
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/overview.md#9",
       "source": "docs/project-knowledge/llm-advisor/overview.md",
       "charCount": 98
     },
@@ -598,9 +608,29 @@
       "charCount": 294
     },
     {
+      "id": "docs/project-knowledge/portfolio-overview.md#0",
+      "source": "docs/project-knowledge/portfolio-overview.md",
+      "charCount": 597
+    },
+    {
+      "id": "docs/project-knowledge/portfolio-overview.md#1",
+      "source": "docs/project-knowledge/portfolio-overview.md",
+      "charCount": 674
+    },
+    {
+      "id": "docs/project-knowledge/portfolio-overview.md#2",
+      "source": "docs/project-knowledge/portfolio-overview.md",
+      "charCount": 657
+    },
+    {
+      "id": "docs/project-knowledge/portfolio-overview.md#3",
+      "source": "docs/project-knowledge/portfolio-overview.md",
+      "charCount": 551
+    },
+    {
       "id": "docs/project-knowledge/question-index.md#0",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 364
+      "charCount": 457
     },
     {
       "id": "docs/project-knowledge/question-index.md#1",
@@ -610,50 +640,60 @@
     {
       "id": "docs/project-knowledge/question-index.md#2",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 153
+      "charCount": 226
     },
     {
       "id": "docs/project-knowledge/question-index.md#3",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 165
+      "charCount": 153
     },
     {
       "id": "docs/project-knowledge/question-index.md#4",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 174
+      "charCount": 165
     },
     {
       "id": "docs/project-knowledge/question-index.md#5",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 31
+      "charCount": 174
     },
     {
       "id": "docs/project-knowledge/question-index.md#6",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 163
+      "charCount": 31
     },
     {
       "id": "docs/project-knowledge/question-index.md#7",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 162
+      "charCount": 163
     },
     {
       "id": "docs/project-knowledge/question-index.md#8",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 232
+      "charCount": 162
     },
     {
       "id": "docs/project-knowledge/question-index.md#9",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 24
+      "charCount": 232
     },
     {
       "id": "docs/project-knowledge/question-index.md#10",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 109
+      "charCount": 24
     },
     {
       "id": "docs/project-knowledge/question-index.md#11",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 216
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#12",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 109
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#13",
       "source": "docs/project-knowledge/question-index.md",
       "charCount": 95
     },

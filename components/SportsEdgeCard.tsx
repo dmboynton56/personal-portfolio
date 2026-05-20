@@ -19,7 +19,12 @@ const sportsEdgeTabs: { key: 'NFL' | 'NBA'; label: string; srNote?: string }[] =
   { key: 'NBA', label: 'NBA • Daily' }
 ]
 
-export default function SportsEdgeCard() {
+type SportsEdgeCardProps = {
+  /** When false, skips API fetch (e.g. homepage section off-screen). Defaults true for standalone pages. */
+  enabled?: boolean
+}
+
+export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) {
   const [data, setData] = useState<SportsEdgePayload | null>(null)
   const [err, setErr] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -84,6 +89,8 @@ export default function SportsEdgeCard() {
   )
 
   useEffect(() => {
+    if (!enabled) return
+
     const load = () => {
       if (activeTab === 'NFL') {
         fetchData(
@@ -100,7 +107,7 @@ export default function SportsEdgeCard() {
     load()
 
     // No interval polling needed since data updates once daily
-  }, [fetchData, weekFilter, dateFilter, activeTab])
+  }, [enabled, fetchData, weekFilter, dateFilter, activeTab])
   
   useEffect(() => {
     // Only show coming soon overlay if NBA tab is active AND there are no games
@@ -229,6 +236,17 @@ export default function SportsEdgeCard() {
 
   const formatSpread = (value: number | null) =>
     value == null ? 'N/A' : value > 0 ? `+${value.toFixed(1)}` : value.toFixed(1)
+
+  if (!enabled) {
+    return (
+      <div className="rounded-2xl border border-border p-4 bg-muted/5">
+        <div className="mb-2 text-sm font-medium text-muted-foreground">Sports Edge</div>
+        <p className="text-center py-10 text-sm text-muted-foreground px-4">
+          Scroll this project into view to load NFL/NBA model edges.
+        </p>
+      </div>
+    )
+  }
 
   if (isLoading) {
     return (

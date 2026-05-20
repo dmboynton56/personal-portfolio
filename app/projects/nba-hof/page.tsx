@@ -2,7 +2,8 @@
 
 import React from 'react'
 import { ProjectLayout } from '@/components/ProjectLayout'
-import { Trophy, BarChart3, Search, Database, Cpu, CheckCircle2 } from 'lucide-react'
+import { ProjectChat } from '@/components/chat/ProjectChat'
+import { Trophy, BarChart3, Cpu } from 'lucide-react'
 import { useProjectMetrics } from '@/hooks/useProjectMetrics'
 
 export default function NbaHofPage() {
@@ -18,6 +19,16 @@ export default function NbaHofPage() {
       metricsGeneratedAt={metrics?.generatedAt}
       isLoadingMetrics={isLoading}
       metricsError={error}
+      belowHero={
+        <section className="space-y-6">
+          <h2 className="text-3xl font-bold">Ask the Data</h2>
+          <p className="text-lg text-muted-foreground">
+            This assistant answers from the Hall of Fame project docs on this site: model design, feature importance,
+            and stated limitations. It does not fetch live prediction tables.
+          </p>
+          <ProjectChat scope="nba-hof" />
+        </section>
+      }
       heroImage={
         <div className="w-full h-full p-8 flex items-center justify-center bg-zinc-950 rounded-xl border border-zinc-800">
           <div className="max-w-md w-full space-y-4">

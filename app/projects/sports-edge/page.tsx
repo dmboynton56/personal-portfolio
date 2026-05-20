@@ -3,7 +3,7 @@
 import React from 'react'
 import { ProjectLayout } from '@/components/ProjectLayout'
 import SportsEdgeCard from '@/components/SportsEdgeCard'
-import { SportsEdgeChat } from '@/components/SportsEdgeChat'
+import { ProjectChat } from '@/components/chat/ProjectChat'
 import { AtsSummaryCard } from '@/components/sports-edge/AtsSummaryCard'
 import { Activity, Database, Server, TrendingUp, Cpu, LineChart } from 'lucide-react'
 import { useProjectMetrics } from '@/hooks/useProjectMetrics'
@@ -22,6 +22,16 @@ export default function SportsEdgePage() {
             metricsGeneratedAt={metrics?.generatedAt}
             isLoadingMetrics={isLoading}
             metricsError={error}
+            belowHero={
+                <section className="space-y-6">
+                    <h2 className="text-3xl font-bold">Ask the Data</h2>
+                    <p className="text-lg text-muted-foreground">
+                        This MVP assistant routes questions to SQL for current results and to project documentation for methodology,
+                        limitations, and metric definitions.
+                    </p>
+                    <ProjectChat scope="sports-edge" />
+                </section>
+            }
             heroImage={
                 <div className="relative w-full h-full flex items-center justify-center bg-zinc-950 rounded-xl overflow-hidden border border-zinc-800">
                     {/* Visual representation of the live card */}
@@ -184,14 +194,6 @@ steps:
                 </div>
             </section>
 
-            <section className="space-y-6">
-                <h2 className="text-3xl font-bold">Ask the Data</h2>
-                <p className="text-lg text-muted-foreground">
-                    This MVP assistant routes questions to SQL for current results and to project documentation for methodology,
-                    limitations, and metric definitions.
-                </p>
-                <SportsEdgeChat />
-            </section>
         </ProjectLayout>
     )
 }
