@@ -1,0 +1,374 @@
+# Warehouse Schema (generated)
+
+Generated at: 2026-05-20T18:36:22.766Z
+Source of truth: plans/docs/gcp-bigquery-datasets/*.json
+
+## Scope
+Use this file for Sports Edge BigQuery text-to-SQL. Supabase serving tables are documented below for column-name mapping only.
+
+## Query routing
+- ATS record, ROI, season spread record, or "how many covers" summary → prefer Supabase canned metrics (games + model_predictions), NOT ad-hoc warehouse SQL.
+- Warehouse SQL is for historical analytics: rest/B2B, feature trends, multi-table aggregates, and deep season slices.
+
+## Supabase serving column map (not in BigQuery)
+- Supabase `games`: id, league, season, home_team, away_team, home_score, away_score, game_time_utc, book_spread
+- Supabase `model_predictions`: game_id, my_spread, my_home_win_prob, asof_ts, model_version
+- BigQuery `model_predictions.predicted_spread` corresponds to Supabase `model_predictions.my_spread`
+
+## ATS / spread cover recipe (BigQuery)
+For model-side spread covers on completed games:
+```sql
+actual_margin = s.home_score - s.away_score
+cover_margin = actual_margin + p.predicted_spread
+cover = cover_margin > 0  -- push when ABS(cover_margin) < 0.001
+```
+Required joins:
+- `model_predictions` p ON game_id
+- `raw_schedules` s ON game_id (for home_score, away_score, league, season, teams)
+Do NOT use `home_margin > 0` alone for spread covers — that is outright win, not ATS.
+Do NOT use `training_feature_view_v2` alone for spread-cover counts — it has no spread column.
+
+## Join rules
+- Default join key: `game_id`
+- Always filter `league` IN ('NBA', 'NFL') when applicable
+- Team codes are abbreviations (BOS, LAL, NE, KC) — not full city names
+- `training_feature_view_v2` lacks home_team/away_team — join `raw_schedules` to filter by team
+
+## Read-only SQL rules
+- SELECT or WITH ... SELECT only
+- LIMIT 50 rows unless the question is a single aggregate scalar
+
+## Supabase inventory (serving layer)
+
+### Supabase table: `features`
+Columns: created_at, asof_ts, feature_json, game_id, id
+
+### Supabase table: `games`
+Columns: week, book_spread, home_score, league, away_team, home_team, away_score, id, season, game_time_utc, created_at
+
+### Supabase table: `games_today_enriched`
+Columns: away_team, game_id, season, week, game_time_utc, book_spread, my_spread, edge_pts, my_home_win_prob, prediction_ts, odds_ts, league, home_team, model_version
+
+### Supabase table: `mancala_stats`
+Columns: id, p1_wins, ties, p2_wins
+
+### Supabase table: `model_predictions`
+Columns: my_home_win_prob, asof_ts, created_at, id, model_name, game_id, my_spread, model_version
+
+### Supabase table: `model_runs`
+Columns: finished_at, created_at, id, rows_written, league, error_text, success, started_at
+
+### Supabase table: `odds_snapshots`
+Columns: line, snapshot_ts, created_at, market, book, id, game_id, price
+
+## Dataset: `learned-pier-478122-p7.sports_edge_raw`
+
+### Table: `learned-pier-478122-p7.sports_edge_raw.raw_nba_game_logs`
+Team-level game logs and scoring trends.
+
+- `game_id` (STRING)
+- `game_date` (DATE)
+- `team` (STRING)
+- `team_id` (INT64)
+- `season` (INT64)
+- `points_scored` (INT64)
+- `points_allowed` (INT64)
+- `net_rating` (FLOAT64)
+- `point_diff` (FLOAT64)
+- `ingested_at` (TIMESTAMP)
+- `raw_record` (STRING)
+- `league` (STRING)
+
+### Table: `learned-pier-478122-p7.sports_edge_raw.raw_nba_odds`
+
+- `game_id` (STRING)
+- `league` (STRING)
+- `season` (INT64)
+- `game_date` (DATE)
+- `home_team` (STRING)
+- `away_team` (STRING)
+- `book` (STRING)
+- `market` (STRING)
+- `line` (FLOAT64)
+- `price` (FLOAT64)
+- `whos_favored` (STRING)
+- `ingested_at` (TIMESTAMP)
+- `raw_record` (STRING)
+
+### Table: `learned-pier-478122-p7.sports_edge_raw.raw_pbp`
+
+- `game_id` (STRING)
+- `play_id` (INT64)
+- `season` (INT64)
+- `week` (INT64)
+- `game_date` (DATE)
+- `home_team` (STRING)
+- `away_team` (STRING)
+- `posteam` (STRING)
+- `defteam` (STRING)
+- `play_type` (STRING)
+- `yards_gained` (FLOAT64)
+- `epa` (FLOAT64)
+- `ingested_at` (TIMESTAMP)
+- `raw_record` (STRING)
+- `league` (STRING)
+
+### Table: `learned-pier-478122-p7.sports_edge_raw.raw_pga_leaderboards`
+
+- `tournament_name` (STRING)
+- `player_id` (STRING)
+- `player_name` (STRING)
+- `score` (STRING)
+- `position` (STRING)
+- `thru` (STRING)
+- `ingested_at` (TIMESTAMP)
+
+### Table: `learned-pier-478122-p7.sports_edge_raw.raw_schedules`
+Historical schedules and final scores. Join on game_id for team names and home_score/away_score.
+
+- `game_id` (STRING)
+- `season` (INT64)
+- `week` (INT64)
+- `game_date` (DATE)
+- `home_team` (STRING)
+- `away_team` (STRING)
+- `home_score` (INT64)
+- `away_score` (INT64)
+- `venue` (STRING)
+- `result` (STRING)
+- `ingested_at` (TIMESTAMP)
+- `raw_record` (STRING)
+- `league` (STRING)
+
+### Table: `learned-pier-478122-p7.sports_edge_raw.raw_team_stats`
+
+- `team` (STRING)
+- `season` (INT64)
+- `week` (INT64)
+- `points_for` (FLOAT64)
+- `points_against` (FLOAT64)
+- `epa_off` (FLOAT64)
+- `epa_def` (FLOAT64)
+- `win_pct` (FLOAT64)
+- `ingested_at` (TIMESTAMP)
+- `raw_record` (STRING)
+- `league` (STRING)
+
+## Dataset: `learned-pier-478122-p7.sports_edge_curated`
+
+### Table: `learned-pier-478122-p7.sports_edge_curated.feature_snapshots`
+Latest feature snapshots for current/upcoming games.
+
+- `game_id` (STRING)
+- `league` (STRING)
+- `season` (INT64)
+- `game_date` (DATE)
+- `as_of_ts` (TIMESTAMP)
+- `home_team` (STRING)
+- `away_team` (STRING)
+- `home_win` (BOOL)
+- `home_margin` (FLOAT64)
+- `rest_home` (FLOAT64)
+- `rest_away` (FLOAT64)
+- `b2b_home` (BOOL)
+- `b2b_away` (BOOL)
+- `opp_strength_home_season` (FLOAT64)
+- `opp_strength_away_season` (FLOAT64)
+- `home_team_win_pct` (FLOAT64)
+- `away_team_win_pct` (FLOAT64)
+- `home_team_point_diff` (FLOAT64)
+- `away_team_point_diff` (FLOAT64)
+- `rest_differential` (FLOAT64)
+- `win_pct_differential` (FLOAT64)
+- `point_diff_differential` (FLOAT64)
+- `opp_strength_differential` (FLOAT64)
+- `week_number` (INT64)
+- `month` (INT64)
+- `is_playoff` (BOOL)
+- `form_home_epa_off_3` (FLOAT64)
+- `form_home_epa_off_5` (FLOAT64)
+- `form_home_epa_off_10` (FLOAT64)
+- `form_home_epa_def_3` (FLOAT64)
+- `form_home_epa_def_5` (FLOAT64)
+- `form_home_epa_def_10` (FLOAT64)
+- `form_away_epa_off_3` (FLOAT64)
+- `form_away_epa_off_5` (FLOAT64)
+- `form_away_epa_off_10` (FLOAT64)
+- `form_away_epa_def_3` (FLOAT64)
+- `form_away_epa_def_5` (FLOAT64)
+- `form_away_epa_def_10` (FLOAT64)
+- `form_epa_off_diff_3` (FLOAT64)
+- `form_epa_off_diff_5` (FLOAT64)
+- `form_epa_off_diff_10` (FLOAT64)
+- `form_epa_def_diff_3` (FLOAT64)
+- `form_epa_def_diff_5` (FLOAT64)
+- `form_epa_def_diff_10` (FLOAT64)
+- `feature_version` (STRING)
+- `is_3in4_home` (BOOL)
+- `is_3in4_away` (BOOL)
+- `is_3in4_differential` (FLOAT64)
+- `form_home_net_rating_3` (FLOAT64)
+- `form_home_net_rating_5` (FLOAT64)
+- `form_home_net_rating_10` (FLOAT64)
+- `form_away_net_rating_3` (FLOAT64)
+- `form_away_net_rating_5` (FLOAT64)
+- `form_away_net_rating_10` (FLOAT64)
+- `form_net_rating_diff_3` (FLOAT64)
+- `form_net_rating_diff_5` (FLOAT64)
+- `form_net_rating_diff_10` (FLOAT64)
+- `book_spread` (FLOAT64)
+
+### Table: `learned-pier-478122-p7.sports_edge_curated.model_predictions`
+Model outputs per game. Use predicted_spread (BigQuery) — not my_spread (Supabase only).
+
+- `prediction_id` (STRING)
+- `game_id` (STRING)
+- `league` (STRING)
+- `model_version` (STRING)
+- `predicted_spread` (FLOAT64)
+- `home_win_prob` (FLOAT64)
+- `prediction_ts` (TIMESTAMP)
+- `input_hash` (STRING)
+- `season` (INT64)
+- `season_week` (INT64)
+- `model_number` (STRING)
+- `book_spread` (FLOAT64)
+
+### Table: `learned-pier-478122-p7.sports_edge_curated.model_runs`
+Model training/run metadata.
+
+- `run_id` (STRING)
+- `started_at` (TIMESTAMP)
+- `finished_at` (TIMESTAMP)
+- `league` (STRING)
+- `rows_written` (INT64)
+- `status` (STRING)
+- `error_text` (STRING)
+
+### Table: `learned-pier-478122-p7.sports_edge_curated.pga_player_wind_skill`
+PGA wind-skill feature table.
+
+- `player_name` (STRING)
+- `overall_avg` (FLOAT64)
+- `high_wind` (FLOAT64)
+- `low_wind` (FLOAT64)
+- `medium_wind` (FLOAT64)
+- `high_wind_premium` (FLOAT64)
+- `updated_at` (TIMESTAMP)
+
+### Table: `learned-pier-478122-p7.sports_edge_curated.training_feature_view`
+Legacy training feature view; prefer training_feature_view_v2 when possible.
+
+- `game_id` (STRING)
+- `league` (STRING)
+- `season` (INT64)
+- `game_date` (DATE)
+- `as_of_ts` (TIMESTAMP)
+- `home_team` (STRING)
+- `away_team` (STRING)
+- `home_win` (BOOL)
+- `home_margin` (FLOAT64)
+- `rest_home` (FLOAT64)
+- `rest_away` (FLOAT64)
+- `b2b_home` (BOOL)
+- `b2b_away` (BOOL)
+- `opp_strength_home_season` (FLOAT64)
+- `opp_strength_away_season` (FLOAT64)
+- `home_team_win_pct` (FLOAT64)
+- `away_team_win_pct` (FLOAT64)
+- `home_team_point_diff` (FLOAT64)
+- `away_team_point_diff` (FLOAT64)
+- `rest_differential` (FLOAT64)
+- `win_pct_differential` (FLOAT64)
+- `point_diff_differential` (FLOAT64)
+- `opp_strength_differential` (FLOAT64)
+- `week_number` (INT64)
+- `month` (INT64)
+- `is_playoff` (BOOL)
+- `form_home_epa_off_3` (FLOAT64)
+- `form_home_epa_off_5` (FLOAT64)
+- `form_home_epa_off_10` (FLOAT64)
+- `form_home_epa_def_3` (FLOAT64)
+- `form_home_epa_def_5` (FLOAT64)
+- `form_home_epa_def_10` (FLOAT64)
+- `form_away_epa_off_3` (FLOAT64)
+- `form_away_epa_off_5` (FLOAT64)
+- `form_away_epa_off_10` (FLOAT64)
+- `form_away_epa_def_3` (FLOAT64)
+- `form_away_epa_def_5` (FLOAT64)
+- `form_away_epa_def_10` (FLOAT64)
+- `form_epa_off_diff_3` (FLOAT64)
+- `form_epa_off_diff_5` (FLOAT64)
+- `form_epa_off_diff_10` (FLOAT64)
+- `form_epa_def_diff_3` (FLOAT64)
+- `form_epa_def_diff_5` (FLOAT64)
+- `form_epa_def_diff_10` (FLOAT64)
+- `feature_version` (STRING)
+
+### Table: `learned-pier-478122-p7.sports_edge_curated.training_feature_view_v2`
+Historical feature history (rest, B2B, margins). No team names — join raw_schedules on game_id.
+
+- `game_id` (STRING)
+- `league` (STRING)
+- `season` (INT64)
+- `week_number` (INT64)
+- `game_date` (DATE)
+- `home_win` (BOOL)
+- `home_margin` (FLOAT64)
+- `rest_home` (FLOAT64)
+- `rest_away` (FLOAT64)
+- `b2b_home` (BOOL)
+- `b2b_away` (BOOL)
+- `opp_strength_home_season` (FLOAT64)
+- `opp_strength_away_season` (FLOAT64)
+- `home_team_win_pct` (FLOAT64)
+- `away_team_win_pct` (FLOAT64)
+- `home_team_point_diff` (FLOAT64)
+- `away_team_point_diff` (FLOAT64)
+- `rest_differential` (FLOAT64)
+- `win_pct_differential` (FLOAT64)
+- `point_diff_differential` (FLOAT64)
+- `opp_strength_differential` (FLOAT64)
+- `iso_week` (INT64)
+- `month` (INT64)
+- `is_playoff` (BOOL)
+- `form_home_epa_off_3` (FLOAT64)
+- `form_home_epa_off_5` (FLOAT64)
+- `form_home_epa_off_10` (FLOAT64)
+- `form_home_epa_def_3` (FLOAT64)
+- `form_home_epa_def_5` (FLOAT64)
+- `form_home_epa_def_10` (FLOAT64)
+- `form_away_epa_off_3` (FLOAT64)
+- `form_away_epa_off_5` (FLOAT64)
+- `form_away_epa_off_10` (FLOAT64)
+- `form_away_epa_def_3` (FLOAT64)
+- `form_away_epa_def_5` (FLOAT64)
+- `form_away_epa_def_10` (FLOAT64)
+- `form_epa_off_diff_3` (FLOAT64)
+- `form_epa_off_diff_5` (FLOAT64)
+- `form_epa_off_diff_10` (FLOAT64)
+- `form_epa_def_diff_3` (FLOAT64)
+- `form_epa_def_diff_5` (FLOAT64)
+- `form_epa_def_diff_10` (FLOAT64)
+
+## Dataset: `learned-pier-478122-p7.sports_edge_results`
+
+### Table: `learned-pier-478122-p7.sports_edge_results.game_results`
+Evaluated game outcomes in the results dataset.
+
+- `game_id` (STRING)
+- `league` (STRING)
+- `season` (INT64)
+- `week` (INT64)
+- `game_date` (DATE)
+- `model_version` (STRING)
+- `predicted_home_win_prob` (FLOAT64)
+- `predicted_home_margin` (FLOAT64)
+- `prediction_ts` (TIMESTAMP)
+- `actual_home_win` (BOOL)
+- `actual_home_margin` (INT64)
+- `actual_home_points` (INT64)
+- `actual_away_points` (INT64)
+- `source_model` (STRING)
+- `run_id` (STRING)
+- `created_at` (TIMESTAMP)

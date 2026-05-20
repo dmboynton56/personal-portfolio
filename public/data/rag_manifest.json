@@ -1,0 +1,1036 @@
+{
+  "version": 1,
+  "generatedAt": "2026-05-20T18:36:30.989Z",
+  "chunks": [
+    {
+      "id": "docs/data-dictionary.txt#0",
+      "source": "docs/data-dictionary.txt",
+      "charCount": 35
+    },
+    {
+      "id": "docs/data-dictionary.txt#1",
+      "source": "docs/data-dictionary.txt",
+      "charCount": 128
+    },
+    {
+      "id": "docs/data-dictionary.txt#2",
+      "source": "docs/data-dictionary.txt",
+      "charCount": 175
+    },
+    {
+      "id": "docs/data-dictionary.txt#3",
+      "source": "docs/data-dictionary.txt",
+      "charCount": 822
+    },
+    {
+      "id": "docs/data-dictionary.txt#4",
+      "source": "docs/data-dictionary.txt",
+      "charCount": 1530
+    },
+    {
+      "id": "docs/data-dictionary.txt#5",
+      "source": "docs/data-dictionary.txt",
+      "charCount": 347
+    },
+    {
+      "id": "docs/data-dictionary.txt#6",
+      "source": "docs/data-dictionary.txt",
+      "charCount": 229
+    },
+    {
+      "id": "docs/faq.txt#0",
+      "source": "docs/faq.txt",
+      "charCount": 25
+    },
+    {
+      "id": "docs/faq.txt#1",
+      "source": "docs/faq.txt",
+      "charCount": 137
+    },
+    {
+      "id": "docs/faq.txt#2",
+      "source": "docs/faq.txt",
+      "charCount": 176
+    },
+    {
+      "id": "docs/faq.txt#3",
+      "source": "docs/faq.txt",
+      "charCount": 165
+    },
+    {
+      "id": "docs/faq.txt#4",
+      "source": "docs/faq.txt",
+      "charCount": 173
+    },
+    {
+      "id": "docs/faq.txt#5",
+      "source": "docs/faq.txt",
+      "charCount": 190
+    },
+    {
+      "id": "docs/faq.txt#6",
+      "source": "docs/faq.txt",
+      "charCount": 144
+    },
+    {
+      "id": "docs/faq.txt#7",
+      "source": "docs/faq.txt",
+      "charCount": 260
+    },
+    {
+      "id": "docs/limitations-and-risk.txt#0",
+      "source": "docs/limitations-and-risk.txt",
+      "charCount": 28
+    },
+    {
+      "id": "docs/limitations-and-risk.txt#1",
+      "source": "docs/limitations-and-risk.txt",
+      "charCount": 132
+    },
+    {
+      "id": "docs/limitations-and-risk.txt#2",
+      "source": "docs/limitations-and-risk.txt",
+      "charCount": 248
+    },
+    {
+      "id": "docs/limitations-and-risk.txt#3",
+      "source": "docs/limitations-and-risk.txt",
+      "charCount": 186
+    },
+    {
+      "id": "docs/limitations-and-risk.txt#4",
+      "source": "docs/limitations-and-risk.txt",
+      "charCount": 230
+    },
+    {
+      "id": "docs/limitations-and-risk.txt#5",
+      "source": "docs/limitations-and-risk.txt",
+      "charCount": 230
+    },
+    {
+      "id": "docs/limitations-and-risk.txt#6",
+      "source": "docs/limitations-and-risk.txt",
+      "charCount": 189
+    },
+    {
+      "id": "docs/metric-definitions.txt#0",
+      "source": "docs/metric-definitions.txt",
+      "charCount": 20
+    },
+    {
+      "id": "docs/metric-definitions.txt#1",
+      "source": "docs/metric-definitions.txt",
+      "charCount": 1014
+    },
+    {
+      "id": "docs/metric-definitions.txt#2",
+      "source": "docs/metric-definitions.txt",
+      "charCount": 424
+    },
+    {
+      "id": "docs/metric-definitions.txt#3",
+      "source": "docs/metric-definitions.txt",
+      "charCount": 1189
+    },
+    {
+      "id": "docs/model-cards/nba-hof-xgboost.txt#0",
+      "source": "docs/model-cards/nba-hof-xgboost.txt",
+      "charCount": 50
+    },
+    {
+      "id": "docs/model-cards/nba-hof-xgboost.txt#1",
+      "source": "docs/model-cards/nba-hof-xgboost.txt",
+      "charCount": 128
+    },
+    {
+      "id": "docs/model-cards/nba-hof-xgboost.txt#2",
+      "source": "docs/model-cards/nba-hof-xgboost.txt",
+      "charCount": 123
+    },
+    {
+      "id": "docs/model-cards/nba-hof-xgboost.txt#3",
+      "source": "docs/model-cards/nba-hof-xgboost.txt",
+      "charCount": 197
+    },
+    {
+      "id": "docs/model-cards/nba-hof-xgboost.txt#4",
+      "source": "docs/model-cards/nba-hof-xgboost.txt",
+      "charCount": 292
+    },
+    {
+      "id": "docs/model-cards/nba-hof-xgboost.txt#5",
+      "source": "docs/model-cards/nba-hof-xgboost.txt",
+      "charCount": 180
+    },
+    {
+      "id": "docs/model-cards/nba-hof-xgboost.txt#6",
+      "source": "docs/model-cards/nba-hof-xgboost.txt",
+      "charCount": 126
+    },
+    {
+      "id": "docs/model-cards/nba-hof-xgboost.txt#7",
+      "source": "docs/model-cards/nba-hof-xgboost.txt",
+      "charCount": 95
+    },
+    {
+      "id": "docs/model-cards/nba-hof-xgboost.txt#8",
+      "source": "docs/model-cards/nba-hof-xgboost.txt",
+      "charCount": 201
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nba-model.md#0",
+      "source": "docs/model-cards/sports-edge-nba-model.md",
+      "charCount": 256
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nba-model.md#1",
+      "source": "docs/model-cards/sports-edge-nba-model.md",
+      "charCount": 283
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nba-model.md#2",
+      "source": "docs/model-cards/sports-edge-nba-model.md",
+      "charCount": 370
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nba-model.md#3",
+      "source": "docs/model-cards/sports-edge-nba-model.md",
+      "charCount": 176
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nba-model.md#4",
+      "source": "docs/model-cards/sports-edge-nba-model.md",
+      "charCount": 338
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nba-model.md#5",
+      "source": "docs/model-cards/sports-edge-nba-model.md",
+      "charCount": 433
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nba-model.md#6",
+      "source": "docs/model-cards/sports-edge-nba-model.md",
+      "charCount": 508
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nba-model.md#7",
+      "source": "docs/model-cards/sports-edge-nba-model.md",
+      "charCount": 330
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nba-model.md#8",
+      "source": "docs/model-cards/sports-edge-nba-model.md",
+      "charCount": 348
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.md#0",
+      "source": "docs/model-cards/sports-edge-nfl-model.md",
+      "charCount": 256
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.md#1",
+      "source": "docs/model-cards/sports-edge-nfl-model.md",
+      "charCount": 290
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.md#2",
+      "source": "docs/model-cards/sports-edge-nfl-model.md",
+      "charCount": 370
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.md#3",
+      "source": "docs/model-cards/sports-edge-nfl-model.md",
+      "charCount": 176
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.md#4",
+      "source": "docs/model-cards/sports-edge-nfl-model.md",
+      "charCount": 338
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.md#5",
+      "source": "docs/model-cards/sports-edge-nfl-model.md",
+      "charCount": 433
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.md#6",
+      "source": "docs/model-cards/sports-edge-nfl-model.md",
+      "charCount": 520
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.md#7",
+      "source": "docs/model-cards/sports-edge-nfl-model.md",
+      "charCount": 330
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.md#8",
+      "source": "docs/model-cards/sports-edge-nfl-model.md",
+      "charCount": 319
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.txt#0",
+      "source": "docs/model-cards/sports-edge-nfl-model.txt",
+      "charCount": 42
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.txt#1",
+      "source": "docs/model-cards/sports-edge-nfl-model.txt",
+      "charCount": 140
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.txt#2",
+      "source": "docs/model-cards/sports-edge-nfl-model.txt",
+      "charCount": 87
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.txt#3",
+      "source": "docs/model-cards/sports-edge-nfl-model.txt",
+      "charCount": 122
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.txt#4",
+      "source": "docs/model-cards/sports-edge-nfl-model.txt",
+      "charCount": 169
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.txt#5",
+      "source": "docs/model-cards/sports-edge-nfl-model.txt",
+      "charCount": 226
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.txt#6",
+      "source": "docs/model-cards/sports-edge-nfl-model.txt",
+      "charCount": 273
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.txt#7",
+      "source": "docs/model-cards/sports-edge-nfl-model.txt",
+      "charCount": 146
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.txt#8",
+      "source": "docs/model-cards/sports-edge-nfl-model.txt",
+      "charCount": 143
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.txt#9",
+      "source": "docs/model-cards/sports-edge-nfl-model.txt",
+      "charCount": 106
+    },
+    {
+      "id": "docs/model-cards/sports-edge-nfl-model.txt#10",
+      "source": "docs/model-cards/sports-edge-nfl-model.txt",
+      "charCount": 173
+    },
+    {
+      "id": "docs/project-knowledge/evidence-register.md#0",
+      "source": "docs/project-knowledge/evidence-register.md",
+      "charCount": 66
+    },
+    {
+      "id": "docs/project-knowledge/evidence-register.md#1",
+      "source": "docs/project-knowledge/evidence-register.md",
+      "charCount": 318
+    },
+    {
+      "id": "docs/project-knowledge/evidence-register.md#2",
+      "source": "docs/project-knowledge/evidence-register.md",
+      "charCount": 2622
+    },
+    {
+      "id": "docs/project-knowledge/evidence-register.md#3",
+      "source": "docs/project-knowledge/evidence-register.md",
+      "charCount": 2507
+    },
+    {
+      "id": "docs/project-knowledge/evidence-register.md#4",
+      "source": "docs/project-knowledge/evidence-register.md",
+      "charCount": 286
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/architecture.md#0",
+      "source": "docs/project-knowledge/llm-advisor/architecture.md",
+      "charCount": 422
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/architecture.md#1",
+      "source": "docs/project-knowledge/llm-advisor/architecture.md",
+      "charCount": 21
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/architecture.md#2",
+      "source": "docs/project-knowledge/llm-advisor/architecture.md",
+      "charCount": 141
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/architecture.md#3",
+      "source": "docs/project-knowledge/llm-advisor/architecture.md",
+      "charCount": 133
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/architecture.md#4",
+      "source": "docs/project-knowledge/llm-advisor/architecture.md",
+      "charCount": 204
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/architecture.md#5",
+      "source": "docs/project-knowledge/llm-advisor/architecture.md",
+      "charCount": 273
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/architecture.md#6",
+      "source": "docs/project-knowledge/llm-advisor/architecture.md",
+      "charCount": 147
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/architecture.md#7",
+      "source": "docs/project-knowledge/llm-advisor/architecture.md",
+      "charCount": 192
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md#0",
+      "source": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md",
+      "charCount": 337
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md#1",
+      "source": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md",
+      "charCount": 15
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md#2",
+      "source": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md",
+      "charCount": 126
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md#3",
+      "source": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md",
+      "charCount": 197
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md#4",
+      "source": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md",
+      "charCount": 167
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md#5",
+      "source": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md",
+      "charCount": 331
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md#6",
+      "source": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md",
+      "charCount": 152
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md#7",
+      "source": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md",
+      "charCount": 315
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/faq.md#0",
+      "source": "docs/project-knowledge/llm-advisor/faq.md",
+      "charCount": 290
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/faq.md#1",
+      "source": "docs/project-knowledge/llm-advisor/faq.md",
+      "charCount": 125
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/faq.md#2",
+      "source": "docs/project-knowledge/llm-advisor/faq.md",
+      "charCount": 194
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/faq.md#3",
+      "source": "docs/project-knowledge/llm-advisor/faq.md",
+      "charCount": 174
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/faq.md#4",
+      "source": "docs/project-knowledge/llm-advisor/faq.md",
+      "charCount": 187
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/faq.md#5",
+      "source": "docs/project-knowledge/llm-advisor/faq.md",
+      "charCount": 189
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/faq.md#6",
+      "source": "docs/project-knowledge/llm-advisor/faq.md",
+      "charCount": 191
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/metrics-and-results.md#0",
+      "source": "docs/project-knowledge/llm-advisor/metrics-and-results.md",
+      "charCount": 695
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/metrics-and-results.md#1",
+      "source": "docs/project-knowledge/llm-advisor/metrics-and-results.md",
+      "charCount": 757
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/metrics-and-results.md#2",
+      "source": "docs/project-knowledge/llm-advisor/metrics-and-results.md",
+      "charCount": 19
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/metrics-and-results.md#3",
+      "source": "docs/project-knowledge/llm-advisor/metrics-and-results.md",
+      "charCount": 260
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/metrics-and-results.md#4",
+      "source": "docs/project-knowledge/llm-advisor/metrics-and-results.md",
+      "charCount": 301
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/metrics-and-results.md#5",
+      "source": "docs/project-knowledge/llm-advisor/metrics-and-results.md",
+      "charCount": 367
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/metrics-and-results.md#6",
+      "source": "docs/project-knowledge/llm-advisor/metrics-and-results.md",
+      "charCount": 438
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/metrics-and-results.md#7",
+      "source": "docs/project-knowledge/llm-advisor/metrics-and-results.md",
+      "charCount": 428
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/metrics-and-results.md#8",
+      "source": "docs/project-knowledge/llm-advisor/metrics-and-results.md",
+      "charCount": 258
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/metrics-and-results.md#9",
+      "source": "docs/project-knowledge/llm-advisor/metrics-and-results.md",
+      "charCount": 147
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/overview.md#0",
+      "source": "docs/project-knowledge/llm-advisor/overview.md",
+      "charCount": 261
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/overview.md#1",
+      "source": "docs/project-knowledge/llm-advisor/overview.md",
+      "charCount": 314
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/overview.md#2",
+      "source": "docs/project-knowledge/llm-advisor/overview.md",
+      "charCount": 271
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/overview.md#3",
+      "source": "docs/project-knowledge/llm-advisor/overview.md",
+      "charCount": 347
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/overview.md#4",
+      "source": "docs/project-knowledge/llm-advisor/overview.md",
+      "charCount": 11
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/overview.md#5",
+      "source": "docs/project-knowledge/llm-advisor/overview.md",
+      "charCount": 117
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/overview.md#6",
+      "source": "docs/project-knowledge/llm-advisor/overview.md",
+      "charCount": 137
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/overview.md#7",
+      "source": "docs/project-knowledge/llm-advisor/overview.md",
+      "charCount": 124
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/overview.md#8",
+      "source": "docs/project-knowledge/llm-advisor/overview.md",
+      "charCount": 98
+    },
+    {
+      "id": "docs/project-knowledge/maintenance-checklist.md#0",
+      "source": "docs/project-knowledge/maintenance-checklist.md",
+      "charCount": 287
+    },
+    {
+      "id": "docs/project-knowledge/maintenance-checklist.md#1",
+      "source": "docs/project-knowledge/maintenance-checklist.md",
+      "charCount": 98
+    },
+    {
+      "id": "docs/project-knowledge/maintenance-checklist.md#2",
+      "source": "docs/project-knowledge/maintenance-checklist.md",
+      "charCount": 329
+    },
+    {
+      "id": "docs/project-knowledge/maintenance-checklist.md#3",
+      "source": "docs/project-knowledge/maintenance-checklist.md",
+      "charCount": 276
+    },
+    {
+      "id": "docs/project-knowledge/maintenance-checklist.md#4",
+      "source": "docs/project-knowledge/maintenance-checklist.md",
+      "charCount": 279
+    },
+    {
+      "id": "docs/project-knowledge/maintenance-checklist.md#5",
+      "source": "docs/project-knowledge/maintenance-checklist.md",
+      "charCount": 280
+    },
+    {
+      "id": "docs/project-knowledge/maintenance-checklist.md#6",
+      "source": "docs/project-knowledge/maintenance-checklist.md",
+      "charCount": 267
+    },
+    {
+      "id": "docs/project-knowledge/maintenance-checklist.md#7",
+      "source": "docs/project-knowledge/maintenance-checklist.md",
+      "charCount": 294
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#0",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 364
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#1",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 31
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#2",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 153
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#3",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 165
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#4",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 174
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#5",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 31
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#6",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 163
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#7",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 162
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#8",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 232
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#9",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 24
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#10",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 109
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#11",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 95
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/architecture.md#0",
+      "source": "docs/project-knowledge/sports-edge/architecture.md",
+      "charCount": 377
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/architecture.md#1",
+      "source": "docs/project-knowledge/sports-edge/architecture.md",
+      "charCount": 26
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/architecture.md#2",
+      "source": "docs/project-knowledge/sports-edge/architecture.md",
+      "charCount": 103
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/architecture.md#3",
+      "source": "docs/project-knowledge/sports-edge/architecture.md",
+      "charCount": 111
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/architecture.md#4",
+      "source": "docs/project-knowledge/sports-edge/architecture.md",
+      "charCount": 142
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/architecture.md#5",
+      "source": "docs/project-knowledge/sports-edge/architecture.md",
+      "charCount": 149
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/architecture.md#6",
+      "source": "docs/project-knowledge/sports-edge/architecture.md",
+      "charCount": 161
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/architecture.md#7",
+      "source": "docs/project-knowledge/sports-edge/architecture.md",
+      "charCount": 165
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/data-sources-and-freshness.md#0",
+      "source": "docs/project-knowledge/sports-edge/data-sources-and-freshness.md",
+      "charCount": 504
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/data-sources-and-freshness.md#1",
+      "source": "docs/project-knowledge/sports-edge/data-sources-and-freshness.md",
+      "charCount": 15
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/data-sources-and-freshness.md#2",
+      "source": "docs/project-knowledge/sports-edge/data-sources-and-freshness.md",
+      "charCount": 141
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/data-sources-and-freshness.md#3",
+      "source": "docs/project-knowledge/sports-edge/data-sources-and-freshness.md",
+      "charCount": 149
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/data-sources-and-freshness.md#4",
+      "source": "docs/project-knowledge/sports-edge/data-sources-and-freshness.md",
+      "charCount": 163
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/data-sources-and-freshness.md#5",
+      "source": "docs/project-knowledge/sports-edge/data-sources-and-freshness.md",
+      "charCount": 232
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/data-sources-and-freshness.md#6",
+      "source": "docs/project-knowledge/sports-edge/data-sources-and-freshness.md",
+      "charCount": 274
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/faq.md#0",
+      "source": "docs/project-knowledge/sports-edge/faq.md",
+      "charCount": 368
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/faq.md#1",
+      "source": "docs/project-knowledge/sports-edge/faq.md",
+      "charCount": 167
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/faq.md#2",
+      "source": "docs/project-knowledge/sports-edge/faq.md",
+      "charCount": 160
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/faq.md#3",
+      "source": "docs/project-knowledge/sports-edge/faq.md",
+      "charCount": 94
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/faq.md#4",
+      "source": "docs/project-knowledge/sports-edge/faq.md",
+      "charCount": 173
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/faq.md#5",
+      "source": "docs/project-knowledge/sports-edge/faq.md",
+      "charCount": 180
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/faq.md#6",
+      "source": "docs/project-knowledge/sports-edge/faq.md",
+      "charCount": 191
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/known-failure-modes.md#0",
+      "source": "docs/project-knowledge/sports-edge/known-failure-modes.md",
+      "charCount": 384
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/known-failure-modes.md#1",
+      "source": "docs/project-knowledge/sports-edge/known-failure-modes.md",
+      "charCount": 533
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/known-failure-modes.md#2",
+      "source": "docs/project-knowledge/sports-edge/known-failure-modes.md",
+      "charCount": 465
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/known-failure-modes.md#3",
+      "source": "docs/project-knowledge/sports-edge/known-failure-modes.md",
+      "charCount": 463
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/known-failure-modes.md#4",
+      "source": "docs/project-knowledge/sports-edge/known-failure-modes.md",
+      "charCount": 486
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/known-failure-modes.md#5",
+      "source": "docs/project-knowledge/sports-edge/known-failure-modes.md",
+      "charCount": 476
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/known-failure-modes.md#6",
+      "source": "docs/project-knowledge/sports-edge/known-failure-modes.md",
+      "charCount": 326
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/known-failure-modes.md#7",
+      "source": "docs/project-knowledge/sports-edge/known-failure-modes.md",
+      "charCount": 470
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/metrics-and-results.md#0",
+      "source": "docs/project-knowledge/sports-edge/metrics-and-results.md",
+      "charCount": 448
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/metrics-and-results.md#1",
+      "source": "docs/project-knowledge/sports-edge/metrics-and-results.md",
+      "charCount": 412
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/metrics-and-results.md#2",
+      "source": "docs/project-knowledge/sports-edge/metrics-and-results.md",
+      "charCount": 19
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/metrics-and-results.md#3",
+      "source": "docs/project-knowledge/sports-edge/metrics-and-results.md",
+      "charCount": 291
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/metrics-and-results.md#4",
+      "source": "docs/project-knowledge/sports-edge/metrics-and-results.md",
+      "charCount": 349
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/metrics-and-results.md#5",
+      "source": "docs/project-knowledge/sports-edge/metrics-and-results.md",
+      "charCount": 318
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/metrics-and-results.md#6",
+      "source": "docs/project-knowledge/sports-edge/metrics-and-results.md",
+      "charCount": 373
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/metrics-and-results.md#7",
+      "source": "docs/project-knowledge/sports-edge/metrics-and-results.md",
+      "charCount": 383
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/metrics-and-results.md#8",
+      "source": "docs/project-knowledge/sports-edge/metrics-and-results.md",
+      "charCount": 345
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/metrics-and-results.md#9",
+      "source": "docs/project-knowledge/sports-edge/metrics-and-results.md",
+      "charCount": 147
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/model-quality-readout.md#0",
+      "source": "docs/project-knowledge/sports-edge/model-quality-readout.md",
+      "charCount": 692
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/model-quality-readout.md#1",
+      "source": "docs/project-knowledge/sports-edge/model-quality-readout.md",
+      "charCount": 351
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/model-quality-readout.md#2",
+      "source": "docs/project-knowledge/sports-edge/model-quality-readout.md",
+      "charCount": 401
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/model-quality-readout.md#3",
+      "source": "docs/project-knowledge/sports-edge/model-quality-readout.md",
+      "charCount": 240
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/model-quality-readout.md#4",
+      "source": "docs/project-knowledge/sports-edge/model-quality-readout.md",
+      "charCount": 493
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/model-quality-readout.md#5",
+      "source": "docs/project-knowledge/sports-edge/model-quality-readout.md",
+      "charCount": 524
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/model-quality-readout.md#6",
+      "source": "docs/project-knowledge/sports-edge/model-quality-readout.md",
+      "charCount": 295
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/overview.md#0",
+      "source": "docs/project-knowledge/sports-edge/overview.md",
+      "charCount": 373
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/overview.md#1",
+      "source": "docs/project-knowledge/sports-edge/overview.md",
+      "charCount": 277
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/overview.md#2",
+      "source": "docs/project-knowledge/sports-edge/overview.md",
+      "charCount": 192
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/overview.md#3",
+      "source": "docs/project-knowledge/sports-edge/overview.md",
+      "charCount": 234
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/overview.md#4",
+      "source": "docs/project-knowledge/sports-edge/overview.md",
+      "charCount": 11
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/overview.md#5",
+      "source": "docs/project-knowledge/sports-edge/overview.md",
+      "charCount": 123
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/overview.md#6",
+      "source": "docs/project-knowledge/sports-edge/overview.md",
+      "charCount": 98
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/overview.md#7",
+      "source": "docs/project-knowledge/sports-edge/overview.md",
+      "charCount": 133
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/overview.md#8",
+      "source": "docs/project-knowledge/sports-edge/overview.md",
+      "charCount": 122
+    },
+    {
+      "id": "docs/project-postmortems/sports-edge-weekly-template.txt#0",
+      "source": "docs/project-postmortems/sports-edge-weekly-template.txt",
+      "charCount": 40
+    },
+    {
+      "id": "docs/project-postmortems/sports-edge-weekly-template.txt#1",
+      "source": "docs/project-postmortems/sports-edge-weekly-template.txt",
+      "charCount": 72
+    },
+    {
+      "id": "docs/project-postmortems/sports-edge-weekly-template.txt#2",
+      "source": "docs/project-postmortems/sports-edge-weekly-template.txt",
+      "charCount": 163
+    },
+    {
+      "id": "docs/project-postmortems/sports-edge-weekly-template.txt#3",
+      "source": "docs/project-postmortems/sports-edge-weekly-template.txt",
+      "charCount": 145
+    },
+    {
+      "id": "docs/project-postmortems/sports-edge-weekly-template.txt#4",
+      "source": "docs/project-postmortems/sports-edge-weekly-template.txt",
+      "charCount": 151
+    },
+    {
+      "id": "docs/project-postmortems/sports-edge-weekly-template.txt#5",
+      "source": "docs/project-postmortems/sports-edge-weekly-template.txt",
+      "charCount": 188
+    },
+    {
+      "id": "docs/project-postmortems/sports-edge-weekly-template.txt#6",
+      "source": "docs/project-postmortems/sports-edge-weekly-template.txt",
+      "charCount": 101
+    },
+    {
+      "id": "docs/project-postmortems/sports-edge-weekly-template.txt#7",
+      "source": "docs/project-postmortems/sports-edge-weekly-template.txt",
+      "charCount": 190
+    },
+    {
+      "id": "docs/warehouse-schema.txt#0",
+      "source": "docs/warehouse-schema.txt",
+      "charCount": 127
+    },
+    {
+      "id": "docs/warehouse-schema.txt#1",
+      "source": "docs/warehouse-schema.txt",
+      "charCount": 135
+    },
+    {
+      "id": "docs/warehouse-schema.txt#2",
+      "source": "docs/warehouse-schema.txt",
+      "charCount": 293
+    },
+    {
+      "id": "docs/warehouse-schema.txt#3",
+      "source": "docs/warehouse-schema.txt",
+      "charCount": 356
+    },
+    {
+      "id": "docs/warehouse-schema.txt#4",
+      "source": "docs/warehouse-schema.txt",
+      "charCount": 573
+    },
+    {
+      "id": "docs/warehouse-schema.txt#5",
+      "source": "docs/warehouse-schema.txt",
+      "charCount": 270
+    },
+    {
+      "id": "docs/warehouse-schema.txt#6",
+      "source": "docs/warehouse-schema.txt",
+      "charCount": 120
+    },
+    {
+      "id": "docs/warehouse-schema.txt#7",
+      "source": "docs/warehouse-schema.txt",
+      "charCount": 934
+    },
+    {
+      "id": "docs/warehouse-schema.txt#8",
+      "source": "docs/warehouse-schema.txt",
+      "charCount": 2176
+    },
+    {
+      "id": "docs/warehouse-schema.txt#9",
+      "source": "docs/warehouse-schema.txt",
+      "charCount": 5972
+    },
+    {
+      "id": "docs/warehouse-schema.txt#10",
+      "source": "docs/warehouse-schema.txt",
+      "charCount": 597
+    }
+  ]
+}

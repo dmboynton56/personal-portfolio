@@ -10,6 +10,15 @@ source_paths:
 
 # Sports Edge Metrics and Results
 
+## Current Model Quality Readout
+
+The first notebook-backed readout is ATS/ROI for NBA and NFL:
+
+- `sports-edge/data-core/notebooks/nba_ats_roi.ipynb`
+- `sports-edge/data-core/notebooks/nfl_ats_roi.ipynb`
+
+The readout contract is documented in `model-quality-readout.md`. Until those notebooks are executed and reviewed, ATS/ROI numbers should be treated as operational readouts, not final validated edge claims.
+
 ## Observed metrics
 
 ## Metric: Automation cadence

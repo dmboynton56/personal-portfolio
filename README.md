@@ -53,14 +53,13 @@ OPENAI_CHAT_MODEL
 
 If `OPENAI_API_KEY` is not set, `/api/chat` still works in deterministic fallback mode using SQL summaries + retrieved docs.
 
-## Local Vertex + BigQuery Chat Testing
+## Local Gemini + BigQuery Chat Testing
 
 To test `/api/chat` against your Google stack locally:
 
 1. Copy `.env.example` to `.env.local`.
 2. Set:
    - `GCP_PROJECT_ID`
-   - `VERTEX_APP_ID`
    - `BIGQUERY_PROJECT_ID`
    - `BIGQUERY_DATASET`
    - `BIGQUERY_CHAT_VIEW`
@@ -69,7 +68,23 @@ To test `/api/chat` against your Google stack locally:
    - `GCP_SERVICE_ACCOUNT_JSON`, or
    - `GCP_SERVICE_ACCOUNT_JSON_BASE64`
 
-The route uses BigQuery for numeric stats questions (for example, home ATS counts) and Vertex AI Search `:answer` for document-grounded responses with citations.
+The route uses BigQuery for numeric stats questions (for example, home ATS counts) and local `/docs` retrieval for document-grounded responses with citations.
+
+## Chatbot RAG
+
+Generate the local doc manifest:
+
+```bash
+npm run build:rag-manifest
+```
+
+Generate embeddings with Vertex AI `text-embedding-004`:
+
+```bash
+npm run build:rag-embeddings
+```
+
+The embedding script writes `public/data/rag_embeddings.json`. Runtime retrieval uses cosine similarity when that file exists and falls back to token overlap if the file is missing or the embedding request fails.
 
 ## Contact
 

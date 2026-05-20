@@ -10,9 +10,12 @@ import ReactMarkdown from 'react-markdown'
 type ChatRole = 'user' | 'assistant'
 
 type Citation = {
+  type: 'doc' | 'bigquery' | 'supabase' | 'web' | 'model'
   source: string
   title: string
-  snippet: string
+  snippet?: string
+  query?: string
+  generatedAt?: string
 }
 
 type Message = {
@@ -25,6 +28,7 @@ type Message = {
 type ChatApiResponse = {
   answer: string
   model: string
+  scope: 'default' | 'sports-edge' | 'llm-advisor' | 'nba-hof'
   citations: Citation[]
   error?: string
 }
@@ -38,6 +42,22 @@ const quickPrompts = [
 
 const createId = () =>
   `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
+
+const citationLabels: Record<Citation['type'], string> = {
+  doc: 'Doc',
+  bigquery: 'BigQuery',
+  supabase: 'Supabase',
+  web: 'Web',
+  model: 'Model'
+}
+
+const citationClasses: Record<Citation['type'], string> = {
+  doc: 'border-blue-500/20 bg-blue-500/10 text-blue-500',
+  bigquery: 'border-violet-500/20 bg-violet-500/10 text-violet-500',
+  supabase: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-500',
+  web: 'border-amber-500/20 bg-amber-500/10 text-amber-500',
+  model: 'border-pink-500/20 bg-pink-500/10 text-pink-500'
+}
 
 export function SportsEdgeChat() {
   const [messages, setMessages] = useState<Message[]>([
@@ -83,7 +103,8 @@ export function SportsEdgeChat() {
         },
         body: JSON.stringify({
           message,
-          history
+          history,
+          scope: 'sports-edge'
         })
       })
 
@@ -185,7 +206,12 @@ export function SportsEdgeChat() {
               <div className="mt-3 space-y-2 border-t border-border/70 pt-2 text-xs">
                 {message.citations.slice(0, 3).map((citation) => (
                   <div key={`${message.id}-${citation.source}-${citation.title}`}>
-                    <p className="font-medium">{citation.title}</p>
+                    <div className="mb-1 flex items-center gap-2">
+                      <span className={`rounded border px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-normal ${citationClasses[citation.type]}`}>
+                        {citationLabels[citation.type]}
+                      </span>
+                      <p className="font-medium">{citation.title}</p>
+                    </div>
                     <p className="text-muted-foreground">{citation.source}</p>
                   </div>
                 ))}

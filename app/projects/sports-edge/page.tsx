@@ -4,6 +4,7 @@ import React from 'react'
 import { ProjectLayout } from '@/components/ProjectLayout'
 import SportsEdgeCard from '@/components/SportsEdgeCard'
 import { SportsEdgeChat } from '@/components/SportsEdgeChat'
+import { AtsSummaryCard } from '@/components/sports-edge/AtsSummaryCard'
 import { Activity, Database, Server, TrendingUp, Cpu, LineChart } from 'lucide-react'
 import { useProjectMetrics } from '@/hooks/useProjectMetrics'
 
@@ -137,6 +138,14 @@ steps:
                         </p>
                     </div>
                 </div>
+            </section>
+
+            <section className="space-y-6">
+                <h2 className="text-3xl font-bold">Live Results</h2>
+                <p className="text-lg text-muted-foreground">
+                    The first Week-2 result path is live: graded games and latest model predictions are joined from Supabase to compute ATS record and flat-unit ROI.
+                </p>
+                <AtsSummaryCard league="NBA" />
             </section>
 
             <section className="space-y-6">
