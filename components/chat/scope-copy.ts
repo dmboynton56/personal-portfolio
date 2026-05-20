@@ -13,8 +13,8 @@ const COPY: Record<ChatScope, ScopeUICopy> = {
     subtitle:
       'Ask about projects, evidence, and how the work on this site is framed. Answers use portfolio documentation.',
     welcomeMessage:
-      'Ask about what is in this portfolio, how projects connect, or what evidence backs any claim. I pull from the site docs.',
-    placeholder: 'Ask about projects, evidence, or methodology',
+      'Ask who I am, what is in this portfolio, how projects connect, or what evidence backs any claim. I pull from the site docs.',
+    placeholder: 'Ask about me, projects, evidence, or methodology',
   },
   'sports-edge': {
     title: 'Sports Edge Chat',

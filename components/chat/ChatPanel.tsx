@@ -11,6 +11,7 @@ import {
 import { Loader2, MessageSquareText, Send } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 
+import { enrichMarkdownLinks } from '@/lib/chat/markdown-links'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { CHAT_SCOPES } from '@/lib/chatbot/scopes'
@@ -53,7 +54,7 @@ export type ChatPanelProps = {
   variant: 'inline' | 'floating'
   /** When false, omit the title block (e.g. floating widget supplies its own header). */
   showHeader?: boolean
-  /** Called when the user focuses input or clicks a starter prompt (expand compact → expanded). */
+  /** Called when the user sends a message or clicks a starter prompt (expand compact → expanded). */
   onExpand?: () => void
   /** Override scroll region classes (e.g. fixed max-height for inline). */
   messagesMaxHeightClass?: string
@@ -74,6 +75,16 @@ const markdownComponents = {
   ),
   strong: ({ children }: { children?: React.ReactNode }) => (
     <strong className="font-bold text-foreground">{children}</strong>
+  ),
+  a: ({ href, children }: { href?: string; children?: React.ReactNode }) => (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="font-medium text-primary underline underline-offset-2 hover:text-primary/80"
+    >
+      {children}
+    </a>
   ),
   code: ({ children }: { children?: React.ReactNode }) => (
     <code className="rounded bg-muted-foreground/20 px-1 py-0.5 font-mono text-xs">
@@ -273,7 +284,7 @@ export function ChatPanel({
             >
               {message.role === 'assistant' ? (
                 <ReactMarkdown components={markdownComponents}>
-                  {message.content}
+                  {enrichMarkdownLinks(message.content)}
                 </ReactMarkdown>
               ) : (
                 message.content
@@ -293,7 +304,9 @@ export function ChatPanel({
                         </span>
                         <p className="font-medium">{citation.title}</p>
                       </div>
-                      <p className="text-muted-foreground">{citation.source}</p>
+                      <p className="text-muted-foreground">
+                        {citation.source.replace(/^docs\/project-knowledge\//, '').replace(/^docs\//, '')}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -320,7 +333,6 @@ export function ChatPanel({
           className="min-w-0 flex-1"
           value={input}
           onChange={(event) => setInput(event.target.value)}
-          onFocus={() => onExpand?.()}
           placeholder={placeholder}
           disabled={isLoading}
         />

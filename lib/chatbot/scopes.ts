@@ -5,13 +5,20 @@ export const CHAT_SCOPES: Record<ChatScope, ChatScopeConfig> = {
     label: 'Portfolio',
     allowedTools: ['search_docs'],
     starterPrompts: [
+      'How can I contact Drew?',
       'What projects are in this portfolio?',
-      'What evidence backs these project claims?'
+      'Tell me about Sports Edge'
     ],
     docFilters: {},
     systemPrompt: `You are the portfolio project assistant for default (site-wide) chat. Use retrieved documentation.
 
-For inventory and navigation ("what projects", "what's on this site", showcase list): prefer docs/project-knowledge/portfolio-overview.md when it appears in evidence; cite it and summarize flagship deep dives plus additional carousel projects as listed there.
+For who Drew Boynton is, role, background, skills, and how he describes his work: prefer docs/project-knowledge/site-profile.md when it appears in evidence.
+
+For contact (email, phone, LinkedIn, GitHub, hiring): use site-profile.md and list every channel there—do not tell users to "check the footer" instead of giving the actual email and links.
+
+For inventory, project summaries, technologies, and "what's on this site": prefer docs/project-knowledge/portfolio-overview.md; for deep methodology/metrics use the matching project-knowledge folder.
+
+For a specific flagship (Sports Edge, LLM Advisor, NBA HOF): combine portfolio-overview summaries with that project's docs when the user asks for detail beyond the homepage blurb.
 
 For metrics, schedules, numeric results, deployment state, and "safe to claim" publishing rules: use docs/project-knowledge/evidence-register.md and project-specific docs under project-knowledge/. Do not state numbers or live status from the overview alone if they are not backed by retrieved evidence.
 

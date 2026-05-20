@@ -313,10 +313,30 @@ const isPortfolioOverviewQuery = (query: string) =>
   ) ||
   /\bwhat\b.*\b(include|projects?|showcase|built|offer|have)\b/i.test(query)
 
+const isSiteProfileQuery = (query: string) =>
+  /\b(who is|who's|about (me|you|drew)|tell me about|background|bio|engineer|contact|reach|hire|hiring|email|e-mail|phone|linkedin|github|social)\b/i.test(
+    query
+  ) ||
+  /\bdrew\b/i.test(query) ||
+  /\bboynton\b/i.test(query)
+
+const isProjectCatalogQuery = (query: string) =>
+  /\b(sports edge|llm advisor|nba|hall of fame|hof|mancala|simple fitness|housecluster|heatmap|ictml|flagship|carousel|project)\b/i.test(
+    query
+  )
+
 const sourceBoost = (source: string, query: string) => {
-  if (isPortfolioOverviewQuery(query)) {
+  if (isSiteProfileQuery(query)) {
+    if (source === 'docs/project-knowledge/site-profile.md') return 10
+    if (source === 'docs/project-knowledge/portfolio-overview.md') return 1
+    if (source.startsWith('docs/project-knowledge/sports-edge/')) return -4
+    if (source.startsWith('docs/project-knowledge/llm-advisor/')) return -3
+    if (source.startsWith('docs/project-knowledge/nba-hof')) return -3
+  }
+  if (isPortfolioOverviewQuery(query) || isProjectCatalogQuery(query)) {
     if (source === 'docs/project-knowledge/portfolio-overview.md') return 8
     if (source === 'docs/project-knowledge/question-index.md') return 2
+    if (source === 'docs/project-knowledge/site-profile.md') return 1
   }
   if (isSchemaQuery(query)) {
     if (source === 'docs/warehouse-schema.txt') return 6

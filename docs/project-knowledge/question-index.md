@@ -66,6 +66,29 @@ Use:
 
 ## Cross-project routing
 
+## Who is Drew Boynton / about the site owner / background / contact?
+
+Use:
+
+- `docs/project-knowledge/site-profile.md` (canonical homepage + about + **email, phone, LinkedIn, GitHub**)
+
+Optional:
+
+- `docs/project-knowledge/portfolio-overview.md` (what projects are showcased, not personal bio)
+
+## How do I contact Drew / LinkedIn / GitHub / email / phone?
+
+Use:
+
+- `docs/project-knowledge/site-profile.md` section **Contact (public)**
+
+## What is [project name] / tell me about Sports Edge / Mancala / etc.?
+
+Use:
+
+- `docs/project-knowledge/portfolio-overview.md` for homepage card summary, tech stack, and deep-dive URL
+- Then `docs/project-knowledge/<project>/` for methodology, metrics, limitations
+
 ## What projects appear on this portfolio / homepage / showcase?
 
 Use:

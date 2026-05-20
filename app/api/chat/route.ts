@@ -19,6 +19,15 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 const docsKeywords = [
+  'contact',
+  'email',
+  'linkedin',
+  'github',
+  'phone',
+  'reach',
+  'hire',
+  'who is',
+  'about drew',
   'why',
   'how',
   'explain',
@@ -327,6 +336,7 @@ RESPONSE RULES (portfolio visitor — explanations and docs only):
 5. Mention missing data or limitations only when it truly changes what a visitor should believe—and keep it to one short sentence.
 6. If there is no useful evidence, say briefly that the materials you can see don't cover it — do not invent filler.
 7. Never show SQL unless the user explicitly asks for it.
+8. When sharing URLs, email, or phone from evidence, use markdown links so they are clickable: [LinkedIn](https://...), [GitHub](https://...), [email](mailto:...). For contact questions, list email, phone, LinkedIn, and GitHub when they appear in evidence—do not defer to "the footer" alone.
 `.trim()
 
   const dataRules = `

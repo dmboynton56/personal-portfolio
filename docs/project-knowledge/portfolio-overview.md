@@ -6,33 +6,73 @@ role: canonical_site_inventory
 
 # Portfolio overview (public showcase)
 
-This file is the **canonical list of projects presented on the portfolio homepage** (`/#work`), aligned with the **WorkSection** carousel. Use it for answers about *what appears on this site*, *what projects are included*, and *flagship vs additional* items.
+This file is the **canonical list of projects presented on the portfolio homepage** (`/#work`), aligned with the **WorkSection** carousel. Use it for answers about *what appears on this site*, *what each project is about*, *technologies used*, and *flagship vs additional* items.
+
+For **who Drew is and contact info**, use `docs/project-knowledge/site-profile.md`.
 
 For **numeric claims, production schedules, and "observed vs planned" metrics**, use `docs/project-knowledge/evidence-register.md` and the relevant `project-knowledge/<project>/` docs—not this overview alone.
 
 ## Flagship projects (deep-dive case study pages)
 
-These have dedicated `/projects/...` pages and richer documentation under `docs/project-knowledge/`.
+These have dedicated `/projects/...` pages, interactive previews on the homepage where noted, and richer documentation under `docs/project-knowledge/`.
 
-| id | Public title (homepage) | Deep dive URL | Focus |
-| --- | --- | --- | --- |
-| nba-hof-predictor | NBA Hall of Fame Predictor | `/projects/nba-hof` | XGBoost HoF probability, interactive player lookup, interpretability |
-| sports-edge | Sports Edge: NFL/NBA Betting Analysis | `/projects/sports-edge` | ML spreads/edges, BigQuery + Supabase, multi-league pipeline |
-| llm-advisor | LLM Advisor: Agentic Trading System | `/projects/llm-advisor` | LLM + execution stack, risk guardrails, telemetry-backed monitoring |
+### NBA Hall of Fame Predictor (`nba-hof-predictor`)
+
+- **Homepage title:** NBA Hall of Fame Predictor
+- **Deep dive:** `/projects/nba-hof`
+- **Summary:** Interactive ML model that estimates NBA players' Hall of Fame chances from career production, peak impact, longevity, and award history. Real-time player lookup and prediction analysis using XGBoost trained on 5,250+ players since 1976.
+- **Technologies:** Python, XGBoost, Next.js, TypeScript, Basketball Analytics
+- **Proof points:** 5,250+ historical careers; interactive probability search; feature-level reasoning per prediction
+- **Interactive on homepage:** yes (player lookup embed)
+
+### Sports Edge (`sports-edge`)
+
+- **Homepage title:** Sports Edge: NFL/NBA Betting Analysis
+- **Deep dive:** `/projects/sports-edge`
+- **Summary:** ML pipeline for model spreads and home win probabilities for NFL/NBA games, compared to sportsbook lines to surface edges. Real-time odds integration, feature engineering (rest, form, opponent strength), automated daily predictions.
+- **Technologies:** Python, Scikit-learn, LightGBM, Supabase, Next.js, Sports Analytics
+- **Proof points:** BigQuery source of truth + Supabase serving; automated daily/weekly pipeline; live portfolio card with sportsbook deltas
+- **GitHub:** https://github.com/dmboynton56/sports-edge
+- **Interactive on homepage:** yes (live card preview)
+
+### LLM Advisor (`llm-advisor`)
+
+- **Homepage title:** LLM Advisor: Agentic Trading System
+- **Deep dive:** `/projects/llm-advisor` (ICTML redirects here)
+- **Summary:** Autonomous trading agent using Gemini for market context, mean-reversion threshold adjustment, and guarded execution. ICTML premarket bias work is being folded into this single trading-advisor story.
+- **Technologies:** Python, Gemini API, Alpaca, Pandas, Backtesting
+- **Proof points:** ICTML premarket fold-in in progress; hybrid ML + LLM decision stack; risk controls tied to execution rules
+- **GitHub:** https://github.com/dmboynton56/llm-advisor
+- **Interactive on homepage:** no (screenshots / metrics on deep dive)
 
 ## Additional projects (carousel only)
 
 Shown on the homepage **without** a separate `/projects/*` deep dive in this repo.
 
-| id | Public title (homepage) | Deep dive URL | Focus |
-| --- | --- | --- | --- |
-| mancala-ai | Mancala AI with Game Theory | *(carousel / interactive embed only)* | Minimax, alpha-beta pruning, game UI |
-| houseclusters | Advanced Data Cluster Sorting | *(carousel only)* | Clustering / GMM (course project) |
-| project1 | CU Boulder Police Department Heatmap | *(carousel only)* | Geospatial / heatmap visualization |
-| simplefitness | Simple Fitness (Tracking App!) | *(carousel only)* | iOS / Swift / CoreData fitness tracker |
+### Mancala AI with Game Theory (`mancala-ai`)
+
+- **Summary:** Mancala with minimax and alpha-beta pruning (≈5-ply lookahead). AI targets ~70–80% win rate vs random play with large search speedups from pruning; Monte Carlo analysis for strategy validation.
+- **Technologies:** Minimax, Alpha-Beta Pruning, Game Theory
+- **Interactive on homepage:** yes (play against AI)
+
+### Advanced Data Cluster Sorting (`houseclusters`)
+
+- **Summary:** Individual Advanced Data Science course project clustering similar records using multiple structures and algorithms.
+- **Technologies:** Python, Pandas, Gaussian Mixture Models
+
+### CU Boulder Police Department Heatmap (`project1`)
+
+- **Summary:** Heatmap of CU Boulder Police Department incident locations and common occurrence patterns.
+- **Technologies:** React, Next.js, TypeScript, Tailwind CSS
+
+### Simple Fitness (`simplefitness`)
+
+- **Summary:** Native iOS app for strength and cardio workout tracking; introduction to iOS/Swift ecosystem.
+- **Technologies:** Xcode, Swift, CoreData
+- **Device frame on homepage:** mobile layout
 
 ## Notes for assistants
 
-- **Listing "what's in the portfolio"** should include **all three flagships** and **all four additional** rows above unless the user asks for a subset.
-- **ICTML** on the site may redirect to LLM Advisor (`/projects/ictml` → `/projects/llm-advisor`); treat LLM Advisor as the flagship narrative for trading-advisor work.
-- Deep-dive **methodology and limitations** live in per-project folders (e.g. `project-knowledge/sports-edge/`, `llm-advisor/`, model cards). This overview does **not** replace those for technical detail.
+- **Listing "what's in the portfolio"** should include **all three flagships** and **all four additional** projects unless the user asks for a subset.
+- **ICTML** may redirect to LLM Advisor (`/projects/ictml` → `/projects/llm-advisor`).
+- **Methodology, limitations, metrics, and architecture** for flagships: use `project-knowledge/sports-edge/`, `llm-advisor/`, `nba-hof` paths and model cards—not this overview alone.
