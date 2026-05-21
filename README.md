@@ -25,33 +25,35 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 Sports Edge odds, game, prediction, and final-score writes now run exclusively from the `sports-edge` repository workflows. This portfolio repo is a read-only consumer of the Supabase tables through `GET /api/sports-edges`; it does not expose a Sports Edge writer or cron POST endpoint.
 
-## Sports Edge Chat + RAG MVP
+## Portfolio chat (scoped assistants + RAG)
 
-The Sports Edge project page now includes a hybrid chat assistant:
+Evidence-first chat is available site-wide and on each flagship project page:
 
-- SQL path: reads Supabase `games` + latest `model_predictions` to answer result-oriented questions.
-- Retrieval path: reads markdown docs in `docs/` for methodology, definitions, and risk caveats.
-- Hybrid path: combines both for questions like "Week 12 top edges and why."
+| Surface | Scope | Tools |
+|---|---|---|
+| Homepage floating widget | `default` | `search_docs` (portfolio + project knowledge) |
+| `/projects/sports-edge` | `sports-edge` | `search_docs`, `query_warehouse` (BigQuery), `get_model_metrics` |
+| `/projects/llm-advisor` | `llm-advisor` | `search_docs`, `get_model_metrics` (Supabase telemetry) |
+| `/projects/nba-hof` | `nba-hof` | `search_docs` |
+
+- **Docs path:** embedding retrieval over `docs/` (cosine similarity when `rag_embeddings.json` exists; token overlap fallback).
+- **Data path:** warehouse SQL or canned metrics per scope; Gemini synthesizes from tool evidence only.
+- **Site-owner / contact / project list:** `docs/project-knowledge/site-profile.md` and `portfolio-overview.md` — keep in sync with homepage TSX when copy changes.
 
 Core files:
 
-- `app/api/chat/route.ts`
-- `components/chat/ChatPanel.tsx`, `components/chat/ProjectChat.tsx`, `components/chat/PortfolioChatWidget.tsx`
-- `docs/data-dictionary.md`
-- `docs/metric-definitions.md`
-- `docs/model-cards/`
-- `docs/project-postmortems/`
-- `docs/limitations-and-risk.md`
-- `docs/faq.md`
+- `app/api/chat/route.ts`, `lib/chatbot/scopes.ts`, `lib/chatbot/tools/*`
+- `components/chat/ChatPanel.tsx`, `ProjectChat.tsx`, `PortfolioChatWidget.tsx`
+- `lib/chat/markdown-links.ts` (clickable URLs in answers)
 
-Optional LLM generation:
+Gemini (recommended for synthesis):
 
 ```
-OPENAI_API_KEY
-OPENAI_CHAT_MODEL
+GCP_PROJECT_ID / VERTEX_AI_* (see .env.example)
+GOOGLE_APPLICATION_CREDENTIALS or GCP_SERVICE_ACCOUNT_JSON(_BASE64)
 ```
 
-If `OPENAI_API_KEY` is not set, `/api/chat` still works in deterministic fallback mode using SQL summaries + retrieved docs.
+Legacy OpenAI env vars are not required; the route uses Gemini via `lib/chatbot/google.ts`.
 
 ## Local Gemini + BigQuery Chat Testing
 

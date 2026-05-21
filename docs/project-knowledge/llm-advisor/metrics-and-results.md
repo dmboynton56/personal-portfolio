@@ -1,6 +1,6 @@
 ---
 project: llm-advisor
-last_verified: 2026-05-06
+last_verified: 2026-05-21
 source_paths:
   - /home/dmboynton/projects/llm-advisor/src/core/config.py
   - /home/dmboynton/projects/llm-advisor/config/thresholds.py
@@ -59,11 +59,18 @@ source_paths:
 
 ## Metric: Dashboard telemetry source contract
 
-- current_value: production uses `supabase` -> `empty`/`degraded`; non-production can use `local-files` fallback
+- current_value: production uses Supabase `llm_advisor_*` tables when EOD has run; falls back to `empty`/`degraded` when rows missing
 - interpretation: deep-dive metrics source-of-truth hierarchy
-- provenance: `personal-portfolio/app/api/llm-advisor/metrics/route.ts`
-- freshness: 2026-04-24
-- caveats: `degraded` indicates upstream read failures, while `empty` indicates no telemetry materialized yet
+- provenance: `personal-portfolio/app/api/llm-advisor/metrics/route.ts`, `llm-advisor/scripts/run_eod_aggregate.py`
+- freshness: 2026-05-21 (Supabase migration `005` applied; backfill run #23 populated 2026-05-21 run row)
+- caveats: `degraded` = upstream read failure; `empty` = no rows yet; no-trade days may have a run row with zero trades
+
+## Metric: Production telemetry milestone (2026-05-21)
+
+- EOD backfill succeeded: [Actions run #23](https://github.com/dmboynton56/llm-advisor/actions/runs/26238749774)
+- Supabase: `llm_advisor_backtest_runs` has `2026-05-21` (`total_trades=0`); heartbeats present
+- BigQuery `trading_signals`: ~357 loop log rows, 32 trade signals, 0 trades for 2026-05-21
+- Next: verify deployed `GET /api/llm-advisor/metrics?source=supabase` after auto EOD on a scheduler-driven session
 
 ## Derived metrics (available but computed at query time)
 

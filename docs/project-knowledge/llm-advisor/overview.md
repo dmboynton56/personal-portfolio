@@ -1,6 +1,6 @@
 ---
 project: llm-advisor
-last_verified: 2026-05-20
+last_verified: 2026-05-21
 source_paths:
   - /home/dmboynton/projects/llm-advisor/README.md
   - /home/dmboynton/projects/llm-advisor/src/core/config.py
@@ -38,7 +38,7 @@ The public portfolio (`/#work` carousel and `/projects/llm-advisor`) labels this
 - **ICTML:** The ICTML route on the portfolio **redirects** to this deep dive (`/projects/ictml` → `/projects/llm-advisor`); consolidation is intentional.
 - **Dashboard copy on the site:** *“ICTML is being folded into this project. Public dashboard polish is in progress while the signal and execution layers consolidate.”*
 
-**Assistant guidance:** If a visitor asks why the project is “under construction” or “work in progress,” answer with the above consolidation narrative. Do **not** imply the project has no runtime or docs — telemetry may still be empty or degraded for unrelated reasons; distinguish **UI/product consolidation** from **missing evidence for numeric claims** (use `data-sources-and-freshness.md` and the evidence register for the latter).
+**Assistant guidance:** If a visitor asks why the project is “under construction” or “work in progress,” answer with the above consolidation narrative. Do **not** imply the project has no runtime or docs — Supabase telemetry tables (`llm_advisor_*`) are populated after EOD (first backfill 2026-05-21); numeric claims should still cite freshness and trade counts from `data-sources-and-freshness.md`.
 
 ## Core workflow summary
 

@@ -46,23 +46,12 @@ The portfolio serves Sports Edge data through `GET /api/sports-edges`. That rout
 
 ### LLM Advisor telemetry ingest
 
-Use `POST /api/llm-advisor/metrics` in local/non-production debugging to parse local LLM Advisor artifacts and upsert them into:
+**Production path:** `llm-advisor/.github/workflows/eod_aggregate.yml` runs `scripts/run_eod_aggregate.py`, which upserts into:
+
 - `llm_advisor_backtest_runs`
 - `llm_advisor_backtest_trades`
 - `llm_advisor_runtime_heartbeats`
 
-Required env vars:
+Schema: `supabase/migrations/005_llm_advisor_telemetry.sql` (applied 2026-05-21). Requires GitHub secrets on the `llm-advisor` repo: `SUPABASE_DB_HOST`, `SUPABASE_DB_PORT`, `SUPABASE_DB_NAME`, `SUPABASE_DB_USER`, `SUPABASE_DB_PASSWORD`.
 
-```
-LLM_ADVISOR_CRON_SECRET=...
-LLM_ADVISOR_DAILY_NEWS_DIR=../llm-advisor/data/daily_news
-```
-
-Example cron call:
-
-```bash
-curl -X POST http://localhost:3000/api/llm-advisor/metrics \
-  -H "x-cron-secret: $LLM_ADVISOR_CRON_SECRET"
-```
-
-The dashboard endpoint `GET /api/llm-advisor/metrics` is Supabase-only in production. Local file fallback is enabled only in non-production environments for debugging.
+**Local debugging only:** `POST /api/llm-advisor/metrics` can parse local artifacts when `LLM_ADVISOR_CRON_SECRET` and `LLM_ADVISOR_DAILY_NEWS_DIR` are set.
