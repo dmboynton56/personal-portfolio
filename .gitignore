@@ -44,4 +44,7 @@ next-env.d.ts
 # Local Puppeteer/Playwright Chrome cache
 chrome/
 
+# Generated RAG embeddings are large and can be rebuilt from docs when needed.
+public/data/rag_embeddings.json
+
 .env

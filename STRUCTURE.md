@@ -1,146 +1,79 @@
-# Portfolio Project Architecture & Tech Stack Analysis
+# Portfolio Repository Structure
 
-## Core Architecture: Next.js 14 App Router
+This repository is the public portfolio surface. It should stay focused on
+displaying projects, serving recruiter-facing metrics, and answering questions
+from curated project documentation. Project pipelines live in their own repos.
 
-The portfolio is built on **Next.js 14** using the modern App Router architecture. Here's how everything fits together:
+## Runtime Stack
 
-### Tech Stack Foundation
-- **Next.js 14**: React framework with App Router for routing, SSG, and performance
-- **TypeScript**: Type safety across the entire codebase
-- **Tailwind CSS**: Utility-first styling with custom design system
-- **Radix UI**: Headless, accessible component primitives
-- **Framer Motion**: Animation library
-- **Supabase**: Backend-as-a-Service for database operations
-- **Shadcn/ui**: Component library built on Radix + Tailwind
+- Next.js App Router and TypeScript for the site.
+- Tailwind CSS and local UI components for the visual system.
+- Supabase for serving metrics and lightweight public data reads.
+- BigQuery for Sports Edge warehouse-backed chat questions.
+- Vertex/Gemini for scoped portfolio chat synthesis and embeddings.
 
-## Directory Structure & Relationships
+## Key Directories
 
-### `/app` - Next.js App Router Core
-```
+```text
 app/
-├── layout.tsx          # Root layout with theme provider
-├── page.tsx           # Homepage with all sections
-├── globals.css        # Global styles + CSS variables
-├── api/
-│   └── mancala-stats/ # API endpoint for game statistics
-└── workout-logger/    # Empty directory (future feature?)
-```
-
-**Key insights:**
-- Single-page application structure - everything renders on the main page
-- API routes handle Supabase interactions
-- Theme system using CSS custom properties
-
-### `/components` - UI Component Architecture
-```
+  api/
+    chat/                    scoped portfolio/project assistant
+    sports-edges/            Sports Edge card and ATS serving APIs
+    llm-advisor/metrics/     LLM Advisor Supabase telemetry API
+    project-metrics/[project] static/fallback project metric API
+  projects/                  project deep-dive pages
 components/
-├── [Feature Components]     # Page sections (Header, ProfileSection, etc.)
-├── [Interactive Components] # MancalaGame, ProjectCarousel, etc.
-└── ui/                     # Shadcn/ui component library
-```
-
-**Component relationships:**
-- **Page sections**: Header → ProfileSection → AboutSection → WorkSection → ContactSection
-- **Reusable components**: ThemeToggle, ProjectCarousel, various interactive demos
-- **UI primitives**: 40+ Radix-based components in `/ui` folder
-
-### `/public` - Static Assets & Data
-```
+  chat/                      shared chat surfaces
+  sports-edge/               Sports Edge metric cards
+  *.tsx                      homepage sections and project-specific displays
+docs/
+  project-knowledge/         source material for RAG answers
+  model-cards/               model summaries for recruiter-facing claims
+lib/
+  chatbot/                   scopes, BigQuery, Supabase metric tools, retrieval
+  freshness.ts               shared API freshness metadata
 public/
-├── images/           # Project screenshots, profile images, icons
-├── data/            # JSON files for predictions/data
-│   ├── daily_bias_predictions.json
-│   └── nba_hof_predictions.json
-└── [favicons]       # Various icon formats
+  data/                      static JSON bundles used by project pages/RAG
+  images/                    screenshots and visual assets
+scripts/
+  build-rag-manifest.mjs     docs manifest generation
+  build-rag-embeddings.mjs   Vertex embedding generation
+supabase/
+  migrations/                serving schema for Sports Edge and LLM Advisor
 ```
 
-**Data flow**: JSON files are consumed by components like `DailyBiasDisplay` and `NBAHofDisplay`
+## Data Ownership
 
-### `/models` - Machine Learning Models
-Contains 12 pickle files (3 ETFs × 4 model types):
-- Random Forest models for bias prediction
-- Label encoders for data preprocessing
-- Used by the Python script for daily predictions
+- `sports-edge` owns Sports Edge data production: raw updates, feature
+  snapshots, model predictions, odds sync, final scores, and Supabase writes.
+- `llm-advisor` owns trading telemetry production: premarket artifacts, live
+  loop outputs, BigQuery persistence, and EOD Supabase upserts.
+- `personal-portfolio` consumes those serving tables. It should not contain
+  standalone trading or sports data production jobs.
 
-### `/scripts` - Automation
-- **`fetch-daily-bias.py`**: Loads ML models, fetches live market data, generates predictions
-- **`generate-favicon.js`**: Icon generation utility
+The legacy standalone ICTML daily-bias workflow was removed from this repo.
+ICTML is now represented as part of the LLM Advisor story, and the
+`/projects/ictml` route redirects to `/projects/llm-advisor`.
 
-### `/lib` & `/hooks` - Utilities
-- **`/lib/utils.ts`**: Single utility function for Tailwind class merging
-- **`/hooks`**: React hooks for mobile detection and toast notifications
+## Documentation Flow
 
-## Data Flow & Interactions
+Project chat answers are grounded by files under `docs/`. After changing those
+files, rebuild:
 
-### 1. **Static Data Pipeline (WIP)**
-```
-GitHub Actions (daily 9:30 EST) 
-→ Python script loads ML models 
-→ Fetches live market data 
-→ Generates predictions 
-→ Updates JSON files 
-→ Auto-commits to repo
+```bash
+npm run build:rag-manifest
+npm run build:rag-embeddings
 ```
 
-### 2. **Interactive Game Data**
-```
-MancalaGame component 
-→ API route (/api/mancala-stats) 
-→ Supabase database 
-→ Real-time game statistics
-```
+The manifest is committed at `public/data/rag_manifest.json`. The embedding
+artifact `public/data/rag_embeddings.json` is generated locally/deploy-side and
+ignored because it is large and can be rebuilt from the docs.
 
-### 3. **Theme System**
-```
-ThemeProvider (next-themes) 
-→ CSS custom properties 
-→ Tailwind classes 
-→ Dark/light mode switching
-```
+## Cleanup Rules
 
-## Key Technologies & How They Interact
-
-### **Styling Architecture**
-- **Tailwind CSS**: Utility classes for rapid development
-- **CSS Custom Properties**: Theme variables in `globals.css`
-- **Component styling**: Shine borders, aurora backgrounds, custom animations
-- **Responsive design**: Mobile-first approach
-
-### **Component System**
-- **Radix UI**: Accessible primitives (dialogs, tooltips, etc.)
-- **Shadcn/ui**: Pre-built components using Radix + Tailwind
-- **Custom components**: Built on top of the design system
-
-### **Performance Optimizations**
-- **Static generation**: Pre-built at build time
-- **Image optimization**: Next.js Image component with unoptimized flag
-- **Code splitting**: Automatic with Next.js App Router
-
-## Safe Development Guidelines
-
-### **What you can safely modify:**
-
-1. **Content changes**: Update text, images, project data in components
-2. **Styling tweaks**: Modify Tailwind classes, CSS custom properties
-3. **Component additions**: Add new sections or interactive elements
-4. **API endpoints**: Add new routes in `/app/api`
-
-### **Be careful with:**
-
-1. **`tailwind.config.ts`**: Changes affect the entire design system
-2. **`globals.css`**: CSS variables control theming across the site
-3. **Component dependencies**: Many components rely on shared utilities
-4. **ML model files**: Don't modify unless you understand the prediction pipeline
-
-### **Critical dependencies:**
-
-- **Path aliases**: `@/*` maps to root directory
-- **Theme system**: Components expect CSS custom properties to exist
-- **Supabase config**: Environment variables required for database
-- **Python dependencies**: Required for the daily prediction automation
-
-## Project Overview
-
-The project is well-architected with clear separation of concerns. The component structure is modular, making it easy to modify individual sections without breaking others. The automation pipeline is isolated from the UI, so you can safely work on the frontend without affecting the ML predictions.
-
-This is a single-page portfolio application that showcases projects, skills, and includes interactive demonstrations of machine learning models and games. The architecture supports both static content and dynamic features while maintaining excellent performance and user experience.
+- Keep project pipeline code in the owning repo, not here.
+- Keep only public-facing static data needed by the site.
+- Do not add local model artifacts, notebooks, or generated raw data to this
+  repo.
+- Keep README and `docs/project-knowledge/*` aligned with the deployed site,
+  Supabase serving tables, and current project workflows.

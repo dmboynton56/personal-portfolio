@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-20T22:10:24.683Z",
+  "generatedAt": "2026-05-23T16:33:36.471Z",
   "chunks": [
     {
       "id": "docs/data-dictionary.txt#0",
@@ -350,82 +350,57 @@
     {
       "id": "docs/project-knowledge/llm-advisor/architecture.md#0",
       "source": "docs/project-knowledge/llm-advisor/architecture.md",
-      "charCount": 422
+      "charCount": 475
     },
     {
       "id": "docs/project-knowledge/llm-advisor/architecture.md#1",
       "source": "docs/project-knowledge/llm-advisor/architecture.md",
-      "charCount": 21
+      "charCount": 1858
     },
     {
       "id": "docs/project-knowledge/llm-advisor/architecture.md#2",
       "source": "docs/project-knowledge/llm-advisor/architecture.md",
-      "charCount": 141
+      "charCount": 573
     },
     {
       "id": "docs/project-knowledge/llm-advisor/architecture.md#3",
       "source": "docs/project-knowledge/llm-advisor/architecture.md",
-      "charCount": 133
+      "charCount": 318
     },
     {
       "id": "docs/project-knowledge/llm-advisor/architecture.md#4",
       "source": "docs/project-knowledge/llm-advisor/architecture.md",
-      "charCount": 204
-    },
-    {
-      "id": "docs/project-knowledge/llm-advisor/architecture.md#5",
-      "source": "docs/project-knowledge/llm-advisor/architecture.md",
-      "charCount": 273
-    },
-    {
-      "id": "docs/project-knowledge/llm-advisor/architecture.md#6",
-      "source": "docs/project-knowledge/llm-advisor/architecture.md",
-      "charCount": 147
-    },
-    {
-      "id": "docs/project-knowledge/llm-advisor/architecture.md#7",
-      "source": "docs/project-knowledge/llm-advisor/architecture.md",
-      "charCount": 192
+      "charCount": 164
     },
     {
       "id": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md#0",
       "source": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md",
-      "charCount": 337
+      "charCount": 440
     },
     {
       "id": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md#1",
       "source": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md",
-      "charCount": 15
+      "charCount": 1258
     },
     {
       "id": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md#2",
       "source": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md",
-      "charCount": 126
+      "charCount": 321
     },
     {
       "id": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md#3",
       "source": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md",
-      "charCount": 197
+      "charCount": 299
     },
     {
       "id": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md#4",
       "source": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md",
-      "charCount": 167
+      "charCount": 227
     },
     {
       "id": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md#5",
       "source": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md",
-      "charCount": 331
-    },
-    {
-      "id": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md#6",
-      "source": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md",
-      "charCount": 152
-    },
-    {
-      "id": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md#7",
-      "source": "docs/project-knowledge/llm-advisor/data-sources-and-freshness.md",
-      "charCount": 315
+      "charCount": 382
     },
     {
       "id": "docs/project-knowledge/llm-advisor/faq.md#0",
@@ -505,15 +480,20 @@
     {
       "id": "docs/project-knowledge/llm-advisor/metrics-and-results.md#7",
       "source": "docs/project-knowledge/llm-advisor/metrics-and-results.md",
-      "charCount": 428
+      "charCount": 585
     },
     {
       "id": "docs/project-knowledge/llm-advisor/metrics-and-results.md#8",
       "source": "docs/project-knowledge/llm-advisor/metrics-and-results.md",
-      "charCount": 258
+      "charCount": 472
     },
     {
       "id": "docs/project-knowledge/llm-advisor/metrics-and-results.md#9",
+      "source": "docs/project-knowledge/llm-advisor/metrics-and-results.md",
+      "charCount": 258
+    },
+    {
+      "id": "docs/project-knowledge/llm-advisor/metrics-and-results.md#10",
       "source": "docs/project-knowledge/llm-advisor/metrics-and-results.md",
       "charCount": 147
     },
@@ -535,7 +515,7 @@
     {
       "id": "docs/project-knowledge/llm-advisor/overview.md#3",
       "source": "docs/project-knowledge/llm-advisor/overview.md",
-      "charCount": 1670
+      "charCount": 1635
     },
     {
       "id": "docs/project-knowledge/llm-advisor/overview.md#4",

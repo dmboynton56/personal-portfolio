@@ -12,6 +12,27 @@ The portfolio is designed to provide a glimpse into my capabilities as a develop
 
 This project itself is an example of my work, built using Next.js, TypeScript, and Tailwind CSS, demonstrating attention to detail in UI development and modern web practices.
 
+## Current repository role
+
+This repo is the portfolio display and serving layer. It does not own the daily
+Sports Edge or LLM Advisor production pipelines:
+
+- `sports-edge` writes sports games, odds, predictions, and final scores into
+  BigQuery and Supabase.
+- `llm-advisor` writes trading telemetry into BigQuery and Supabase after the
+  live loop/EOD workflows.
+- This site reads Supabase serving tables, static JSON bundles, and curated docs
+  to render project pages and scoped chat answers.
+
+The old standalone ICTML daily-bias automation has been removed from the
+portfolio. ICTML is now folded into the LLM Advisor project narrative, and
+`/projects/ictml` redirects to `/projects/llm-advisor`.
+
+Last terminal verification: 2026-05-23. BigQuery and Supabase were reachable
+from local credentials. Sports Edge data lived under BigQuery project
+`learned-pier-478122-p7` and Supabase serving tables; LLM Advisor telemetry was
+present in the Supabase `llm_advisor_*` tables.
+
 ## Sports Edge data plumbing
 
 The Supabase schema + migrations that back the Sports Edge card live in `supabase/migrations/001_sports_edge_schema.sql`. Apply them with `supabase db push --file supabase/migrations/001_sports_edge_schema.sql` and make sure the following env vars are set in your deployment target:
@@ -86,7 +107,7 @@ Generate embeddings with Vertex AI `text-embedding-004`:
 npm run build:rag-embeddings
 ```
 
-The embedding script writes `public/data/rag_embeddings.json`. Runtime retrieval uses cosine similarity when that file exists and falls back to token overlap if the file is missing or the embedding request fails.
+The embedding script writes `public/data/rag_embeddings.json`. That file is intentionally ignored because it is large and generated from docs. Runtime retrieval uses cosine similarity when the file exists and falls back to token overlap if the file is missing or the embedding request fails.
 
 **After you add or edit files under `docs/`** (for example [`docs/project-knowledge/portfolio-overview.md`](docs/project-knowledge/portfolio-overview.md)), re-run **`build:rag-manifest`** and **`build:rag-embeddings`** so default-scope chat and project-scoped RAG both see the new chunks. The default portfolio chat scope includes all of `docs/project-knowledge/`, `docs/model-cards/`, `docs/project-postmortems/`, and the shared root `.txt` references in `docs/`.
 
