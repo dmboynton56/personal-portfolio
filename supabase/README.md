@@ -26,6 +26,7 @@ This folder keeps the SQL migrations that provision the `games`, `odds_snapshots
    supabase db push --file supabase/migrations/002_add_week_column.sql
    supabase db push --file supabase/migrations/004_add_actual_scores.sql
    supabase db push --file supabase/migrations/005_llm_advisor_telemetry.sql
+   supabase db push --file supabase/migrations/007_llm_advisor_order_events.sql
    ```
 4. Confirm the view returns rows:
    ```bash
@@ -51,7 +52,8 @@ The portfolio serves Sports Edge data through `GET /api/sports-edges`. That rout
 - `llm_advisor_backtest_runs`
 - `llm_advisor_backtest_trades`
 - `llm_advisor_runtime_heartbeats`
+- `llm_advisor_order_events`
 
-Schema: `supabase/migrations/005_llm_advisor_telemetry.sql` (applied 2026-05-21). Requires GitHub secrets on the `llm-advisor` repo: `SUPABASE_DB_HOST`, `SUPABASE_DB_PORT`, `SUPABASE_DB_NAME`, `SUPABASE_DB_USER`, `SUPABASE_DB_PASSWORD`.
+Schema: `supabase/migrations/005_llm_advisor_telemetry.sql` (applied 2026-05-21) plus `007_llm_advisor_order_events.sql` (applied 2026-05-23). Requires GitHub secrets on the `llm-advisor` repo: `SUPABASE_DB_HOST`, `SUPABASE_DB_PORT`, `SUPABASE_DB_NAME`, `SUPABASE_DB_USER`, `SUPABASE_DB_PASSWORD`.
 
 **Local debugging only:** `POST /api/llm-advisor/metrics` can parse local artifacts when `LLM_ADVISOR_CRON_SECRET` and `LLM_ADVISOR_DAILY_NEWS_DIR` are set.

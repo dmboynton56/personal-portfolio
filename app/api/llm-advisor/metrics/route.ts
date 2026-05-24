@@ -72,10 +72,27 @@ type NormalizedHeartbeat = {
   sourceFile: string | null
 }
 
+type NormalizedOrderEvent = {
+  eventUid: string
+  runDate: string
+  eventTs: string
+  eventType: string
+  symbol: string
+  loopCount: number | null
+  setupType: string | null
+  side: string | null
+  entryPrice: number | null
+  zScore: number | null
+  orderId: string | null
+  details: Record<string, unknown>
+  sourceFile: string | null
+}
+
 type Artifacts = {
   runs: NormalizedRun[]
   trades: NormalizedTrade[]
   heartbeats: NormalizedHeartbeat[]
+  orderEvents: NormalizedOrderEvent[]
   dataDir: string | null
 }
 
@@ -112,9 +129,29 @@ type LlmAdvisorMetricsPayload = {
       outcome: 'win' | 'loss' | 'flat' | 'unknown'
     }>
   }
+  execution: {
+    eventCount: number
+    signalCount: number
+    validationRejectedCount: number
+    validationErrorCount: number
+    executionAttemptCount: number
+    executionSucceededCount: number
+    executionFailedCount: number
+    recent: Array<{
+      eventUid: string
+      eventTs: string
+      eventType: string
+      symbol: string
+      setupType: string | null
+      side: string | null
+      orderId: string | null
+      reason: string | null
+    }>
+  }
   coverage: {
     runCount: number
     tradeCount: number
+    orderEventCount: number
     daysInSample: number
     dataDir: string | null
   }
@@ -350,6 +387,56 @@ const parseLatestHeartbeat = (
   return null
 }
 
+const parseOrderEventsFile = (
+  fileText: string,
+  runDate: string,
+  filePath: string
+): NormalizedOrderEvent[] => {
+  return fileText
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
+    .map((line, index): NormalizedOrderEvent | null => {
+      try {
+        const parsed = JSON.parse(line) as Record<string, unknown>
+        const eventTs = parseTimestamp(parsed.ts)
+        const eventType = asString(parsed.event_type)
+        const symbol = asString(parsed.symbol)
+        if (!eventTs || !eventType || !symbol) return null
+        const signal =
+          parsed.signal && typeof parsed.signal === 'object'
+            ? (parsed.signal as Record<string, unknown>)
+            : {}
+        const details =
+          parsed.details && typeof parsed.details === 'object'
+            ? (parsed.details as Record<string, unknown>)
+            : {}
+        const order =
+          details.order && typeof details.order === 'object'
+            ? (details.order as Record<string, unknown>)
+            : {}
+        return {
+          eventUid: `${runDate}:${eventTs}:${eventType}:${symbol}:${index + 1}`,
+          runDate,
+          eventTs,
+          eventType,
+          symbol,
+          loopCount: asInteger(parsed.loop_count),
+          setupType: asString(signal.setup_type),
+          side: asString(signal.side),
+          entryPrice: asNumber(signal.entry_price),
+          zScore: asNumber(signal.z_score),
+          orderId: asString(order.order_id),
+          details,
+          sourceFile: filePath
+        }
+      } catch {
+        return null
+      }
+    })
+    .filter((event): event is NormalizedOrderEvent => Boolean(event))
+}
+
 const loadLocalArtifacts = async (force = false): Promise<Artifacts> => {
   if (!force && localCache && localCache.expiresAt > Date.now()) {
     return localCache.artifacts
@@ -360,6 +447,7 @@ const loadLocalArtifacts = async (force = false): Promise<Artifacts> => {
     runs: [],
     trades: [],
     heartbeats: [],
+    orderEvents: [],
     dataDir
   }
 
@@ -384,11 +472,18 @@ const loadLocalArtifacts = async (force = false): Promise<Artifacts> => {
   for (const runDir of runDirs) {
     const processedDir = path.join(dataDir, runDir.name, 'processed')
     const backtestPath = path.join(processedDir, 'backtest_results.json')
+    const sessionSummaryPath = path.join(processedDir, 'session_summary.json')
     const liveLogPath = path.join(processedDir, 'live_loop_log.jsonl')
+    const orderEventsPath = path.join(processedDir, 'order_events.jsonl')
 
     const backtestText = await readFileTextIfExists(backtestPath)
-    if (backtestText) {
-      const parsed = parseBacktestFile(backtestText, runDir.runDate, backtestPath)
+    const sessionSummaryText = backtestText
+      ? null
+      : await readFileTextIfExists(sessionSummaryPath)
+    const runPayloadText = backtestText ?? sessionSummaryText
+    const runPayloadPath = backtestText ? backtestPath : sessionSummaryPath
+    if (runPayloadText) {
+      const parsed = parseBacktestFile(runPayloadText, runDir.runDate, runPayloadPath)
       if (parsed) {
         artifacts.runs.push(parsed.run)
         artifacts.trades.push(...parsed.trades)
@@ -406,6 +501,13 @@ const loadLocalArtifacts = async (force = false): Promise<Artifacts> => {
         artifacts.heartbeats.push(heartbeat)
       }
     }
+
+    const orderEventsText = await readFileTextIfExists(orderEventsPath)
+    if (orderEventsText) {
+      artifacts.orderEvents.push(
+        ...parseOrderEventsFile(orderEventsText, runDir.runDate, orderEventsPath)
+      )
+    }
   }
 
   localCache = {
@@ -419,7 +521,8 @@ const loadLocalArtifacts = async (force = false): Promise<Artifacts> => {
 const hasArtifactContent = (artifacts: Artifacts): boolean =>
   artifacts.runs.length > 0 ||
   artifacts.trades.length > 0 ||
-  artifacts.heartbeats.length > 0
+  artifacts.heartbeats.length > 0 ||
+  artifacts.orderEvents.length > 0
 
 const computeTelemetryUpdatedAt = (artifacts: Artifacts): string | null => {
   const candidates: number[] = []
@@ -436,6 +539,11 @@ const computeTelemetryUpdatedAt = (artifacts: Artifacts): string | null => {
 
   for (const run of artifacts.runs) {
     const parsed = Date.parse(`${run.runDate}T23:59:59.000Z`)
+    if (!Number.isNaN(parsed)) candidates.push(parsed)
+  }
+
+  for (const event of artifacts.orderEvents) {
+    const parsed = Date.parse(event.eventTs)
     if (!Number.isNaN(parsed)) candidates.push(parsed)
   }
 
@@ -488,7 +596,7 @@ const setCachedResponse = (
 const fetchSupabaseArtifacts = async (): Promise<SupabaseFetchResult> => {
   if (!supabase) return { status: 'missing' }
 
-  const [runsResult, tradesResult, heartbeatResult] = await Promise.all([
+  const [runsResult, tradesResult, heartbeatResult, orderEventsResult] = await Promise.all([
     supabase
       .from('llm_advisor_backtest_runs')
       .select(
@@ -507,7 +615,14 @@ const fetchSupabaseArtifacts = async (): Promise<SupabaseFetchResult> => {
       .from('llm_advisor_runtime_heartbeats')
       .select('source_date,heartbeat_ts,loop_count,symbols_tracked,backtest,source_file')
       .order('heartbeat_ts', { ascending: false })
-      .limit(50)
+      .limit(50),
+    supabase
+      .from('llm_advisor_order_events')
+      .select(
+        'event_uid,run_date,event_ts,event_type,symbol,loop_count,setup_type,side,entry_price,z_score,order_id,details,source_file'
+      )
+      .order('event_ts', { ascending: false })
+      .limit(2500)
   ])
 
   if (runsResult.error || tradesResult.error || heartbeatResult.error) {
@@ -526,6 +641,14 @@ const fetchSupabaseArtifacts = async (): Promise<SupabaseFetchResult> => {
       heartbeatError: heartbeatResult.error
     })
     return { status: 'error', errorId }
+  }
+
+  const canIgnoreOrderEventsError =
+    Boolean(orderEventsResult.error) && isMissingTableError(orderEventsResult.error)
+  if (orderEventsResult.error && !canIgnoreOrderEventsError) {
+    console.warn('LLM advisor order events fetch warning', {
+      error: orderEventsResult.error
+    })
   }
 
   const runs: NormalizedRun[] = (runsResult.data ?? [])
@@ -588,12 +711,49 @@ const fetchSupabaseArtifacts = async (): Promise<SupabaseFetchResult> => {
     })
     .filter((row): row is NormalizedHeartbeat => Boolean(row))
 
+  const orderEvents: NormalizedOrderEvent[] =
+    orderEventsResult.error
+      ? []
+      : (orderEventsResult.data ?? [])
+          .map((row, index) => {
+            const runDate = asString(row.run_date) ?? ''
+            const eventTs = parseTimestamp(row.event_ts)
+            const eventType = asString(row.event_type)
+            const symbol = asString(row.symbol)
+            if (!parseRunDate(runDate) || !eventTs || !eventType || !symbol) {
+              return null
+            }
+            const details =
+              row.details && typeof row.details === 'object'
+                ? (row.details as Record<string, unknown>)
+                : {}
+            return {
+              eventUid:
+                asString(row.event_uid) ??
+                `${runDate}:${eventTs}:${eventType}:${symbol}:db-${index}`,
+              runDate,
+              eventTs,
+              eventType,
+              symbol,
+              loopCount: asInteger(row.loop_count),
+              setupType: asString(row.setup_type),
+              side: asString(row.side),
+              entryPrice: asNumber(row.entry_price),
+              zScore: asNumber(row.z_score),
+              orderId: asString(row.order_id),
+              details,
+              sourceFile: asString(row.source_file)
+            }
+          })
+          .filter((row): row is NormalizedOrderEvent => Boolean(row))
+
   return {
     status: 'ok',
     artifacts: {
       runs,
       trades,
       heartbeats,
+      orderEvents,
       dataDir: null
     }
   }
@@ -608,6 +768,9 @@ const buildPayload = (
   const trades = [...artifacts.trades]
   const heartbeats = [...artifacts.heartbeats].sort((a, b) =>
     b.heartbeatTs.localeCompare(a.heartbeatTs)
+  )
+  const orderEvents = [...artifacts.orderEvents].sort((a, b) =>
+    b.eventTs.localeCompare(a.eventTs)
   )
 
   const anchorDate = runs.length ? runs[0].runDate : null
@@ -690,6 +853,28 @@ const buildPayload = (
       outcome: toTradeOutcome(trade.pnl)
     }))
 
+  const orderEventCount = (eventType: string) =>
+    orderEvents.filter((event) => event.eventType === eventType).length
+
+  const eventReason = (event: NormalizedOrderEvent): string | null => {
+    const reason = asString(event.details.reason)
+    if (reason) return reason
+    const error = asString(event.details.error)
+    if (error) return error
+    return null
+  }
+
+  const recentOrderEvents = orderEvents.slice(0, 8).map((event) => ({
+    eventUid: event.eventUid,
+    eventTs: event.eventTs,
+    eventType: event.eventType,
+    symbol: event.symbol,
+    setupType: event.setupType,
+    side: event.side,
+    orderId: event.orderId,
+    reason: eventReason(event)
+  }))
+
   return {
     source,
     generatedAt: new Date().toISOString(),
@@ -715,9 +900,20 @@ const buildPayload = (
       averageLoss,
       recent: recentTrades
     },
+    execution: {
+      eventCount: orderEvents.length,
+      signalCount: orderEventCount('signal_detected'),
+      validationRejectedCount: orderEventCount('validation_rejected'),
+      validationErrorCount: orderEventCount('validation_error'),
+      executionAttemptCount: orderEventCount('execution_attempt'),
+      executionSucceededCount: orderEventCount('execution_succeeded'),
+      executionFailedCount: orderEventCount('execution_failed'),
+      recent: recentOrderEvents
+    },
     coverage: {
       runCount: runs.length,
       tradeCount: trades.length,
+      orderEventCount: orderEvents.length,
       daysInSample: runs.length,
       dataDir: artifacts.dataDir
     }
@@ -775,6 +971,7 @@ export async function GET(req: NextRequest) {
             runs: [],
             trades: [],
             heartbeats: [],
+            orderEvents: [],
             dataDir: null
           },
           {
@@ -795,6 +992,7 @@ export async function GET(req: NextRequest) {
             runs: [],
             trades: [],
             heartbeats: [],
+            orderEvents: [],
             dataDir: null
           },
           { message: EMPTY_TELEMETRY_MESSAGE }
@@ -811,6 +1009,7 @@ export async function GET(req: NextRequest) {
           runs: [],
           trades: [],
           heartbeats: [],
+          orderEvents: [],
           dataDir: null
         },
         { message: EMPTY_TELEMETRY_MESSAGE }
@@ -837,6 +1036,7 @@ export async function GET(req: NextRequest) {
           runs: [],
           trades: [],
           heartbeats: [],
+          orderEvents: [],
           dataDir: null
         },
         {
@@ -922,6 +1122,23 @@ export async function POST(req: NextRequest) {
       updated_at: nowIso
     }))
 
+    const orderEventRows = local.orderEvents.map((event) => ({
+      event_uid: event.eventUid,
+      run_date: event.runDate,
+      event_ts: event.eventTs,
+      event_type: event.eventType,
+      symbol: event.symbol,
+      loop_count: event.loopCount,
+      setup_type: event.setupType,
+      side: event.side,
+      entry_price: event.entryPrice,
+      z_score: event.zScore,
+      order_id: event.orderId,
+      details: event.details,
+      source_file: event.sourceFile,
+      updated_at: nowIso
+    }))
+
     for (const runChunk of chunk(runRows, 300)) {
       if (!runChunk.length) continue
       const { error } = await supabase
@@ -952,12 +1169,23 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    for (const orderEventChunk of chunk(orderEventRows, 500)) {
+      if (!orderEventChunk.length) continue
+      const { error } = await supabase
+        .from('llm_advisor_order_events')
+        .upsert(orderEventChunk, { onConflict: 'event_uid' })
+      if (error) {
+        throw new Error(`Failed to upsert order event rows: ${error.message}`)
+      }
+    }
+
     return NextResponse.json({
       ok: true,
       ingested: {
         runs: runRows.length,
         trades: tradeRows.length,
-        heartbeats: heartbeatRows.length
+        heartbeats: heartbeatRows.length,
+        orderEvents: orderEventRows.length
       },
       dataDir: local.dataDir,
       timestamp: nowIso

@@ -76,9 +76,29 @@ type LlmAdvisorMetricsPayload = {
       outcome: 'win' | 'loss' | 'flat' | 'unknown'
     }>
   }
+  execution: {
+    eventCount: number
+    signalCount: number
+    validationRejectedCount: number
+    validationErrorCount: number
+    executionAttemptCount: number
+    executionSucceededCount: number
+    executionFailedCount: number
+    recent: Array<{
+      eventUid: string
+      eventTs: string
+      eventType: string
+      symbol: string
+      setupType: string | null
+      side: string | null
+      orderId: string | null
+      reason: string | null
+    }>
+  }
   coverage: {
     runCount: number
     tradeCount: number
+    orderEventCount: number
     daysInSample: number
     dataDir: string | null
   }
@@ -129,6 +149,12 @@ const formatSource = (source: LlmAdvisorMetricsPayload['source']) => {
   if (source === 'degraded') return 'Telemetry degraded'
   return 'No telemetry'
 }
+
+const formatEventType = (value: string) =>
+  value
+    .split('_')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ')
 
 const getAgentState = (metrics: LlmAdvisorMetricsPayload | null) => {
   if (!metrics || metrics.heartbeat.ageSeconds == null) return 'NO FEED'
@@ -243,9 +269,9 @@ export default function LlmAdvisorPage() {
           iconName: 'gauge'
         },
         {
-          label: 'Risk/Reward',
-          value: formatRatio(metricsData?.trades.rrOverall ?? null),
-          iconName: 'shield'
+          label: 'Signals Seen',
+          value: String(metricsData?.execution?.signalCount ?? 0),
+          iconName: 'activity'
         }
       ] as const,
     [metricsData]
@@ -365,6 +391,9 @@ export default function LlmAdvisorPage() {
               Trades indexed: <span className="text-foreground">{metricsData?.coverage.tradeCount ?? 0}</span>
             </div>
             <div>
+              Order events indexed: <span className="text-foreground">{metricsData?.coverage.orderEventCount ?? 0}</span>
+            </div>
+            <div>
               Runtime loops seen: <span className="text-foreground">{metricsData?.heartbeat.loopCount ?? 'N/A'}</span>
             </div>
             <div>
@@ -437,6 +466,26 @@ export default function LlmAdvisorPage() {
               Loop: {metricsData?.heartbeat.loopCount ?? 'N/A'} | Symbols: {metricsData?.heartbeat.symbolsTracked ?? 'N/A'}
             </p>
           </div>
+          <div className="bg-card border border-border rounded-xl p-5 space-y-2">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Brain className="w-4 h-4" />
+              <span className="text-sm">Signal Flow</span>
+            </div>
+            <p className="text-2xl font-bold">{metricsData?.execution?.signalCount ?? 0}</p>
+            <p className="text-xs text-muted-foreground">
+              Rejected: {metricsData?.execution?.validationRejectedCount ?? 0} | Parser errors: {metricsData?.execution?.validationErrorCount ?? 0}
+            </p>
+          </div>
+          <div className="bg-card border border-border rounded-xl p-5 space-y-2">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Terminal className="w-4 h-4" />
+              <span className="text-sm">Order Attempts</span>
+            </div>
+            <p className="text-2xl font-bold">{metricsData?.execution?.executionAttemptCount ?? 0}</p>
+            <p className="text-xs text-muted-foreground">
+              Filled: {metricsData?.execution?.executionSucceededCount ?? 0} | Failed: {metricsData?.execution?.executionFailedCount ?? 0}
+            </p>
+          </div>
         </div>
 
         <div className="bg-card border border-border rounded-xl p-4">
@@ -470,6 +519,42 @@ export default function LlmAdvisorPage() {
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">No trades found in telemetry yet.</p>
+          )}
+        </div>
+
+        <div className="bg-card border border-border rounded-xl p-4">
+          <h3 className="text-lg font-semibold mb-3">Recent Execution Events</h3>
+          {metricsData?.execution?.recent.length ? (
+            <div className="space-y-2">
+              {metricsData.execution.recent.map((event) => (
+                <div
+                  key={event.eventUid}
+                  className="grid gap-2 border border-border rounded-lg px-3 py-2 text-sm md:grid-cols-[1fr_auto]"
+                >
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                      <span className="font-semibold">{event.symbol}</span>
+                      <span className="text-muted-foreground">{formatEventType(event.eventType)}</span>
+                      {event.setupType && (
+                        <span className="text-muted-foreground uppercase">{event.setupType}</span>
+                      )}
+                      {event.side && (
+                        <span className="text-muted-foreground uppercase">{event.side}</span>
+                      )}
+                      {event.orderId && (
+                        <span className="font-mono text-xs text-muted-foreground">{event.orderId}</span>
+                      )}
+                    </div>
+                    {event.reason && (
+                      <p className="mt-1 truncate text-xs text-muted-foreground">{event.reason}</p>
+                    )}
+                  </div>
+                  <div className="text-muted-foreground md:text-right">{formatTimestamp(event.eventTs)}</div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground">No signal or order lifecycle events found yet.</p>
           )}
         </div>
       </section>
