@@ -29,6 +29,7 @@ This folder keeps the SQL migrations that provision the `games`, `odds_snapshots
    supabase db push --file supabase/migrations/007_llm_advisor_order_events.sql
    supabase db push --file supabase/migrations/008_add_mlb_serving_columns.sql
    ```
+   Migration `008` (MLB league constraint + probable pitcher columns) was applied to production on 2026-05-25.
 4. Confirm the view returns rows:
    ```bash
    supabase db query 'select * from games_today_enriched limit 5;'
