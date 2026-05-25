@@ -27,6 +27,7 @@ This folder keeps the SQL migrations that provision the `games`, `odds_snapshots
    supabase db push --file supabase/migrations/004_add_actual_scores.sql
    supabase db push --file supabase/migrations/005_llm_advisor_telemetry.sql
    supabase db push --file supabase/migrations/007_llm_advisor_order_events.sql
+   supabase db push --file supabase/migrations/008_add_mlb_serving_columns.sql
    ```
 4. Confirm the view returns rows:
    ```bash
@@ -43,7 +44,7 @@ Odds ingestion now runs in the `sports-edge` repository (`data-core/scripts/sync
 
 ### Sports Edge serving API
 
-The portfolio serves Sports Edge data through `GET /api/sports-edges`. That route reads Supabase `games` and `model_predictions` and returns a cacheable payload for the project page. Sports Edge writes for `games`, `odds_snapshots`, `model_predictions`, and final scores are owned by the `sports-edge` repository workflows.
+The portfolio serves Sports Edge data through `GET /api/sports-edges`. That route reads Supabase `games` and `model_predictions` and returns a cacheable payload for the project page. Sports Edge writes for `games`, `odds_snapshots`, `model_predictions`, and final scores are owned by the `sports-edge` repository workflows. MLB rows are probability-only and use nullable `home_probable_pitcher` / `away_probable_pitcher` display fields.
 
 ### LLM Advisor telemetry ingest
 

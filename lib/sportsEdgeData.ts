@@ -30,6 +30,22 @@ export type NbaGameEdge = {
   spreadHit?: boolean | null
 }
 
+export type MlbGameEdge = {
+  gameId: string
+  homeTeam: string
+  awayTeam: string
+  firstPitchUtc: string
+  homeWinProb: number
+  modelVersion: string
+  predictionUpdated: string
+  note: string
+  homeProbablePitcher?: string | null
+  awayProbablePitcher?: string | null
+  actualHomeScore?: number | null
+  actualAwayScore?: number | null
+  winnerHit?: boolean | null
+}
+
 export type SportsEdgePayload = {
   nfl: {
     season: number
@@ -45,6 +61,14 @@ export type SportsEdgePayload = {
     label: string
     updatedAt: string
     games: NbaGameEdge[]
+    availableDates: string[]
+  }
+  mlb: {
+    season: number
+    date: string
+    label: string
+    updatedAt: string
+    games: MlbGameEdge[]
     availableDates: string[]
   }
 }
@@ -161,6 +185,14 @@ export const sportsEdgeMockData: SportsEdgePayload = {
     label: 'Nov 26, 2024',
     updatedAt: '2024-11-12T15:30:00Z',
     availableDates: ['2024-11-26'],
+    games: []
+  },
+  mlb: {
+    season: 2026,
+    date: '2026-05-24',
+    label: 'May 24, 2026',
+    updatedAt: '2026-05-24T15:30:00Z',
+    availableDates: [],
     games: []
   }
 }

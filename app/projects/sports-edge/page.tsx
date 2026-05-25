@@ -14,7 +14,7 @@ export default function SportsEdgePage() {
     return (
         <ProjectLayout
             title="Sports Edge"
-            description="A production sports modeling pipeline with BigQuery as source-of-truth, Supabase serving, and documented outputs across NBA, NFL, PGA, and CBB workflows."
+            description="A production sports modeling pipeline with BigQuery as source-of-truth, Supabase serving, and documented outputs across NBA, NFL, MLB, PGA, and CBB workflows."
             tags={['Python', 'BigQuery', 'GCP', 'Next.js', 'LightGBM', 'Supabase']}
             repoUrl="https://github.com/dmboynton56/sports-edge"
             metrics={metrics?.metrics}
@@ -98,8 +98,10 @@ steps:
   - python scripts/build_feature_snapshots.py --league NFL ...
   - python -m src.pipeline.refresh_nba --model-version v3
   - python -m src.pipeline.refresh_nfl --model-version v1
+  - python -m src.pipeline.refresh_mlb --model-version v3
   - python scripts/sync_bq_to_supabase.py --league NBA --append
   - python scripts/sync_bq_to_supabase.py --league NFL --append
+  - python scripts/sync_bq_to_supabase.py --league MLB --append
   - python scripts/sync_odds.py ...`}
                     </pre>
                 </div>
@@ -135,7 +137,7 @@ steps:
                             <h3 className="font-semibold">Automation Contract</h3>
                         </div>
                         <p className="text-sm text-muted-foreground">
-                            Production refresh executes daily at 13:00 UTC and runs both NBA and NFL generation before syncing to Supabase.
+                            Production refresh executes daily at 13:00 UTC and runs NBA, NFL, and probability-only MLB generation before syncing to Supabase.
                         </p>
                     </div>
                     <div className="bg-card border border-border rounded-xl p-5">
@@ -144,7 +146,7 @@ steps:
                             <h3 className="font-semibold">CBB + PGA Context</h3>
                         </div>
                         <p className="text-sm text-muted-foreground">
-                            CBB and PGA documentation/workflows are integrated in `data-core/docs` and cache artifacts, so project knowledge is broader than only NBA/NFL.
+                            CBB and PGA documentation/workflows are integrated in `data-core/docs` and cache artifacts, so project knowledge is broader than only NBA/NFL/MLB.
                         </p>
                     </div>
                 </div>

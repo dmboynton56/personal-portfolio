@@ -15,7 +15,7 @@ interface LogoProps {
 }
 
 export function Logo({ size = 32, className = '', onClick, clickable = false, alwaysWhite = false }: LogoProps) {
-  const { theme } = useTheme()
+  const { resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
@@ -50,9 +50,10 @@ export function Logo({ size = 32, className = '', onClick, clickable = false, al
   }
 
   // Use white version if alwaysWhite is true, otherwise switch based on theme
+  const activeTheme = resolvedTheme ?? 'dark'
   const logoSrc = alwaysWhite 
     ? '/images/general/newicon.png' 
-    : (theme === 'dark' ? '/images/general/newicon.png' : '/images/general/newicon_dark.png')
+    : (activeTheme === 'dark' ? '/images/general/newicon.png' : '/images/general/newicon_dark.png')
 
   const logoContent = (
     <Image

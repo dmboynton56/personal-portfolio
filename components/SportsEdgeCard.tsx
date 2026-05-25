@@ -8,15 +8,20 @@ import {
   useRef,
   useState
 } from 'react'
-import type { SportsEdgePayload, NflGameEdge, NbaGameEdge } from '@/lib/sportsEdgeData'
+import type { SportsEdgePayload, NflGameEdge, NbaGameEdge, MlbGameEdge } from '@/lib/sportsEdgeData'
 import type { ApiEnvelope } from '@/lib/freshness'
 import { calculateEdge } from '@/lib/sportsEdgeData'
 import { NflTeamLogo } from './NflTeamLogo'
+import { NbaTeamLogo } from './NbaTeamLogo'
+import { MlbTeamLogo } from './MlbTeamLogo'
 import { getTeamShortName } from '@/lib/nflTeams'
+import { getNbaTeamShortName } from '@/lib/nbaTeams'
+import { getMlbTeamShortName } from '@/lib/mlbTeams'
 
-const sportsEdgeTabs: { key: 'NFL' | 'NBA'; label: string; srNote?: string }[] = [
+const sportsEdgeTabs: { key: 'NFL' | 'NBA' | 'MLB'; label: string; srNote?: string }[] = [
   { key: 'NFL', label: 'NFL • Weekly' },
-  { key: 'NBA', label: 'NBA • Daily' }
+  { key: 'NBA', label: 'NBA • Daily' },
+  { key: 'MLB', label: 'MLB • Daily' }
 ]
 
 type SportsEdgeCardProps = {
@@ -28,7 +33,7 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
   const [data, setData] = useState<SportsEdgePayload | null>(null)
   const [err, setErr] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState<'NFL' | 'NBA'>('NFL')
+  const [activeTab, setActiveTab] = useState<'NFL' | 'NBA' | 'MLB'>('NFL')
   const [comingSoonVisible, setComingSoonVisible] = useState(false)
   const [availableWeeks, setAvailableWeeks] = useState<number[]>([])
   const [selectedWeek, setSelectedWeek] = useState<number | undefined>(undefined)
@@ -36,6 +41,8 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
   const [availableDates, setAvailableDates] = useState<string[]>([])
   const [selectedDate, setSelectedDate] = useState<string | undefined>(undefined)
   const [dateFilter, setDateFilter] = useState<string | undefined>(undefined)
+  const [availableMlbDates, setAvailableMlbDates] = useState<string[]>([])
+  const [selectedMlbDate, setSelectedMlbDate] = useState<string | undefined>(undefined)
   const requestIdRef = useRef(0)
 
   const fetchData = useCallback(
@@ -75,6 +82,8 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
         setSelectedWeek(payload.nfl.week)
         setAvailableDates(payload.nba.availableDates ?? [])
         setSelectedDate(payload.nba.date)
+        setAvailableMlbDates(payload.mlb.availableDates ?? [])
+        setSelectedMlbDate(payload.mlb.date)
       } catch (e) {
         if (requestId !== requestIdRef.current) return
         setErr(String(e))
@@ -96,9 +105,11 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
         fetchData(
           typeof weekFilter === 'number' && Number.isFinite(weekFilter)
             ? weekFilter
-            : undefined,
+          : undefined,
           undefined
         )
+      } else if (activeTab === 'NBA') {
+        fetchData(undefined, dateFilter)
       } else {
         fetchData(undefined, dateFilter)
       }
@@ -145,6 +156,13 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
     setDateFilter(nextDate)
   }
 
+  const handleMlbDateChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const nextDate = event.target.value
+    if (!nextDate || dateFilter === nextDate) return
+    setSelectedMlbDate(nextDate)
+    setDateFilter(nextDate)
+  }
+
   const labelSuffix = useMemo(() => {
     if (!data?.nfl.label) return ''
     const week = selectedWeek ?? data.nfl.week
@@ -170,12 +188,20 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
     return selectedDate ? [selectedDate] : []
   }, [availableDates, selectedDate])
 
+  const mlbDateOptions = useMemo(() => {
+    if (availableMlbDates.length) {
+      return [...availableMlbDates].sort((a, b) => b.localeCompare(a))
+    }
+    return selectedMlbDate ? [selectedMlbDate] : []
+  }, [availableMlbDates, selectedMlbDate])
+
   const formatDateLabel = (dateStr: string) => {
     const date = new Date(dateStr)
     return date.toLocaleDateString('en-US', {
       weekday: 'short',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
+      timeZone: 'UTC'
     })
   }
 
@@ -198,6 +224,16 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
       const diff = Math.abs(edgeB ?? 0) - Math.abs(edgeA ?? 0)
       return diff === 0
         ? Date.parse(a.tipoffUtc) - Date.parse(b.tipoffUtc)
+        : diff
+    })
+  }, [data])
+
+  const sortedMlbGames: MlbGameEdge[] = useMemo(() => {
+    if (!data?.mlb.games) return []
+    return [...data.mlb.games].sort((a, b) => {
+      const diff = Math.abs((b.homeWinProb ?? 0.5) - 0.5) - Math.abs((a.homeWinProb ?? 0.5) - 0.5)
+      return diff === 0
+        ? Date.parse(a.firstPitchUtc) - Date.parse(b.firstPitchUtc)
         : diff
     })
   }, [data])
@@ -302,7 +338,9 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
       <p className="mb-4 text-center text-xs text-muted-foreground" aria-live="polite">
         {activeTab === 'NFL'
           ? 'Showing live NFL model edges.'
-          : 'Showing live NBA model edges.'}
+          : activeTab === 'NBA'
+            ? 'Showing live NBA model edges.'
+            : 'Showing MLB model home-win probabilities.'}
       </p>
 
       {activeTab === 'NFL' ? (
@@ -403,7 +441,7 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
                           <span className="font-semibold text-foreground">
                             {game.modelSpread > 0 ? `+${game.modelSpread.toFixed(1)}` : game.modelSpread.toFixed(1)}
                           </span>
-                          {game.spreadHit !== null && (
+                          {game.spreadHit != null && (
                             <span
                               className={`text-xs font-bold ${
                                 game.spreadHit
@@ -452,7 +490,7 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
             </div>
           )}
         </div>
-      ) : (
+      ) : activeTab === 'NBA' ? (
         <div className="relative space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-muted/10 p-3 text-sm">
             <div>
@@ -512,17 +550,19 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
                   >
                     <div className="flex items-start justify-between gap-2 text-xs">
                       <div className="flex flex-1 items-center gap-2">
+                        <NbaTeamLogo team={game.awayTeam} size={28} className="shrink-0" />
                         <div className="flex flex-col leading-tight">
                           <span className="font-semibold text-foreground">
-                            {game.awayTeam}
+                            {getNbaTeamShortName(game.awayTeam)}
                           </span>
                         </div>
                         <span className="text-[11px] text-muted-foreground">@</span>
                         <div className="flex flex-col items-end leading-tight">
                           <span className="font-semibold text-foreground">
-                            {game.homeTeam}
+                            {getNbaTeamShortName(game.homeTeam)}
                           </span>
                         </div>
+                        <NbaTeamLogo team={game.homeTeam} size={28} className="shrink-0" />
                       </div>
                       <span className={`min-w-[60px] text-right text-[10px] font-semibold uppercase ${badge.className}`}>
                         {badge.label}
@@ -544,7 +584,7 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
                           <span className="font-semibold text-foreground">
                             {game.modelSpread > 0 ? `+${game.modelSpread.toFixed(1)}` : game.modelSpread.toFixed(1)}
                           </span>
-                          {game.spreadHit !== null && (
+                          {game.spreadHit != null && (
                             <span
                               className={`text-xs font-bold ${
                                 game.spreadHit
@@ -599,6 +639,138 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
               <div className="text-sm text-muted-foreground">
                 Coming soon — nightly predictions unlock later this month.
               </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-muted/10 p-3 text-sm">
+            <div>
+              <div className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                MLB {data.mlb.season}
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <label htmlFor="mlb-date-select" className="sr-only">
+                  Select MLB date
+                </label>
+                <select
+                  id="mlb-date-select"
+                  value={selectedMlbDate ?? ''}
+                  onChange={handleMlbDateChange}
+                  className="rounded-lg border border-border bg-background/80 px-3 py-1 text-sm font-semibold text-foreground shadow-sm focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground disabled:opacity-60"
+                  disabled={!mlbDateOptions.length}
+                >
+                  {selectedMlbDate == null && (
+                    <option value="" disabled>
+                      Select date
+                    </option>
+                  )}
+                  {mlbDateOptions.map((date) => (
+                    <option key={date} value={date}>
+                      {formatDateLabel(date)}
+                    </option>
+                  ))}
+                </select>
+                {data.mlb.label && (
+                  <span className="text-base font-semibold text-muted-foreground">
+                    {data.mlb.label}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="text-xs text-muted-foreground">
+              Updated {formatUpdatedAt(data.mlb.updatedAt)}
+            </div>
+          </div>
+
+          <p className="rounded-lg bg-foreground/5 p-2 text-xs text-muted-foreground">
+            MLB values are model probabilities, not betting advice. Moneyline odds, ROI, and spread edges are intentionally not shown.
+          </p>
+
+          {sortedMlbGames.length === 0 ? (
+            <div className="rounded-xl border border-dashed py-8 text-center text-sm text-muted-foreground">
+              MLB board not loaded yet. Check back after the daily refresh completes.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+              {sortedMlbGames.map((game) => {
+                const predictedHome = game.homeWinProb >= 0.5
+                const predictedTeam = predictedHome ? game.homeTeam : game.awayTeam
+                const predictedProb = predictedHome ? game.homeWinProb : 1 - game.homeWinProb
+                return (
+                  <div
+                    key={game.gameId}
+                    className="flex flex-col rounded-xl border bg-card/60 p-3 hover:border-accent/60"
+                  >
+                    <div className="flex items-start justify-between gap-2 text-xs">
+                      <div className="flex flex-1 items-center gap-2">
+                        <MlbTeamLogo team={game.awayTeam} size={28} className="shrink-0" />
+                        <div className="flex flex-col leading-tight">
+                          <span className="font-semibold text-foreground">
+                            {getMlbTeamShortName(game.awayTeam)}
+                          </span>
+                          {game.awayProbablePitcher && (
+                            <span className="text-[11px] text-muted-foreground">
+                              {game.awayProbablePitcher}
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-[11px] text-muted-foreground">@</span>
+                        <div className="flex flex-col items-end leading-tight">
+                          <span className="font-semibold text-foreground">
+                            {getMlbTeamShortName(game.homeTeam)}
+                          </span>
+                          {game.homeProbablePitcher && (
+                            <span className="text-[11px] text-muted-foreground">
+                              {game.homeProbablePitcher}
+                            </span>
+                          )}
+                        </div>
+                        <MlbTeamLogo team={game.homeTeam} size={28} className="shrink-0" />
+                      </div>
+                      {game.winnerHit != null && (
+                        <span
+                          className={`min-w-[60px] text-right text-[10px] font-semibold uppercase ${
+                            game.winnerHit ? 'text-emerald-500' : 'text-red-500'
+                          }`}
+                          title={game.winnerHit ? 'Winner prediction hit' : 'Winner prediction missed'}
+                        >
+                          {game.winnerHit ? 'Hit' : 'Miss'}
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-[11px] text-muted-foreground">
+                      {formatTipoff(game.firstPitchUtc)}
+                    </div>
+                    <div className="mt-3 space-y-1 text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Home win</span>
+                        <span className="font-semibold text-foreground">
+                          {formatPercent(game.homeWinProb)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Model side</span>
+                        <span className="font-semibold text-foreground">
+                          {getMlbTeamShortName(predictedTeam)} {formatPercent(predictedProb)}
+                        </span>
+                      </div>
+                      {game.actualHomeScore != null && game.actualAwayScore != null && (
+                        <div className="flex justify-between pt-1 border-t border-border/50">
+                          <span className="text-muted-foreground">Final</span>
+                          <span className="font-semibold text-foreground">
+                            {game.awayTeam} {game.actualAwayScore} - {game.homeTeam} {game.actualHomeScore}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <p className="mt-2 text-xs text-muted-foreground">{game.note}</p>
+                    <div className="mt-auto pt-3 text-[10px] uppercase text-muted-foreground">
+                      Update {formatUpdatedAt(game.predictionUpdated)} • {game.modelVersion}
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           )}
         </div>

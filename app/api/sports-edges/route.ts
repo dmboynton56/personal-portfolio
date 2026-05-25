@@ -4,7 +4,8 @@ import {
   sportsEdgeMockData,
   SportsEdgePayload,
   NflGameEdge,
-  NbaGameEdge
+  NbaGameEdge,
+  MlbGameEdge
 } from '@/lib/sportsEdgeData'
 import { ApiEnvelope, ApiSource, STALE_THRESHOLDS, toApiMeta } from '@/lib/freshness'
 
@@ -33,6 +34,8 @@ type SupabaseGameRow = {
   book_spread?: number | null
   home_score?: number | null
   away_score?: number | null
+  home_probable_pitcher?: string | null
+  away_probable_pitcher?: string | null
 }
 
 type SupabasePredictionRow = {
@@ -70,10 +73,52 @@ type LoadedNbaEdges = {
   window: WeekWindow
 }
 
+type LoadedMlbEdges = {
+  games: MlbGameEdge[]
+  season: number
+  date: string
+  label: string
+  window: WeekWindow
+}
+
 const parseIsoDate = (value?: string | null) => {
   if (!value) return null
   const parsed = new Date(value)
   return Number.isNaN(parsed.getTime()) ? null : parsed
+}
+
+const chunkArray = <T,>(items: T[], size: number): T[][] => {
+  const chunks: T[][] = []
+  for (let index = 0; index < items.length; index += size) {
+    chunks.push(items.slice(index, index + size))
+  }
+  return chunks
+}
+
+const loadPredictedGameIds = async (gameIds: string[]) => {
+  if (!supabase || !gameIds.length) return new Set<string>()
+
+  const predictedGameIds = new Set<string>()
+  for (const chunk of chunkArray(gameIds, 200)) {
+    const { data: predictions, error } = await supabase
+      .from('model_predictions')
+      .select('game_id')
+      .in('game_id', chunk)
+      .limit(1000)
+
+    if (error) {
+      console.warn('Supabase error when gathering predicted game ids.', error)
+      continue
+    }
+
+    predictions?.forEach((prediction) => {
+      if (prediction.game_id) {
+        predictedGameIds.add(prediction.game_id)
+      }
+    })
+  }
+
+  return predictedGameIds
 }
 
 const getWeekWindow = (): WeekWindow => {
@@ -152,6 +197,40 @@ const formatWeekLabel = (week: number, window: WeekWindow) => {
   return `Week of ${format.format(window.start)}`
 }
 
+const formatDateLabel = (value: string) => {
+  const dateObj = new Date(value)
+  return dateObj.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC'
+  })
+}
+
+const resolveGameDateLabel = (
+  games: SupabaseGameRow[],
+  dateFilter?: string
+) => {
+  if (dateFilter) {
+    return {
+      date: dateFilter,
+      label: formatDateLabel(dateFilter)
+    }
+  }
+
+  const firstGameDate = parseIsoDate(games[0]?.game_time_utc)
+  if (firstGameDate) {
+    const date = firstGameDate.toISOString().split('T')[0]
+    return {
+      date,
+      label: formatDateLabel(date)
+    }
+  }
+
+  const date = new Date().toISOString().split('T')[0]
+  return { date, label: 'Today' }
+}
+
 const windowFromGames = (games: SupabaseGameRow[], fallback: WeekWindow) => {
   const timestamps = games
     .map((game) => parseIsoDate(game.game_time_utc))
@@ -218,7 +297,7 @@ const loadNflEdges = async (
   let gamesQuery = supabase
     .from('games')
     .select(
-      'id, league, season, week, game_time_utc, home_team, away_team, book_spread, home_score, away_score'
+      'id, league, season, week, game_time_utc, home_team, away_team, book_spread, home_score, away_score, home_probable_pitcher, away_probable_pitcher'
     )
     .eq('league', 'NFL')
 
@@ -363,20 +442,15 @@ const loadAvailableWeeks = async (season?: number) => {
     return []
   }
 
-  // Get game IDs that have predictions
-  const gameIds = games.map((g) => g.id)
-  const { data: predictions } = await supabase
-    .from('model_predictions')
-    .select('game_id')
-    .in('game_id', gameIds)
-    .limit(10000) // Reasonable limit
+  const gamesWithPredictions = await loadPredictedGameIds(
+    games.map((game) => game.id)
+  )
 
-  if (!predictions?.length) {
+  if (!gamesWithPredictions.size) {
     return []
   }
 
   // Get unique weeks from games that have predictions
-  const gamesWithPredictions = new Set(predictions.map((p) => p.game_id))
   const uniqueWeeks = Array.from(
     new Set(
       games
@@ -421,24 +495,49 @@ const mapGameToNbaEdge = (
   }
 }
 
-const loadNbaEdges = async (
-  options: LoadOptions = {}
-): Promise<LoadedNbaEdges | null> => {
-  if (!supabase) return null
+const mapGameToMlbEdge = (
+  game: SupabaseGameRow,
+  prediction: SupabasePredictionRow
+): MlbGameEdge => {
+  const actualHomeScore = game.home_score ?? null
+  const actualAwayScore = game.away_score ?? null
+  const homeWinProb = prediction.my_home_win_prob ?? 0.5
+  let winnerHit: boolean | null = null
 
-  const preferredModelName = process.env.SPORTS_EDGE_MODEL_NAME?.trim()
-  const dateFilter = options.date
-  const defaultWindow = getDateWindow()
+  if (actualHomeScore != null && actualAwayScore != null) {
+    winnerHit = (homeWinProb >= 0.5) === (actualHomeScore > actualAwayScore)
+  }
 
-  let gamesQuery = supabase
+  return {
+    gameId: game.id,
+    homeTeam: game.home_team,
+    awayTeam: game.away_team,
+    firstPitchUtc: game.game_time_utc,
+    homeWinProb,
+    modelVersion: prediction.model_version ?? 'mlb-winner-v3',
+    predictionUpdated: prediction.asof_ts ?? game.game_time_utc,
+    note: 'MLB v3 home-win probability from Supabase.',
+    homeProbablePitcher: game.home_probable_pitcher ?? null,
+    awayProbablePitcher: game.away_probable_pitcher ?? null,
+    actualHomeScore,
+    actualAwayScore,
+    winnerHit
+  }
+}
+
+const buildDateGamesQuery = (
+  league: 'NBA' | 'MLB',
+  dateFilter: string | undefined,
+  defaultWindow: WeekWindow
+) => {
+  let gamesQuery = supabase!
     .from('games')
     .select(
-      'id, league, season, week, game_time_utc, home_team, away_team, book_spread, home_score, away_score'
+      'id, league, season, week, game_time_utc, home_team, away_team, book_spread, home_score, away_score, home_probable_pitcher, away_probable_pitcher'
     )
-    .eq('league', 'NBA')
+    .eq('league', league)
 
   if (dateFilter) {
-    // Filter by date: get all games on this date (UTC)
     const filterDate = new Date(dateFilter)
     const startOfDay = new Date(Date.UTC(
       filterDate.getUTCFullYear(),
@@ -448,7 +547,7 @@ const loadNbaEdges = async (
     ))
     const endOfDay = new Date(startOfDay)
     endOfDay.setUTCDate(endOfDay.getUTCDate() + 1)
-    
+
     gamesQuery = gamesQuery
       .gte('game_time_utc', startOfDay.toISOString())
       .lt('game_time_utc', endOfDay.toISOString())
@@ -458,9 +557,22 @@ const loadNbaEdges = async (
       .lt('game_time_utc', defaultWindow.end.toISOString())
   }
 
-  const { data: games, error: gamesError } = await gamesQuery.order(
-    'game_time_utc',
-    { ascending: true }
+  return gamesQuery.order('game_time_utc', { ascending: true })
+}
+
+const loadNbaEdges = async (
+  options: LoadOptions = {}
+): Promise<LoadedNbaEdges | null> => {
+  if (!supabase) return null
+
+  const preferredModelName = process.env.SPORTS_EDGE_MODEL_NAME?.trim()
+  const dateFilter = options.date
+  const defaultWindow = getDateWindow()
+
+  const { data: games, error: gamesError } = await buildDateGamesQuery(
+    'NBA',
+    dateFilter,
+    defaultWindow
   )
 
   if (gamesError) {
@@ -548,32 +660,7 @@ const loadNbaEdges = async (
 
   const season = determineSeason(games)
   
-  // Determine the date label
-  let date: string
-  let label: string
-  if (dateFilter) {
-    date = dateFilter
-    const dateObj = new Date(dateFilter)
-    label = dateObj.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    })
-  } else {
-    // Use the first game's date
-    const firstGameDate = parseIsoDate(games[0]?.game_time_utc)
-    if (firstGameDate) {
-      date = firstGameDate.toISOString().split('T')[0]
-      label = firstGameDate.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-      })
-    } else {
-      date = new Date().toISOString().split('T')[0]
-      label = 'Today'
-    }
-  }
+  const { date, label } = resolveGameDateLabel(games, dateFilter)
 
   const window = dateFilter
     ? windowFromGames(games, defaultWindow)
@@ -588,14 +675,126 @@ const loadNbaEdges = async (
   }
 }
 
-const loadAvailableDates = async (season?: number) => {
+const loadMlbEdges = async (
+  options: LoadOptions = {}
+): Promise<LoadedMlbEdges | null> => {
+  if (!supabase) return null
+
+  const preferredModelName = process.env.SPORTS_EDGE_MODEL_NAME?.trim()
+  const dateFilter = options.date
+  const defaultWindow = getDateWindow()
+
+  const { data: games, error: gamesError } = await buildDateGamesQuery(
+    'MLB',
+    dateFilter,
+    defaultWindow
+  )
+
+  if (gamesError) {
+    console.warn(
+      'Supabase error when loading MLB games for date window.',
+      gamesError
+    )
+    return null
+  }
+
+  if (!games?.length) {
+    return null
+  }
+
+  const gameIds = games.map((game) => game.id)
+  if (!gameIds.length) {
+    return null
+  }
+
+  let predictionsQuery = supabase
+    .from('model_predictions')
+    .select('game_id, model_name, my_spread, my_home_win_prob, model_version, asof_ts')
+    .in('game_id', gameIds)
+
+  if (preferredModelName) {
+    predictionsQuery = predictionsQuery.eq(
+      'model_name',
+      preferredModelName
+    )
+  }
+
+  predictionsQuery = predictionsQuery.order('asof_ts', {
+    ascending: false
+  })
+
+  const { data: predictions, error: predictionError } = await predictionsQuery
+
+  if (predictionError) {
+    console.warn(
+      'Supabase error when loading MLB model_predictions.',
+      predictionError
+    )
+    return null
+  }
+
+  if (!predictions?.length) {
+    return null
+  }
+
+  const latestPredictionsByModel = new Map<string, SupabasePredictionRow>()
+  const latestPredictionsByGame = new Map<string, SupabasePredictionRow>()
+  for (const prediction of predictions) {
+    const key = `${prediction.game_id}:${prediction.model_name ?? 'unknown'}`
+    if (!latestPredictionsByModel.has(key)) {
+      latestPredictionsByModel.set(key, prediction)
+    }
+
+    if (!latestPredictionsByGame.has(prediction.game_id)) {
+      latestPredictionsByGame.set(prediction.game_id, prediction)
+    }
+  }
+
+  const pickPrediction = (gameId: string) => {
+    if (preferredModelName) {
+      const preferred = latestPredictionsByModel.get(
+        `${gameId}:${preferredModelName}`
+      )
+      if (preferred) return preferred
+    }
+
+    return latestPredictionsByGame.get(gameId) ?? null
+  }
+
+  const mappedGames = games
+    .map((game) => {
+      const prediction = pickPrediction(game.id)
+      return prediction ? mapGameToMlbEdge(game, prediction) : null
+    })
+    .filter((value): value is MlbGameEdge => Boolean(value))
+
+  if (!mappedGames.length) {
+    return null
+  }
+
+  const season = determineSeason(games)
+  const { date, label } = resolveGameDateLabel(games, dateFilter)
+  const window = dateFilter
+    ? windowFromGames(games, defaultWindow)
+    : defaultWindow
+
+  return {
+    games: mappedGames,
+    season: season ?? 2026,
+    date,
+    label,
+    window
+  }
+}
+
+const loadAvailableDates = async (league: 'NBA' | 'MLB', season?: number) => {
   if (!supabase) return []
 
-  // Query dates from NBA games that have predictions
+  // Query dates from games that have predictions
   let query = supabase
     .from('games')
     .select('game_time_utc, id')
-    .eq('league', 'NBA')
+    .eq('league', league)
 
   if (typeof season === 'number' && Number.isFinite(season)) {
     query = query.eq('season', season)
@@ -606,7 +805,7 @@ const loadAvailableDates = async (season?: number) => {
   })
 
   if (gamesError) {
-    console.warn('Supabase error when gathering available NBA dates.', gamesError)
+    console.warn(`Supabase error when gathering available ${league} dates.`, gamesError)
     return []
   }
 
@@ -614,20 +813,15 @@ const loadAvailableDates = async (season?: number) => {
     return []
   }
 
-  // Get game IDs that have predictions
-  const gameIds = games.map((g) => g.id)
-  const { data: predictions } = await supabase
-    .from('model_predictions')
-    .select('game_id')
-    .in('game_id', gameIds)
-    .limit(10000)
+  const gamesWithPredictions = await loadPredictedGameIds(
+    games.map((game) => game.id)
+  )
 
-  if (!predictions?.length) {
+  if (!gamesWithPredictions.size) {
     return []
   }
 
   // Get unique dates (YYYY-MM-DD) from games that have predictions
-  const gamesWithPredictions = new Set(predictions.map((p) => p.game_id))
   const dateSet = new Set<string>()
   
   games
@@ -665,6 +859,10 @@ export async function GET(request: NextRequest) {
     nba: {
       ...sportsEdgeMockData.nba,
       availableDates: sportsEdgeMockData.nba.availableDates ?? []
+    },
+    mlb: {
+      ...sportsEdgeMockData.mlb,
+      availableDates: sportsEdgeMockData.mlb.availableDates ?? []
     }
   }
 
@@ -672,9 +870,10 @@ export async function GET(request: NextRequest) {
     try {
       // Always load available weeks/dates independently, regardless of whether loadEdges returns data
       // This fixes the bug where dropdown only shows options from the current window
-      const [availableWeeks, availableDates] = await Promise.all([
+      const [availableWeeks, availableNbaDates, availableMlbDates] = await Promise.all([
         loadAvailableWeeks(),
-        loadAvailableDates()
+        loadAvailableDates('NBA'),
+        loadAvailableDates('MLB')
       ])
       
       // Load NFL edges
@@ -724,24 +923,57 @@ export async function GET(request: NextRequest) {
             updatedAt: new Date().toISOString(),
             games: nbaEdges.games,
             availableDates:
-              availableDates.length > 0
-                ? availableDates
+              availableNbaDates.length > 0
+                ? availableNbaDates
                 : payload.nba.availableDates
           }
         }
       } else {
         // Even if no edges returned, update availableDates if we found any
-        if (availableDates.length > 0) {
+        if (availableNbaDates.length > 0) {
           payload = {
             ...payload,
             nba: {
               ...payload.nba,
-              availableDates
+              availableDates: availableNbaDates
             }
           }
         }
         console.warn(
           'No NBA edges returned from Supabase window. Serving mock payload.'
+        )
+      }
+
+      // Load MLB edges
+      const mlbEdges = await loadMlbEdges({ date: normalizedDate })
+      if (mlbEdges) {
+        responseSource = 'supabase'
+        payload = {
+          ...payload,
+          mlb: {
+            season: mlbEdges.season,
+            date: mlbEdges.date,
+            label: mlbEdges.label,
+            updatedAt: new Date().toISOString(),
+            games: mlbEdges.games,
+            availableDates:
+              availableMlbDates.length > 0
+                ? availableMlbDates
+                : payload.mlb.availableDates
+          }
+        }
+      } else {
+        if (availableMlbDates.length > 0) {
+          payload = {
+            ...payload,
+            mlb: {
+              ...payload.mlb,
+              availableDates: availableMlbDates
+            }
+          }
+        }
+        console.warn(
+          'No MLB edges returned from Supabase window. Serving mock payload.'
         )
       }
     } catch (error) {
@@ -758,7 +990,8 @@ export async function GET(request: NextRequest) {
 
   const updatedAtCandidates = [
     payload.nfl.updatedAt,
-    payload.nba.updatedAt
+    payload.nba.updatedAt,
+    payload.mlb.updatedAt
   ]
     .map((ts) => Date.parse(ts))
     .filter((ms) => Number.isFinite(ms)) as number[]
