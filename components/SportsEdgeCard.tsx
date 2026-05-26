@@ -29,24 +29,30 @@ type SportsEdgeCardProps = {
   enabled?: boolean
 }
 
+type FetchParams = {
+  week?: number
+  nbaDate?: string
+  mlbDate?: string
+}
+
 export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) {
   const [data, setData] = useState<SportsEdgePayload | null>(null)
   const [err, setErr] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState<'NFL' | 'NBA' | 'MLB'>('NFL')
-  const [comingSoonVisible, setComingSoonVisible] = useState(false)
   const [availableWeeks, setAvailableWeeks] = useState<number[]>([])
   const [selectedWeek, setSelectedWeek] = useState<number | undefined>(undefined)
   const [weekFilter, setWeekFilter] = useState<number | undefined>(undefined)
   const [availableDates, setAvailableDates] = useState<string[]>([])
   const [selectedDate, setSelectedDate] = useState<string | undefined>(undefined)
-  const [dateFilter, setDateFilter] = useState<string | undefined>(undefined)
+  const [nbaDateFilter, setNbaDateFilter] = useState<string | undefined>(undefined)
   const [availableMlbDates, setAvailableMlbDates] = useState<string[]>([])
   const [selectedMlbDate, setSelectedMlbDate] = useState<string | undefined>(undefined)
+  const [mlbDateFilter, setMlbDateFilter] = useState<string | undefined>(undefined)
   const requestIdRef = useRef(0)
 
   const fetchData = useCallback(
-    async (week?: number, date?: string) => {
+    async ({ week, nbaDate, mlbDate }: FetchParams = {}) => {
       const requestId = ++requestIdRef.current
       try {
         setIsLoading(true)
@@ -54,8 +60,11 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
         if (typeof week === 'number' && Number.isFinite(week)) {
           params.set('week', week.toString())
         }
-        if (date) {
-          params.set('date', date)
+        if (nbaDate) {
+          params.set('nbaDate', nbaDate)
+        }
+        if (mlbDate) {
+          params.set('mlbDate', mlbDate)
         }
         const queryString = params.toString()
         const url = `/api/sports-edges${queryString ? `?${queryString}` : ''}`
@@ -82,8 +91,10 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
         setSelectedWeek(payload.nfl.week)
         setAvailableDates(payload.nba.availableDates ?? [])
         setSelectedDate(payload.nba.date)
+        setNbaDateFilter((current) => current ?? payload.nba.date)
         setAvailableMlbDates(payload.mlb.availableDates ?? [])
         setSelectedMlbDate(payload.mlb.date)
+        setMlbDateFilter((current) => current ?? payload.mlb.date)
       } catch (e) {
         if (requestId !== requestIdRef.current) return
         setErr(String(e))
@@ -100,35 +111,19 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
   useEffect(() => {
     if (!enabled) return
 
-    const load = () => {
-      if (activeTab === 'NFL') {
-        fetchData(
-          typeof weekFilter === 'number' && Number.isFinite(weekFilter)
-            ? weekFilter
+    fetchData({
+      week:
+        activeTab === 'NFL' &&
+        typeof weekFilter === 'number' &&
+        Number.isFinite(weekFilter)
+          ? weekFilter
           : undefined,
-          undefined
-        )
-      } else if (activeTab === 'NBA') {
-        fetchData(undefined, dateFilter)
-      } else {
-        fetchData(undefined, dateFilter)
-      }
-    }
-
-    load()
+      nbaDate: activeTab === 'NBA' ? nbaDateFilter : undefined,
+      mlbDate: activeTab === 'MLB' ? mlbDateFilter : undefined
+    })
 
     // No interval polling needed since data updates once daily
-  }, [enabled, fetchData, weekFilter, dateFilter, activeTab])
-  
-  useEffect(() => {
-    // Only show coming soon overlay if NBA tab is active AND there are no games
-    if (activeTab === 'NBA') {
-      const hasGames = data?.nba.games && data.nba.games.length > 0
-      setComingSoonVisible(!hasGames)
-    } else {
-      setComingSoonVisible(false)
-    }
-  }, [activeTab, data])
+  }, [enabled, fetchData, weekFilter, nbaDateFilter, mlbDateFilter, activeTab])
 
   const sortedGames: NflGameEdge[] = useMemo(() => {
     if (!data?.nfl.games) return []
@@ -151,16 +146,16 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
 
   const handleDateChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const nextDate = event.target.value
-    if (!nextDate || dateFilter === nextDate) return
+    if (!nextDate || nbaDateFilter === nextDate) return
     setSelectedDate(nextDate)
-    setDateFilter(nextDate)
+    setNbaDateFilter(nextDate)
   }
 
   const handleMlbDateChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const nextDate = event.target.value
-    if (!nextDate || dateFilter === nextDate) return
+    if (!nextDate || mlbDateFilter === nextDate) return
     setSelectedMlbDate(nextDate)
-    setDateFilter(nextDate)
+    setMlbDateFilter(nextDate)
   }
 
   const labelSuffix = useMemo(() => {
@@ -491,7 +486,7 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
           )}
         </div>
       ) : activeTab === 'NBA' ? (
-        <div className="relative space-y-4">
+        <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-muted/10 p-3 text-sm">
             <div>
               <div className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
@@ -533,9 +528,7 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
 
           {sortedNbaGames.length === 0 ? (
             <div className="rounded-xl border border-dashed py-8 text-center text-sm text-muted-foreground">
-              {comingSoonVisible
-                ? 'Daily board not loaded yet. Check back after games are played.'
-                : 'No games available for selected date.'}
+              No games available for selected date.
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -630,15 +623,6 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
                   </div>
                 )
               })}
-            </div>
-          )}
-          {comingSoonVisible && (
-            <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center bg-background/75 text-center backdrop-blur-sm transition-opacity duration-300 opacity-100">
-              <div className="mb-2 text-xs font-semibold uppercase tracking-[0.3em] text-accent">Sneak Peek</div>
-              <div className="text-2xl font-semibold text-foreground">NBA model</div>
-              <div className="text-sm text-muted-foreground">
-                Coming soon — nightly predictions unlock later this month.
-              </div>
             </div>
           )}
         </div>

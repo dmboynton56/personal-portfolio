@@ -141,6 +141,17 @@ const getWeekWindow = (): WeekWindow => {
   return { start, end }
 }
 
+const todayUtcDate = () => new Date().toISOString().split('T')[0]
+
+const resolveLeagueDate = (
+  explicitDate: string | undefined,
+  availableDates: string[]
+) => {
+  if (explicitDate) return explicitDate
+  if (availableDates.length > 0) return availableDates[0]
+  return todayUtcDate()
+}
+
 const getDateWindow = (): WeekWindow => {
   const envStart = parseIsoDate(process.env.SPORTS_EDGE_DATE_START)
   const envEnd = parseIsoDate(process.env.SPORTS_EDGE_DATE_END)
@@ -153,8 +164,11 @@ const getDateWindow = (): WeekWindow => {
   const start = new Date(
     Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
   )
+  start.setUTCDate(start.getUTCDate() - DEFAULT_LOOKBACK_DAYS)
   start.setUTCHours(0, 0, 0, 0)
-  const end = new Date(start)
+  const end = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
+  )
   end.setUTCDate(end.getUTCDate() + DEFAULT_HORIZON_DAYS)
   end.setUTCHours(23, 59, 59, 999)
 
@@ -841,12 +855,15 @@ const loadAvailableDates = async (league: 'NBA' | 'MLB', season?: number) => {
 export async function GET(request: NextRequest) {
   const weekParam = request.nextUrl.searchParams.get('week')
   const dateParam = request.nextUrl.searchParams.get('date')
+  const nbaDateParam =
+    request.nextUrl.searchParams.get('nbaDate') ?? dateParam ?? undefined
+  const mlbDateParam =
+    request.nextUrl.searchParams.get('mlbDate') ?? dateParam ?? undefined
   const requestedWeek = weekParam ? Number(weekParam) : undefined
   const normalizedWeek =
     typeof requestedWeek === 'number' && Number.isFinite(requestedWeek)
       ? requestedWeek
       : undefined
-  const normalizedDate = dateParam || undefined
 
   let responseSource: ApiSource = 'fallback-cache'
   let payload: SportsEdgePayload = {
@@ -875,6 +892,9 @@ export async function GET(request: NextRequest) {
         loadAvailableDates('NBA'),
         loadAvailableDates('MLB')
       ])
+
+      const resolvedNbaDate = resolveLeagueDate(nbaDateParam ?? undefined, availableNbaDates)
+      const resolvedMlbDate = resolveLeagueDate(mlbDateParam ?? undefined, availableMlbDates)
       
       // Load NFL edges
       const nflEdges = await loadNflEdges({ week: normalizedWeek })
@@ -911,7 +931,7 @@ export async function GET(request: NextRequest) {
       }
 
       // Load NBA edges
-      const nbaEdges = await loadNbaEdges({ date: normalizedDate })
+      const nbaEdges = await loadNbaEdges({ date: resolvedNbaDate })
       if (nbaEdges) {
         responseSource = 'supabase'
         payload = {
@@ -928,24 +948,29 @@ export async function GET(request: NextRequest) {
                 : payload.nba.availableDates
           }
         }
-      } else {
-        // Even if no edges returned, update availableDates if we found any
-        if (availableNbaDates.length > 0) {
-          payload = {
-            ...payload,
-            nba: {
-              ...payload.nba,
-              availableDates: availableNbaDates
-            }
+      } else if (availableNbaDates.length > 0 || nbaDateParam) {
+        responseSource = 'supabase'
+        payload = {
+          ...payload,
+          nba: {
+            ...payload.nba,
+            date: resolvedNbaDate,
+            label: formatDateLabel(resolvedNbaDate),
+            games: [],
+            availableDates: availableNbaDates
           }
         }
+        console.warn(
+          'No NBA edges returned for selected date. Serving empty board with available dates.'
+        )
+      } else {
         console.warn(
           'No NBA edges returned from Supabase window. Serving mock payload.'
         )
       }
 
       // Load MLB edges
-      const mlbEdges = await loadMlbEdges({ date: normalizedDate })
+      const mlbEdges = await loadMlbEdges({ date: resolvedMlbDate })
       if (mlbEdges) {
         responseSource = 'supabase'
         payload = {
@@ -962,16 +987,22 @@ export async function GET(request: NextRequest) {
                 : payload.mlb.availableDates
           }
         }
-      } else {
-        if (availableMlbDates.length > 0) {
-          payload = {
-            ...payload,
-            mlb: {
-              ...payload.mlb,
-              availableDates: availableMlbDates
-            }
+      } else if (availableMlbDates.length > 0 || mlbDateParam) {
+        responseSource = 'supabase'
+        payload = {
+          ...payload,
+          mlb: {
+            ...payload.mlb,
+            date: resolvedMlbDate,
+            label: formatDateLabel(resolvedMlbDate),
+            games: [],
+            availableDates: availableMlbDates
           }
         }
+        console.warn(
+          'No MLB edges returned for selected date. Serving empty board with available dates.'
+        )
+      } else {
         console.warn(
           'No MLB edges returned from Supabase window. Serving mock payload.'
         )
