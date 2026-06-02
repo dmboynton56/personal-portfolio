@@ -7,6 +7,98 @@
   box-shadow: 0 0 0 2px #1a1a1a;
 }
 
+.device-scale {
+  --device-scale: 1;
+  --device-width: 0px;
+  --device-height: 0px;
+  position: relative;
+  width: min(calc(var(--device-width) * var(--device-scale)), 100%);
+  height: calc(var(--device-height) * var(--device-scale));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  margin-inline: auto;
+}
+
+.device-scale-content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(var(--device-scale));
+  transform-origin: center;
+}
+
+.device-scale--iphone {
+  --device-width: 427px;
+  --device-height: 864px;
+}
+
+.device-scale--macbook {
+  --device-width: 1330px;
+  --device-height: 894px;
+}
+
+.device-scale--desktop-home {
+  --device-scale: 0.22;
+}
+
+.device-scale--desktop-carousel {
+  --device-scale: 0.2;
+}
+
+.device-scale--mobile-home {
+  --device-scale: 0.65;
+}
+
+.device-scale--mobile-carousel {
+  --device-scale: 0.55;
+}
+
+@media (min-width: 370px) {
+  .device-scale--desktop-home {
+    --device-scale: 0.25;
+  }
+}
+
+@media (min-width: 640px) {
+  .device-scale--desktop-home {
+    --device-scale: 0.4;
+  }
+}
+
+@media (min-width: 768px) {
+  .device-scale--desktop-home {
+    --device-scale: 0.55;
+  }
+
+  .device-scale--desktop-carousel {
+    --device-scale: 0.4;
+  }
+
+  .device-scale--mobile-home {
+    --device-scale: 0.85;
+  }
+
+  .device-scale--mobile-carousel {
+    --device-scale: 0.75;
+  }
+}
+
+@media (min-width: 1024px) {
+  .device-scale--desktop-home {
+    --device-scale: 0.7;
+  }
+
+  .device-scale--desktop-carousel {
+    --device-scale: 0.6;
+  }
+
+  .device-scale--mobile-carousel {
+    --device-scale: 0.85;
+  }
+}
+
 .marvel-device .screen {
   width: 100%;
   position: relative;
@@ -154,10 +246,10 @@
 
 .marvel-device.macbook .bottom-bar {
   position: absolute;
-  width: 140%;
+  width: 106%;
   height: 24px;
   background: #1a1a1a;
-  left: -20%;
+  left: -3%;
   bottom: -24px;
   border-radius: 0 0 20px 20px;
   z-index: 1;

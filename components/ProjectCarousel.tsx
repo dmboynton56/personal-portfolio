@@ -19,6 +19,25 @@ interface ProjectCarouselProps {
   initialImage?: string; // Add prop to specify which image to start on
 }
 
+const DESKTOP_DEVICE_PREVIEW_CLASS =
+  'device-scale device-scale--macbook device-scale--desktop-carousel';
+const MOBILE_DEVICE_PREVIEW_CLASS =
+  'device-scale device-scale--iphone device-scale--mobile-carousel';
+
+function DevicePreview({
+  className,
+  children,
+}: {
+  className: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={className}>
+      <div className="device-scale-content">{children}</div>
+    </div>
+  );
+}
+
 export function ProjectCarousel({ images, onClose, projectType, initialImage }: ProjectCarouselProps) {
   const swiperRef = useRef(null);
   const [mounted, setMounted] = useState(false);
@@ -65,7 +84,7 @@ export function ProjectCarousel({ images, onClose, projectType, initialImage }: 
             <SwiperSlide key={idx} className="flex items-center justify-center py-8">
               <div className="w-full h-full flex items-center justify-center">
                 {projectType === 'mobile' ? (
-                  <div className="transform scale-[0.55] md:scale-[0.75] lg:scale-[0.85] origin-center">
+                  <DevicePreview className={MOBILE_DEVICE_PREVIEW_CLASS}>
                     <DeviceFrameset device="iPhone X" color="black" landscape={false}>
                       <Image
                         src={src}
@@ -76,9 +95,9 @@ export function ProjectCarousel({ images, onClose, projectType, initialImage }: 
                         priority={idx === getInitialSlide()}
                       />
                     </DeviceFrameset>
-                  </div>
+                  </DevicePreview>
                 ) : (
-                  <div className="transform scale-[0.2] sm:scale-[0.20] md:scale-[0.4] lg:scale-[0.6] origin-center">
+                  <DevicePreview className={DESKTOP_DEVICE_PREVIEW_CLASS}>
                     <DeviceFrameset device="MacBook Pro" color="silver">
                       <div className="relative w-[1280px] h-[800px] bg-background">
                         <div className="absolute inset-0 flex items-center justify-center">
@@ -95,7 +114,7 @@ export function ProjectCarousel({ images, onClose, projectType, initialImage }: 
                       </div>
                       <div className="bottom-bar" />
                     </DeviceFrameset>
-                  </div>
+                  </DevicePreview>
                 )}
               </div>
             </SwiperSlide>

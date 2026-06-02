@@ -28,6 +28,24 @@ const SportsEdgeDisplay = dynamic(
 
 /** Responsive hint for lazy previews and carousel-friendly fills */
 const PROJECT_IMAGE_SIZES = '(max-width: 768px) min(100vw, 896px), min(896px, 75vw)'
+const DESKTOP_DEVICE_PREVIEW_CLASS =
+  'device-scale device-scale--macbook device-scale--desktop-home'
+const MOBILE_DEVICE_PREVIEW_CLASS =
+  'device-scale device-scale--iphone device-scale--mobile-home'
+
+function DevicePreview({
+  className,
+  children,
+}: {
+  className: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className={className}>
+      <div className="device-scale-content">{children}</div>
+    </div>
+  )
+}
 
 interface Project {
   id: string
@@ -459,14 +477,14 @@ export function WorkSection() {
                   >
                     {project.isInteractive && project.id === 'mancala-ai' ? (
                       visibleProjectIds.has('mancala-ai') ? (
-                        <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center flex items-center justify-center w-full h-full">
+                        <DevicePreview className={DESKTOP_DEVICE_PREVIEW_CLASS}>
                           <DeviceFrameset device="MacBook Pro" color="silver">
                             <div className="relative w-[1280px] h-[800px] bg-background flex items-center justify-center">
                               <MancalaGame />
                             </div>
                             <div className="bottom-bar" />
                           </DeviceFrameset>
-                        </div>
+                        </DevicePreview>
                       ) : (
                         renderInteractivePlaceholder(project)
                       )
@@ -476,7 +494,7 @@ export function WorkSection() {
                           onClick={() => handleImageClick(project)}
                           className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
                         >
-                          <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
+                          <DevicePreview className={DESKTOP_DEVICE_PREVIEW_CLASS}>
                             <DeviceFrameset device="MacBook Pro" color="silver">
                               <div className="relative w-[1280px] h-[800px] bg-background">
                                 <div className="absolute inset-[8px] overflow-hidden">
@@ -490,7 +508,7 @@ export function WorkSection() {
                               </div>
                               <div className="bottom-bar" />
                             </DeviceFrameset>
-                          </div>
+                          </DevicePreview>
                           <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
                         </div>
                       ) : (
@@ -503,7 +521,7 @@ export function WorkSection() {
                           onPointerDown={(event) => event.stopPropagation()}
                           className="relative transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
                         >
-                          <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
+                          <DevicePreview className={DESKTOP_DEVICE_PREVIEW_CLASS}>
                             <DeviceFrameset device="MacBook Pro" color="silver">
                               <div className="relative w-[1280px] h-[800px] bg-background">
                                 <div className="absolute inset-[8px] overflow-hidden">
@@ -512,7 +530,7 @@ export function WorkSection() {
                               </div>
                               <div className="bottom-bar" />
                             </DeviceFrameset>
-                          </div>
+                          </DevicePreview>
                           <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
                         </div>
                       ) : (
@@ -520,7 +538,7 @@ export function WorkSection() {
                       )
                     ) : project.id === 'llm-advisor' ? (
                       <div className="relative transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group">
-                        <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
+                        <DevicePreview className={DESKTOP_DEVICE_PREVIEW_CLASS}>
                           <DeviceFrameset device="MacBook Pro" color="silver">
                             <div className="relative w-[1280px] h-[800px] overflow-hidden bg-zinc-950">
                               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.24),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(16,185,129,0.18),transparent_34%)]" />
@@ -553,7 +571,7 @@ export function WorkSection() {
                             </div>
                             <div className="bottom-bar" />
                           </DeviceFrameset>
-                        </div>
+                        </DevicePreview>
                       </div>
                     ) : (
                       <div
@@ -561,7 +579,7 @@ export function WorkSection() {
                         className="relative cursor-pointer transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
                       >
                         {project.type === 'mobile' ? (
-                          <div className="transform scale-[0.65] md:scale-[0.85] origin-center">
+                          <DevicePreview className={MOBILE_DEVICE_PREVIEW_CLASS}>
                             <DeviceFrameset device="iPhone X" color="black" landscape={false}>
                               <Image
                                 src={project.image}
@@ -571,9 +589,9 @@ export function WorkSection() {
                                 className="object-contain"
                               />
                             </DeviceFrameset>
-                          </div>
+                          </DevicePreview>
                         ) : (
-                          <div className="transform scale-[0.25] sm:scale-[0.4] md:scale-[0.55] lg:scale-[0.7] origin-center">
+                          <DevicePreview className={DESKTOP_DEVICE_PREVIEW_CLASS}>
                             <DeviceFrameset device="MacBook Pro" color="silver">
                               <div className="relative w-[1280px] h-[800px] bg-background">
                                 <div className="absolute inset-0 flex items-center justify-center">
@@ -589,7 +607,7 @@ export function WorkSection() {
                               </div>
                               <div className="bottom-bar" />
                             </DeviceFrameset>
-                          </div>
+                          </DevicePreview>
                         )}
                         <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
                       </div>
