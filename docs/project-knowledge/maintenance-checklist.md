@@ -38,6 +38,7 @@ Run this checklist once per month, or immediately after major pipeline/config ch
   - `docs/project-knowledge/sports-edge/*.md`
   - `docs/project-knowledge/question-index.md`
 - Keep frontmatter fields (`last_verified`, `source_paths`) current.
+- **Embedding rebuild is automated.** A GitHub Action (`.github/workflows/rebuild-rag-embeddings.yml`) re-indexes `public/data/rag_embeddings.json` on every push to `main` that touches `docs/**` or the RAG scripts, plus a weekly Sunday cron. No manual `npm run build:rag-embeddings` step is needed after doc edits land on `main`. See `.github/workflows/README.md` for troubleshooting.
 
 ## Step 5: KPI source consistency checks
 

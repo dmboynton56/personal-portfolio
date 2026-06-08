@@ -1,0 +1,101 @@
+name: rebuild-rag-embeddings
+
+# Rebuilds the offline RAG embedding index from docs/** so the portfolio
+# chat can answer questions from the current corpus without a manual
+# `npm run build:rag-embeddings` step.
+#
+# Triggers:
+#   - push to main when docs/** or the RAG scripts change
+#   - weekly cron as a safety net
+#   - manual workflow_dispatch from the Actions tab
+#
+# Output: writes public/data/rag_embeddings.json and public/data/rag_manifest.json,
+# then auto-commits the result back to main. The commit message includes
+# [skip ci] so this workflow does not retrigger itself.
+
+"on":
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'scripts/build-rag-*.mjs'
+      - '.github/workflows/rebuild-rag-embeddings.yml'
+  workflow_dispatch:
+  schedule:
+    # Weekly Sunday 06:00 UTC. Cheap safety net for missed triggers.
+    - cron: '0 6 * * 0'
+
+concurrency:
+  # Never run two rebuilds at once. If a new push comes in while one is
+  # running, the in-flight run is allowed to finish (cancel-in-progress: false)
+  # so we don't churn through Vertex API quota on thrash.
+  group: rebuild-rag-embeddings
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  # Needed for the auto-commit step to push back to main.
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # Full history lets the auto-commit step be a normal fast-forward.
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build RAG manifest
+        run: npm run build:rag-manifest
+        env:
+          # These are required by the build scripts even when they're
+          # only used for embedding. The manifest step itself doesn't
+          # need them, but it shares its import with the embedding step
+          # which validates them at startup.
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          VERTEX_AI_PROJECT: ${{ secrets.VERTEX_AI_PROJECT }}
+
+      - name: Build RAG embeddings
+        run: npm run build:rag-embeddings
+        env:
+          # Auth: prefer the base64-encoded service account JSON secret.
+          # Falls back to GCP_SERVICE_ACCOUNT_JSON (raw JSON string) if set.
+          # If neither is set, the script will fail loudly.
+          GCP_SERVICE_ACCOUNT_JSON_BASE64: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON_BASE64 }}
+          GCP_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+          GOOGLE_APPLICATION_CREDENTIALS: ''
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          VERTEX_AI_PROJECT: ${{ secrets.VERTEX_AI_PROJECT }}
+          VERTEX_AI_LOCATION: ${{ secrets.VERTEX_AI_LOCATION }}
+          VERTEX_AI_EMBEDDING_MODEL: ${{ secrets.VERTEX_AI_EMBEDDING_MODEL }}
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet public/data/rag_manifest.json public/data/rag_embeddings.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Auto-commit rebuilt embeddings
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add public/data/rag_manifest.json public/data/rag_embeddings.json
+          # [skip ci] is critical: prevents this commit from retriggering
+          # the workflow and creating an infinite loop.
+          git commit -m "chore(rag): rebuild embeddings [skip ci]"
+          git push origin main
