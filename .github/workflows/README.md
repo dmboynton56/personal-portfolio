@@ -21,7 +21,8 @@ Configure these in **Settings → Secrets and variables → Actions**:
 
 | Secret | Required | Notes |
 | --- | --- | --- |
-| `GCP_SERVICE_ACCOUNT_JSON_BASE64` | yes (recommended) | Base64-encoded service account JSON. The service account needs `aiplatform.endpoints.predict` on the project. |
+| `GCP_SERVICE_ACCOUNT_JSON` | yes (recommended) | Raw service account JSON string. Easier to paste correctly than base64. The service account needs `aiplatform.endpoints.predict` on the project. |
+| `GCP_SERVICE_ACCOUNT_JSON_BASE64` | optional | Base64-encoded service account JSON. Used as a fallback if the raw JSON secret is not set. |
 | `GCP_PROJECT_ID` | yes | Your Google Cloud project ID. |
 | `VERTEX_AI_PROJECT` | recommended | Usually the same as `GCP_PROJECT_ID`. |
 | `VERTEX_AI_LOCATION` | optional | Defaults to `us-central1`. |
@@ -30,13 +31,25 @@ Configure these in **Settings → Secrets and variables → Actions**:
 
 If neither auth secret is set, the embedding step fails with a clear error pointing at the script.
 
-## How to base64-encode a service account key
+## How to provide a service account key
+
+Two options, in order of preference:
+
+**Option 1: Paste the raw JSON (recommended).** Open the service account `.json` file in a text editor, select all, copy, and paste into the `GCP_SERVICE_ACCOUNT_JSON` secret. The file should start with `{"type": "service_account",` and end with `}`. No encoding required, fewer ways to get it wrong.
+
+**Option 2: Base64-encode the JSON (fallback).** If the raw form is unavailable:
 
 ```bash
 base64 -i path/to/service-account.json | tr -d '\n' | pbcopy
 ```
 
-Then paste into the `GCP_SERVICE_ACCOUNT_JSON_BASE64` repo secret.
+Verify the decode is intact before pasting:
+
+```bash
+pbpaste | base64 -d | head -c 20
+```
+
+You should see `{"type": "service_account",` or similar. If you see binary garbage or the output is truncated, the original file wasn't a JSON credentials file. Then paste into the `GCP_SERVICE_ACCOUNT_JSON_BASE64` repo secret.
 
 ## Concurrency
 
