@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-05-23T16:33:36.471Z",
+  "generatedAt": "2026-06-08T23:52:53.552Z",
   "chunks": [
     {
       "id": "docs/data-dictionary.txt#0",
@@ -575,7 +575,7 @@
     {
       "id": "docs/project-knowledge/maintenance-checklist.md#5",
       "source": "docs/project-knowledge/maintenance-checklist.md",
-      "charCount": 280
+      "charCount": 665
     },
     {
       "id": "docs/project-knowledge/maintenance-checklist.md#6",
