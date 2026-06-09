@@ -1,4 +1,13 @@
 {
+    "personal-portfolio": {
+        "generatedAt": "2026-06-08T00:00:00.000000+00:00",
+        "metrics": [
+            { "label": "RAG Index", "value": "1,200+ chunks", "iconName": "database", "trend": "neutral" },
+            { "label": "Build Mode", "value": "Static + ISR", "iconName": "workflow", "trend": "neutral" },
+            { "label": "Data Sources", "value": "Sports Edge • LLM Advisor", "iconName": "activity", "trend": "neutral" },
+            { "label": "Chatbot Stack", "value": "Gemini + Vertex AI", "iconName": "brainCircuit", "trend": "neutral" }
+        ]
+    },
     "sports-edge": {
         "generatedAt": "2026-04-07T17:16:30.644158+00:00",
         "metrics": [

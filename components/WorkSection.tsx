@@ -92,6 +92,24 @@ interface PlayerPrediction {
 
 const mockProjects: Project[] = [
   {
+    id: 'personal-portfolio',
+    title: 'My Personal Portfolio Website',
+    description:
+      'Built with TypeScript, Next.js, and a Supabase + BigQuery data spine. Pulls live sportsbook edges from Sports Edge and trading snapshots from LLM Advisor, then renders them alongside the rest of the site. A Gemini-powered chatbot (Vertex AI, RAG-grounded on the site\'s own content) answers questions about me, my projects, and the data behind the page you\'re looking at. This card is a case study of the system you\'re using right now.',
+    category: 'flagship',
+    type: 'desktop',
+    image: '/images/projects/personal-portfolio-hero.png',
+    images: ['/images/projects/personal-portfolio-hero.png'],
+    technologies: ['TypeScript', 'Next.js', 'React', 'Tailwind', 'Supabase', 'BigQuery', 'Gemini / Vertex AI', 'RAG'],
+    proofPoints: [
+      'Live data from Sports Edge + LLM Advisor in one component tree',
+      'Chatbot grounded on the site\'s own content via RAG (rag_manifest + rag_embeddings)',
+      'Treats itself as a product: project_metrics table, changelog, system diagram'
+    ],
+    isInteractive: true,
+    caseStudyUrl: '/projects/personal-portfolio'
+  },
+  {
     id: 'nba-hof-predictor',
     title: 'NBA Hall of Fame Predictor 🏀',
     description:

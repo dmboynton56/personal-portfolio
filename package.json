@@ -11,6 +11,7 @@
     "build:rag-manifest": "node scripts/build-rag-manifest.mjs",
     "build:warehouse-schema": "node scripts/build-warehouse-schema.mjs",
     "build:rag-embeddings": "node scripts/build-rag-embeddings.mjs",
+    "build:changelog": "node scripts/build-changelog.mjs",
     "refresh-project-metrics": "node scripts/refresh-project-metrics.mjs"
   },
   "dependencies": {

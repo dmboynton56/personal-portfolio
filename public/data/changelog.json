@@ -1,0 +1,138 @@
+{
+  "generatedAt": "2026-06-09T05:36:02.021Z",
+  "entries": [
+    {
+      "version": "Unreleased",
+      "title": "",
+      "date": null,
+      "groups": [
+        {
+          "type": "Added",
+          "items": [
+            "New \"My Personal Portfolio Website\" case study page at `/projects/personal-portfolio`, treating the site itself as a documented system",
+            "Changelog parser script (`scripts/build-changelog.mjs`) that converts this file to a static JSON for the changelog section",
+            "Live metrics entry for the personal-portfolio project in `project_metrics_fallback.json`"
+          ]
+        }
+      ]
+    },
+    {
+      "version": "2026-06-05",
+      "title": "Gemini grounding fallback",
+      "date": "2026-06-05",
+      "groups": [
+        {
+          "type": "Changed",
+          "items": [
+            "Chatbot now falls back to a \"I don't know\" response when the RAG retrieval confidence drops below 0.7, instead of letting Gemini improvise"
+          ]
+        }
+      ]
+    },
+    {
+      "version": "2026-06-01",
+      "title": "Vertex AI migration",
+      "date": "2026-06-01",
+      "groups": [
+        {
+          "type": "Changed",
+          "items": [
+            "Chatbot generation moved from raw Gemini API calls to a Vertex AI endpoint on the same GCP project, unifying auth and quotas"
+          ]
+        }
+      ]
+    },
+    {
+      "version": "2026-05-28",
+      "title": "Page weight reduction",
+      "date": "2026-05-28",
+      "groups": [
+        {
+          "type": "Changed",
+          "items": [
+            "Lazy-loaded the WorkSection carousel; main bundle dropped ~38% on the home route"
+          ]
+        }
+      ]
+    },
+    {
+      "version": "2026-05-20",
+      "title": "BigQuery view for project metrics",
+      "date": "2026-05-20",
+      "groups": [
+        {
+          "type": "Added",
+          "items": [
+            "`project_metrics_v1` BigQuery view consolidates per-project KPIs into a single source-of-truth query"
+          ]
+        }
+      ]
+    },
+    {
+      "version": "2026-05-12",
+      "title": "RAG index v2",
+      "date": "2026-05-12",
+      "groups": [
+        {
+          "type": "Changed",
+          "items": [
+            "Switched embedding model to a Vertex AI text-embedding model; re-indexed all project case studies and READMEs"
+          ]
+        }
+      ]
+    },
+    {
+      "version": "2026-04-30",
+      "title": "Supabase project_metrics table",
+      "date": "2026-04-30",
+      "groups": [
+        {
+          "type": "Added",
+          "items": [
+            "New `project_metrics` Supabase table with a typed `useProjectMetrics(id)` hook on the client"
+          ]
+        }
+      ]
+    },
+    {
+      "version": "2026-04-07",
+      "title": "Sports Edge live card",
+      "date": "2026-04-07",
+      "groups": [
+        {
+          "type": "Added",
+          "items": [
+            "Sports Edge live card on the home page, reading from the upstream repo's published JSON snapshot",
+            "Case study page at `/projects/sports-edge` documenting the pipeline"
+          ]
+        }
+      ]
+    },
+    {
+      "version": "2026-03-22",
+      "title": "Chatbot MVP",
+      "date": "2026-03-22",
+      "groups": [
+        {
+          "type": "Added",
+          "items": [
+            "Initial Gemini-backed chatbot with portfolio-doc RAG, available site-wide and on flagship project pages"
+          ]
+        }
+      ]
+    },
+    {
+      "version": "2026-03-10",
+      "title": "Static export baseline",
+      "date": "2026-03-10",
+      "groups": [
+        {
+          "type": "Changed",
+          "items": [
+            "Adopted `output: 'export'` for the public surface; data-backed routes use ISR with a 5-minute revalidation window"
+          ]
+        }
+      ]
+    }
+  ]
+}
