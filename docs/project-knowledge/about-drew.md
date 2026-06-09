@@ -36,8 +36,14 @@ Drew is open to full-time opportunities as a:
 - **Software engineer** with an ML or data emphasis
 
 He's targeting roles where data and modeling are core to the product
-(rather than ML-as-a-feature on a non-data product). Industry, company
-size, and remote/hybrid preferences are flexible.
+(rather than ML-as-a-feature on a non-data product). He's open to
+relocating for the right role, and would consider moving back to
+Boston or to Austin, San Francisco, Chicago, or New York City.
+Industry and company size are flexible; remote/hybrid/on-site are all
+on the table.
+
+For his background and how he got into ML, see
+`docs/project-knowledge/drew-story.md`.
 
 ## Projects he works on
 
