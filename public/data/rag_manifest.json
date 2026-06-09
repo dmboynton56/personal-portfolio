@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-06-09T02:08:11.423Z",
+  "generatedAt": "2026-06-09T02:16:01.393Z",
   "chunks": [
     {
       "id": "docs/data-dictionary.txt#0",
@@ -340,7 +340,7 @@
     {
       "id": "docs/project-knowledge/about-drew.md#3",
       "source": "docs/project-knowledge/about-drew.md",
-      "charCount": 351
+      "charCount": 596
     },
     {
       "id": "docs/project-knowledge/about-drew.md#4",
@@ -351,6 +351,61 @@
       "id": "docs/project-knowledge/about-drew.md#5",
       "source": "docs/project-knowledge/about-drew.md",
       "charCount": 157
+    },
+    {
+      "id": "docs/project-knowledge/drew-personal.md#0",
+      "source": "docs/project-knowledge/drew-personal.md",
+      "charCount": 241
+    },
+    {
+      "id": "docs/project-knowledge/drew-personal.md#1",
+      "source": "docs/project-knowledge/drew-personal.md",
+      "charCount": 147
+    },
+    {
+      "id": "docs/project-knowledge/drew-personal.md#2",
+      "source": "docs/project-knowledge/drew-personal.md",
+      "charCount": 44
+    },
+    {
+      "id": "docs/project-knowledge/drew-personal.md#3",
+      "source": "docs/project-knowledge/drew-personal.md",
+      "charCount": 181
+    },
+    {
+      "id": "docs/project-knowledge/drew-personal.md#4",
+      "source": "docs/project-knowledge/drew-personal.md",
+      "charCount": 308
+    },
+    {
+      "id": "docs/project-knowledge/drew-story.md#0",
+      "source": "docs/project-knowledge/drew-story.md",
+      "charCount": 163
+    },
+    {
+      "id": "docs/project-knowledge/drew-story.md#1",
+      "source": "docs/project-knowledge/drew-story.md",
+      "charCount": 82
+    },
+    {
+      "id": "docs/project-knowledge/drew-story.md#2",
+      "source": "docs/project-knowledge/drew-story.md",
+      "charCount": 265
+    },
+    {
+      "id": "docs/project-knowledge/drew-story.md#3",
+      "source": "docs/project-knowledge/drew-story.md",
+      "charCount": 233
+    },
+    {
+      "id": "docs/project-knowledge/drew-story.md#4",
+      "source": "docs/project-knowledge/drew-story.md",
+      "charCount": 334
+    },
+    {
+      "id": "docs/project-knowledge/drew-story.md#5",
+      "source": "docs/project-knowledge/drew-story.md",
+      "charCount": 300
     },
     {
       "id": "docs/project-knowledge/evidence-register.md#0",
