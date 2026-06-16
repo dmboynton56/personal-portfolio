@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-06-14T09:00:20.669Z",
+  "generatedAt": "2026-06-16T03:50:48.419Z",
   "chunks": [
     {
       "id": "docs/data-dictionary.txt#0",
@@ -1050,12 +1050,12 @@
     {
       "id": "docs/project-knowledge/sports-edge/overview.md#0",
       "source": "docs/project-knowledge/sports-edge/overview.md",
-      "charCount": 373
+      "charCount": 458
     },
     {
       "id": "docs/project-knowledge/sports-edge/overview.md#1",
       "source": "docs/project-knowledge/sports-edge/overview.md",
-      "charCount": 277
+      "charCount": 307
     },
     {
       "id": "docs/project-knowledge/sports-edge/overview.md#2",
@@ -1070,25 +1070,30 @@
     {
       "id": "docs/project-knowledge/sports-edge/overview.md#4",
       "source": "docs/project-knowledge/sports-edge/overview.md",
-      "charCount": 11
+      "charCount": 1151
     },
     {
       "id": "docs/project-knowledge/sports-edge/overview.md#5",
       "source": "docs/project-knowledge/sports-edge/overview.md",
-      "charCount": 123
+      "charCount": 11
     },
     {
       "id": "docs/project-knowledge/sports-edge/overview.md#6",
       "source": "docs/project-knowledge/sports-edge/overview.md",
-      "charCount": 98
+      "charCount": 123
     },
     {
       "id": "docs/project-knowledge/sports-edge/overview.md#7",
       "source": "docs/project-knowledge/sports-edge/overview.md",
-      "charCount": 133
+      "charCount": 98
     },
     {
       "id": "docs/project-knowledge/sports-edge/overview.md#8",
+      "source": "docs/project-knowledge/sports-edge/overview.md",
+      "charCount": 133
+    },
+    {
+      "id": "docs/project-knowledge/sports-edge/overview.md#9",
       "source": "docs/project-knowledge/sports-edge/overview.md",
       "charCount": 122
     },
