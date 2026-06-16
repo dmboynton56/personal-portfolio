@@ -17,6 +17,8 @@ export default function SportsEdgePage() {
             description="A production sports modeling pipeline with BigQuery as source-of-truth, Supabase serving, and documented outputs across NBA, NFL, MLB, World Cup, PGA, and CBB workflows."
             tags={['Python', 'BigQuery', 'GCP', 'Next.js', 'LightGBM', 'Supabase']}
             repoUrl="https://github.com/dmboynton56/sports-edge"
+            liveUrl="https://sports-edge.drewboynton.com"
+            liveUrlLabel="Open Operations Dashboard"
             metrics={metrics?.metrics}
             metricsSource={metrics?.source}
             metricsGeneratedAt={metrics?.generatedAt}

@@ -13,6 +13,7 @@ interface ProjectLayoutProps {
     tags: string[]
     repoUrl?: string
     liveUrl?: string
+    liveUrlLabel?: string
     metrics?: ProjectMetric[] | readonly ProjectMetric[]
     metricsSource?: MetricSource
     metricsGeneratedAt?: string
@@ -30,6 +31,7 @@ export function ProjectLayout({
     tags,
     repoUrl,
     liveUrl,
+    liveUrlLabel = 'View Live',
     metrics,
     metricsSource,
     metricsGeneratedAt,
@@ -76,12 +78,12 @@ export function ProjectLayout({
                             ))}
                         </div>
 
-                        <div className="flex gap-4">
+                        <div className="flex flex-wrap gap-4">
                             {liveUrl && (
                                 <Button asChild size="lg" className="shine-border group/btn" onClick={() => track('view_live_clicked', { project: title })}>
                                     <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="relative z-10 flex items-center justify-center text-foreground/80 group-hover/btn:text-foreground transition-colors">
                                         <ExternalLink className="w-4 h-4 mr-2" />
-                                        View Live
+                                        {liveUrlLabel}
                                     </a>
                                 </Button>
                             )}

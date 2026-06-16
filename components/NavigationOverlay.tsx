@@ -38,6 +38,10 @@ export function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
     { name: 'Contact', id: 'contact' },
   ]
 
+  const liveProjectLinks = [
+    { name: 'Sports Edge Dashboard', href: 'https://sports-edge.drewboynton.com' },
+  ]
+
   const socialLinks = [
     { name: 'LinkedIn', href: 'https://www.linkedin.com/in/drew-boynton-1bba16180/' },
     { name: 'GitHub', href: 'https://github.com/dmboynton56' },
@@ -92,6 +96,32 @@ export function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
                   </motion.li>
                 ))}
               </ul>
+
+              <div className="mt-12 pt-8 border-t border-border">
+                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-4">
+                  Live Projects
+                </p>
+                <ul className="space-y-4">
+                  {liveProjectLinks.map((link, index) => (
+                    <motion.li
+                      key={link.name}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 + index * 0.08 }}
+                    >
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={onClose}
+                        className="text-lg font-semibold text-foreground/80 hover:text-foreground transition-colors"
+                      >
+                        {link.name}
+                      </a>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
             </nav>
 
             <div className="mt-auto">

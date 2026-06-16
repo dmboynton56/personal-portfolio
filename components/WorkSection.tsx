@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { Search, Send } from 'lucide-react'
+import { ExternalLink, Search, Send } from 'lucide-react'
 import { DeviceFrameset } from 'react-device-frameset'
 import '@/styles/device-frames.css'
 import { BorderBeam } from '@/components/ui/border-beam'
@@ -59,6 +59,8 @@ interface Project {
   proofPoints?: string[]
   isInteractive?: boolean
   caseStudyUrl?: string
+  liveUrl?: string
+  liveUrlLabel?: string
   cardOnly?: boolean
 }
 
@@ -146,7 +148,9 @@ const mockProjects: Project[] = [
       'Live portfolio card pulling sportsbook deltas'
     ],
     isInteractive: true,
-    caseStudyUrl: '/projects/sports-edge'
+    caseStudyUrl: '/projects/sports-edge',
+    liveUrl: 'https://sports-edge.drewboynton.com',
+    liveUrlLabel: 'Ops Dashboard',
   },
   {
     id: 'llm-advisor',
@@ -471,15 +475,32 @@ export function WorkSection() {
                           ))}
                         </div>
 
-                        {project.caseStudyUrl && (
-                          <Button asChild className="shine-border w-full sm:w-auto group/btn">
-                            <a
-                              href={project.caseStudyUrl}
-                              className="relative z-10 flex items-center justify-center text-foreground/80 group-hover/btn:text-foreground transition-colors"
-                            >
-                              View Deep Dive <div className="ml-2">→</div>
-                            </a>
-                          </Button>
+                        {(project.caseStudyUrl || project.liveUrl) && (
+                          <div className="flex flex-wrap gap-3">
+                            {project.caseStudyUrl && (
+                              <Button asChild className="shine-border w-full sm:w-auto group/btn">
+                                <a
+                                  href={project.caseStudyUrl}
+                                  className="relative z-10 flex items-center justify-center text-foreground/80 group-hover/btn:text-foreground transition-colors"
+                                >
+                                  View Deep Dive <div className="ml-2">→</div>
+                                </a>
+                              </Button>
+                            )}
+                            {project.liveUrl && (
+                              <Button asChild variant="outline" className="w-full sm:w-auto group/btn">
+                                <a
+                                  href={project.liveUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="relative z-10 flex items-center justify-center text-foreground/80 group-hover/btn:text-foreground transition-colors"
+                                >
+                                  <ExternalLink className="w-4 h-4 mr-2" />
+                                  {project.liveUrlLabel ?? 'View Live'}
+                                </a>
+                              </Button>
+                            )}
+                          </div>
                         )}
                       </div>
                     </div>
