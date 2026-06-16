@@ -59,6 +59,7 @@ interface Project {
   proofPoints?: string[]
   isInteractive?: boolean
   caseStudyUrl?: string
+  cardOnly?: boolean
 }
 
 interface PlayerPrediction {
@@ -95,19 +96,15 @@ const mockProjects: Project[] = [
     id: 'personal-portfolio',
     title: 'My Personal Portfolio Website',
     description:
-      'Built with TypeScript, Next.js, and a Supabase + BigQuery data spine. Pulls live sportsbook edges from Sports Edge and trading snapshots from LLM Advisor, then renders them alongside the rest of the site. A Gemini-powered chatbot (Vertex AI, RAG-grounded on the site\'s own content) answers questions about me, my projects, and the data behind the page you\'re looking at. This card is a case study of the system you\'re using right now.',
+      'What started as a portfolio site grew into its own project - TypeScript and Next.js up front, Supabase and BigQuery underneath. It pulls live sportsbook edges from Sports Edge and trading snapshots from LLM Advisor onto the homepage, and includes a Gemini chatbot (Vertex AI, RAG over this site\'s content) that can answer questions about my work and the data behind what you\'re looking at.',
     category: 'flagship',
     type: 'desktop',
     image: '/images/projects/personal-portfolio-hero.png',
     images: ['/images/projects/personal-portfolio-hero.png'],
     technologies: ['TypeScript', 'Next.js', 'React', 'Tailwind', 'Supabase', 'BigQuery', 'Gemini / Vertex AI', 'RAG'],
-    proofPoints: [
-      'Live data from Sports Edge + LLM Advisor in one component tree',
-      'Chatbot grounded on the site\'s own content via RAG (rag_manifest + rag_embeddings)',
-      'Treats itself as a product: project_metrics table, changelog, system diagram'
-    ],
     isInteractive: true,
-    caseStudyUrl: '/projects/personal-portfolio'
+    caseStudyUrl: '/projects/personal-portfolio',
+    cardOnly: true
   },
   {
     id: 'nba-hof-predictor',
@@ -488,6 +485,7 @@ export function WorkSection() {
                     </div>
                   </div>
 
+                  {!project.cardOnly && (
                   <div
                     className={`relative mx-auto w-full flex items-center justify-center ${
                       project.type === 'desktop' ? 'h-[500px] mt-8' : 'h-[600px] flex items-center justify-center'
@@ -631,6 +629,7 @@ export function WorkSection() {
                       </div>
                     )}
                   </div>
+                  )}
 
                   {project.isInteractive && project.id === 'nba-hof-predictor' && (
                     <div className="mt-8 relative max-w-2xl mx-auto">
