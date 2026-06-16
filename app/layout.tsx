@@ -17,18 +17,28 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: '/images/general/newicon.png',
-        href: '/images/general/newicon.png',
+        url: '/favicon.ico',
+        sizes: 'any',
+      },
+      {
+        url: '/favicon-48x48.png',
+        sizes: '48x48',
+        type: 'image/png',
+      },
+      {
+        url: '/icon-192.png',
+        sizes: '192x192',
+        type: 'image/png',
       },
     ],
     apple: [
       {
-        url: '/apple-icon.png',
+        url: '/apple-touch-icon.png',
         sizes: '180x180',
         type: 'image/png',
       },
     ],
-    shortcut: ['/images/general/newicon.png'],
+    shortcut: ['/favicon.ico'],
   },
   manifest: '/site.webmanifest',
 }
@@ -49,7 +59,7 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'Organization',
               url: 'https://www.drewboynton.com',
-              logo: 'https://www.drewboynton.com/images/general/newicon.png',
+              logo: 'https://www.drewboynton.com/icon-512.png',
             }),
           }}
         />
