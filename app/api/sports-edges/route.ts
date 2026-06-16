@@ -5,7 +5,10 @@ import {
   SportsEdgePayload,
   NflGameEdge,
   NbaGameEdge,
-  MlbGameEdge
+  MlbGameEdge,
+  WorldCupGroupRankRow,
+  WorldCupMatchEdge,
+  WorldCupTeamProbability
 } from '@/lib/sportsEdgeData'
 import { ApiEnvelope, ApiSource, STALE_THRESHOLDS, toApiMeta } from '@/lib/freshness'
 
@@ -47,6 +50,53 @@ type SupabasePredictionRow = {
   asof_ts: string | null
 }
 
+type SupabaseWorldCupMatchRow = {
+  match_id: string
+  external_match_id: string
+  season: number
+  stage: string
+  group_name: string | null
+  kickoff_utc: string | null
+  home_team: string
+  away_team: string
+  status: string | null
+  home_score: number | null
+  away_score: number | null
+  model_name: string | null
+  model_version: string | null
+  home_win_prob: number | null
+  draw_prob: number | null
+  away_win_prob: number | null
+  home_knockout_win_prob: number | null
+  away_knockout_win_prob: number | null
+  projected_home_goals: number | null
+  projected_away_goals: number | null
+  prediction_ts: string | null
+}
+
+type SupabaseWorldCupTeamProbabilityRow = {
+  team: string
+  group_name: string | null
+  model_name: string | null
+  model_version: string | null
+  simulation_ts: string | null
+  simulations: number | null
+  bracket_source: string | null
+  rating: number | null
+  round_of_32_prob: number | null
+  round_of_16_prob: number | null
+  quarterfinal_prob: number | null
+  semifinal_prob: number | null
+  final_prob: number | null
+  champion_prob: number | null
+  group_rank_probs: {
+    rank_1?: number | null
+    rank_2?: number | null
+    rank_3?: number | null
+    rank_4?: number | null
+  } | null
+}
+
 type WeekWindow = {
   start: Date
   end: Date
@@ -79,6 +129,17 @@ type LoadedMlbEdges = {
   date: string
   label: string
   window: WeekWindow
+}
+
+type LoadedWorldCup = {
+  matches: WorldCupMatchEdge[]
+  season: number
+  label: string
+  updatedAt: string
+  simulations: number
+  bracketSource: string
+  teamProbabilities: WorldCupTeamProbability[]
+  groupRankProbabilities: Record<string, WorldCupGroupRankRow[]>
 }
 
 const parseIsoDate = (value?: string | null) => {
@@ -852,6 +913,224 @@ const loadAvailableDates = async (league: 'NBA' | 'MLB', season?: number) => {
   return Array.from(dateSet).sort((a, b) => b.localeCompare(a))
 }
 
+const mapWorldCupMatch = (row: SupabaseWorldCupMatchRow): WorldCupMatchEdge | null => {
+  if (
+    row.home_win_prob == null ||
+    row.draw_prob == null ||
+    row.away_win_prob == null
+  ) {
+    return null
+  }
+
+  return {
+    matchId: row.external_match_id ?? row.match_id,
+    stage: row.stage,
+    groupName: row.group_name,
+    kickoffUtc: row.kickoff_utc,
+    homeTeam: row.home_team,
+    awayTeam: row.away_team,
+    homeWinProb: Number(row.home_win_prob),
+    drawProb: Number(row.draw_prob),
+    awayWinProb: Number(row.away_win_prob),
+    homeKnockoutWinProb:
+      row.home_knockout_win_prob == null
+        ? null
+        : Number(row.home_knockout_win_prob),
+    awayKnockoutWinProb:
+      row.away_knockout_win_prob == null
+        ? null
+        : Number(row.away_knockout_win_prob),
+    projectedHomeGoals:
+      row.projected_home_goals == null
+        ? null
+        : Number(row.projected_home_goals),
+    projectedAwayGoals:
+      row.projected_away_goals == null
+        ? null
+        : Number(row.projected_away_goals),
+    modelVersion: row.model_version ?? 'world-cup-v0',
+    predictionUpdated: row.prediction_ts ?? row.kickoff_utc ?? new Date().toISOString(),
+    status: row.status,
+    actualHomeScore: row.home_score ?? null,
+    actualAwayScore: row.away_score ?? null
+  }
+}
+
+const mapWorldCupTeamProbability = (
+  row: SupabaseWorldCupTeamProbabilityRow
+): WorldCupTeamProbability => ({
+  team: row.team,
+  groupName: row.group_name,
+  rating: row.rating == null ? null : Number(row.rating),
+  roundOf32Prob: Number(row.round_of_32_prob ?? 0),
+  roundOf16Prob: Number(row.round_of_16_prob ?? 0),
+  quarterfinalProb: Number(row.quarterfinal_prob ?? 0),
+  semifinalProb: Number(row.semifinal_prob ?? 0),
+  finalProb: Number(row.final_prob ?? 0),
+  championProb: Number(row.champion_prob ?? 0),
+  groupRankProbs: {
+    rank1: row.group_rank_probs?.rank_1 ?? null,
+    rank2: row.group_rank_probs?.rank_2 ?? null,
+    rank3: row.group_rank_probs?.rank_3 ?? null,
+    rank4: row.group_rank_probs?.rank_4 ?? null
+  }
+})
+
+const buildGroupRankProbabilities = (
+  rows: SupabaseWorldCupTeamProbabilityRow[]
+): Record<string, WorldCupGroupRankRow[]> => {
+  const grouped: Record<string, WorldCupGroupRankRow[]> = {}
+  rows.forEach((row) => {
+    if (!row.group_name) return
+    grouped[row.group_name] = grouped[row.group_name] ?? []
+    grouped[row.group_name].push({
+      team: row.team,
+      rating: row.rating == null ? null : Number(row.rating),
+      rank1: Number(row.group_rank_probs?.rank_1 ?? 0),
+      rank2: Number(row.group_rank_probs?.rank_2 ?? 0),
+      rank3: Number(row.group_rank_probs?.rank_3 ?? 0),
+      rank4: Number(row.group_rank_probs?.rank_4 ?? 0)
+    })
+  })
+
+  Object.values(grouped).forEach((groupRows) => {
+    groupRows.sort((a, b) => {
+      const firstRankDiff = b.rank1 - a.rank1
+      if (firstRankDiff !== 0) return firstRankDiff
+      const secondRankDiff = b.rank2 - a.rank2
+      if (secondRankDiff !== 0) return secondRankDiff
+      return (b.rating ?? 0) - (a.rating ?? 0)
+    })
+  })
+
+  return grouped
+}
+
+const loadWorldCup = async (): Promise<LoadedWorldCup | null> => {
+  if (!supabase) return null
+
+  const preferredModelName =
+    process.env.WORLD_CUP_MODEL_NAME?.trim() || 'sports_edge_world_cup'
+  const season = Number(process.env.WORLD_CUP_SEASON ?? 2026)
+
+  let matchesQuery = supabase
+    .from('world_cup_matches_enriched')
+    .select(
+      [
+        'match_id',
+        'external_match_id',
+        'season',
+        'stage',
+        'group_name',
+        'kickoff_utc',
+        'home_team',
+        'away_team',
+        'status',
+        'home_score',
+        'away_score',
+        'model_name',
+        'model_version',
+        'home_win_prob',
+        'draw_prob',
+        'away_win_prob',
+        'home_knockout_win_prob',
+        'away_knockout_win_prob',
+        'projected_home_goals',
+        'projected_away_goals',
+        'prediction_ts'
+      ].join(', ')
+    )
+    .eq('season', season)
+
+  if (preferredModelName) {
+    matchesQuery = matchesQuery.eq('model_name', preferredModelName)
+  }
+
+  const { data: matchRows, error: matchesError } = await matchesQuery.order(
+    'kickoff_utc',
+    { ascending: true, nullsFirst: false }
+  )
+
+  if (matchesError) {
+    console.warn('Supabase error when loading World Cup matches.', matchesError)
+    return null
+  }
+
+  const matches = ((matchRows ?? []) as unknown as SupabaseWorldCupMatchRow[])
+    .map((row) => mapWorldCupMatch(row))
+    .filter((value): value is WorldCupMatchEdge => Boolean(value))
+
+  let teamQuery = supabase
+    .from('world_cup_team_probabilities')
+    .select(
+      [
+        'team',
+        'group_name',
+        'model_name',
+        'model_version',
+        'simulation_ts',
+        'simulations',
+        'bracket_source',
+        'rating',
+        'round_of_32_prob',
+        'round_of_16_prob',
+        'quarterfinal_prob',
+        'semifinal_prob',
+        'final_prob',
+        'champion_prob',
+        'group_rank_probs'
+      ].join(', ')
+    )
+
+  if (preferredModelName) {
+    teamQuery = teamQuery.eq('model_name', preferredModelName)
+  }
+
+  const { data: teamRows, error: teamsError } = await teamQuery
+    .order('simulation_ts', { ascending: false })
+    .order('champion_prob', { ascending: false })
+    .limit(120)
+
+  if (teamsError) {
+    console.warn('Supabase error when loading World Cup team probabilities.', teamsError)
+    return null
+  }
+
+  const typedTeamRows = (teamRows ?? []) as unknown as SupabaseWorldCupTeamProbabilityRow[]
+  const latestSimulationTs = typedTeamRows.find((row) => row.simulation_ts)?.simulation_ts
+  const latestRows = latestSimulationTs
+    ? typedTeamRows.filter((row) => row.simulation_ts === latestSimulationTs)
+    : typedTeamRows
+  const teamProbabilities = latestRows.map(mapWorldCupTeamProbability)
+  const groupRankProbabilities = buildGroupRankProbabilities(latestRows)
+
+  if (!matches.length && !teamProbabilities.length) {
+    return null
+  }
+
+  const updatedAtCandidates = [
+    ...matches.map((match) => Date.parse(match.predictionUpdated)),
+    ...latestRows
+      .map((row) => Date.parse(row.simulation_ts ?? ''))
+      .filter((ms) => Number.isFinite(ms))
+  ].filter((ms) => Number.isFinite(ms))
+
+  const updatedAt = updatedAtCandidates.length
+    ? new Date(Math.max(...updatedAtCandidates)).toISOString()
+    : new Date().toISOString()
+
+  return {
+    matches,
+    season,
+    label: `${season} tournament forecast`,
+    updatedAt,
+    simulations: latestRows[0]?.simulations ?? 0,
+    bracketSource: latestRows[0]?.bracket_source ?? 'unknown',
+    teamProbabilities,
+    groupRankProbabilities
+  }
+}
+
 export async function GET(request: NextRequest) {
   const weekParam = request.nextUrl.searchParams.get('week')
   const dateParam = request.nextUrl.searchParams.get('date')
@@ -880,6 +1159,9 @@ export async function GET(request: NextRequest) {
     mlb: {
       ...sportsEdgeMockData.mlb,
       availableDates: sportsEdgeMockData.mlb.availableDates ?? []
+    },
+    worldCup: {
+      ...sportsEdgeMockData.worldCup
     }
   }
 
@@ -887,10 +1169,11 @@ export async function GET(request: NextRequest) {
     try {
       // Always load available weeks/dates independently, regardless of whether loadEdges returns data
       // This fixes the bug where dropdown only shows options from the current window
-      const [availableWeeks, availableNbaDates, availableMlbDates] = await Promise.all([
+      const [availableWeeks, availableNbaDates, availableMlbDates, worldCup] = await Promise.all([
         loadAvailableWeeks(),
         loadAvailableDates('NBA'),
-        loadAvailableDates('MLB')
+        loadAvailableDates('MLB'),
+        loadWorldCup()
       ])
 
       const resolvedNbaDate = resolveLeagueDate(nbaDateParam ?? undefined, availableNbaDates)
@@ -1007,6 +1290,18 @@ export async function GET(request: NextRequest) {
           'No MLB edges returned from Supabase window. Serving mock payload.'
         )
       }
+
+      if (worldCup) {
+        responseSource = 'supabase'
+        payload = {
+          ...payload,
+          worldCup
+        }
+      } else {
+        console.warn(
+          'No World Cup probabilities returned from Supabase. Serving empty World Cup board.'
+        )
+      }
     } catch (error) {
       console.warn(
         'Unexpected error while fetching Supabase edges. Serving mock data.',
@@ -1022,7 +1317,8 @@ export async function GET(request: NextRequest) {
   const updatedAtCandidates = [
     payload.nfl.updatedAt,
     payload.nba.updatedAt,
-    payload.mlb.updatedAt
+    payload.mlb.updatedAt,
+    payload.worldCup.updatedAt
   ]
     .map((ts) => Date.parse(ts))
     .filter((ms) => Number.isFinite(ms)) as number[]

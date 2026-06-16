@@ -46,6 +46,54 @@ export type MlbGameEdge = {
   winnerHit?: boolean | null
 }
 
+export type WorldCupMatchEdge = {
+  matchId: string
+  stage: string
+  groupName?: string | null
+  kickoffUtc?: string | null
+  homeTeam: string
+  awayTeam: string
+  homeWinProb: number
+  drawProb: number
+  awayWinProb: number
+  homeKnockoutWinProb?: number | null
+  awayKnockoutWinProb?: number | null
+  projectedHomeGoals?: number | null
+  projectedAwayGoals?: number | null
+  modelVersion: string
+  predictionUpdated: string
+  status?: string | null
+  actualHomeScore?: number | null
+  actualAwayScore?: number | null
+}
+
+export type WorldCupTeamProbability = {
+  team: string
+  groupName?: string | null
+  rating?: number | null
+  roundOf32Prob: number
+  roundOf16Prob: number
+  quarterfinalProb: number
+  semifinalProb: number
+  finalProb: number
+  championProb: number
+  groupRankProbs?: {
+    rank1?: number | null
+    rank2?: number | null
+    rank3?: number | null
+    rank4?: number | null
+  }
+}
+
+export type WorldCupGroupRankRow = {
+  team: string
+  rating?: number | null
+  rank1: number
+  rank2: number
+  rank3: number
+  rank4: number
+}
+
 export type SportsEdgePayload = {
   nfl: {
     season: number
@@ -70,6 +118,16 @@ export type SportsEdgePayload = {
     updatedAt: string
     games: MlbGameEdge[]
     availableDates: string[]
+  }
+  worldCup: {
+    season: number
+    label: string
+    updatedAt: string
+    simulations: number
+    bracketSource: string
+    matches: WorldCupMatchEdge[]
+    teamProbabilities: WorldCupTeamProbability[]
+    groupRankProbabilities: Record<string, WorldCupGroupRankRow[]>
   }
 }
 
@@ -194,6 +252,16 @@ export const sportsEdgeMockData: SportsEdgePayload = {
     updatedAt: '2026-05-24T15:30:00Z',
     availableDates: [],
     games: []
+  },
+  worldCup: {
+    season: 2026,
+    label: '2026 tournament forecast',
+    updatedAt: '2026-06-12T15:30:00Z',
+    simulations: 0,
+    bracketSource: 'awaiting-world-cup-sync',
+    matches: [],
+    teamProbabilities: [],
+    groupRankProbabilities: {}
   }
 }
 

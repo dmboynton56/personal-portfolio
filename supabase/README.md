@@ -28,11 +28,13 @@ This folder keeps the SQL migrations that provision the `games`, `odds_snapshots
    supabase db push --file supabase/migrations/005_llm_advisor_telemetry.sql
    supabase db push --file supabase/migrations/007_llm_advisor_order_events.sql
    supabase db push --file supabase/migrations/008_add_mlb_serving_columns.sql
+   supabase db push --file supabase/migrations/009_world_cup_serving_tables.sql
    ```
    Migration `008` (MLB league constraint + probable pitcher columns) was applied to production on 2026-05-25.
 4. Confirm the view returns rows:
    ```bash
    supabase db query 'select * from games_today_enriched limit 5;'
+   supabase db query 'select * from world_cup_matches_enriched limit 5;'
    ```
 
 ## Local development
@@ -46,6 +48,8 @@ Odds ingestion now runs in the `sports-edge` repository (`data-core/scripts/sync
 ### Sports Edge serving API
 
 The portfolio serves Sports Edge data through `GET /api/sports-edges`. That route reads Supabase `games` and `model_predictions` and returns a cacheable payload for the project page. Sports Edge writes for `games`, `odds_snapshots`, `model_predictions`, and final scores are owned by the `sports-edge` repository workflows. MLB rows are probability-only and use nullable `home_probable_pitcher` / `away_probable_pitcher` display fields.
+
+World Cup forecasts use dedicated serving tables from migration `009`: `world_cup_matches`, `world_cup_match_predictions`, `world_cup_team_probabilities`, `world_cup_model_runs`, and the `world_cup_matches_enriched` view. The same `/api/sports-edges` route returns them under the `worldCup` payload key.
 
 ### LLM Advisor telemetry ingest
 

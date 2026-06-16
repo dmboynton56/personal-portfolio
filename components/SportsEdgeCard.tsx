@@ -8,7 +8,14 @@ import {
   useRef,
   useState
 } from 'react'
-import type { SportsEdgePayload, NflGameEdge, NbaGameEdge, MlbGameEdge } from '@/lib/sportsEdgeData'
+import type {
+  MlbGameEdge,
+  NbaGameEdge,
+  NflGameEdge,
+  SportsEdgePayload,
+  WorldCupMatchEdge,
+  WorldCupTeamProbability
+} from '@/lib/sportsEdgeData'
 import type { ApiEnvelope } from '@/lib/freshness'
 import { calculateEdge } from '@/lib/sportsEdgeData'
 import { NflTeamLogo } from './NflTeamLogo'
@@ -18,10 +25,13 @@ import { getTeamShortName } from '@/lib/nflTeams'
 import { getNbaTeamShortName } from '@/lib/nbaTeams'
 import { getMlbTeamShortName } from '@/lib/mlbTeams'
 
-const sportsEdgeTabs: { key: 'NFL' | 'NBA' | 'MLB'; label: string; srNote?: string }[] = [
+type SportsEdgeTab = 'NFL' | 'NBA' | 'MLB' | 'WORLD_CUP'
+
+const sportsEdgeTabs: { key: SportsEdgeTab; label: string; srNote?: string }[] = [
   { key: 'NFL', label: 'NFL • Weekly' },
   { key: 'NBA', label: 'NBA • Daily' },
-  { key: 'MLB', label: 'MLB • Daily' }
+  { key: 'MLB', label: 'MLB • Daily' },
+  { key: 'WORLD_CUP', label: 'World Cup' }
 ]
 
 type SportsEdgeCardProps = {
@@ -39,7 +49,7 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
   const [data, setData] = useState<SportsEdgePayload | null>(null)
   const [err, setErr] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState<'NFL' | 'NBA' | 'MLB'>('NFL')
+  const [activeTab, setActiveTab] = useState<SportsEdgeTab>('NFL')
   const [availableWeeks, setAvailableWeeks] = useState<number[]>([])
   const [selectedWeek, setSelectedWeek] = useState<number | undefined>(undefined)
   const [weekFilter, setWeekFilter] = useState<number | undefined>(undefined)
@@ -233,6 +243,23 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
     })
   }, [data])
 
+  const sortedWorldCupMatches: WorldCupMatchEdge[] = useMemo(() => {
+    if (!data?.worldCup.matches) return []
+    return [...data.worldCup.matches].sort((a, b) => {
+      const aTime = a.kickoffUtc ? Date.parse(a.kickoffUtc) : Number.MAX_SAFE_INTEGER
+      const bTime = b.kickoffUtc ? Date.parse(b.kickoffUtc) : Number.MAX_SAFE_INTEGER
+      if (aTime !== bTime) return aTime - bTime
+      return a.matchId.localeCompare(b.matchId)
+    })
+  }, [data])
+
+  const topWorldCupTeams: WorldCupTeamProbability[] = useMemo(() => {
+    if (!data?.worldCup.teamProbabilities) return []
+    return [...data.worldCup.teamProbabilities]
+      .sort((a, b) => b.championProb - a.championProb)
+      .slice(0, 8)
+  }, [data])
+
   const formatKickoff = (iso: string) => {
     const date = new Date(iso)
     return date.toLocaleString('en-US', {
@@ -255,6 +282,12 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
   }
 
   const formatPercent = (value: number) => `${(value * 100).toFixed(1)}%`
+
+  const formatStage = (value: string) =>
+    value
+      .split('_')
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ')
 
   const edgeBadge = (edge: number | null) => {
     if (edge == null) return { label: 'No line', className: 'text-muted-foreground' }
@@ -335,7 +368,9 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
           ? 'Showing live NFL model edges.'
           : activeTab === 'NBA'
             ? 'Showing live NBA model edges.'
-            : 'Showing MLB model home-win probabilities.'}
+            : activeTab === 'MLB'
+              ? 'Showing MLB model home-win probabilities.'
+              : 'Showing World Cup match and tournament probabilities.'}
       </p>
 
       {activeTab === 'NFL' ? (
@@ -626,7 +661,7 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
             </div>
           )}
         </div>
-      ) : (
+      ) : activeTab === 'MLB' ? (
         <div className="space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-muted/10 p-3 text-sm">
             <div>
@@ -755,6 +790,160 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
                   </div>
                 )
               })}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-muted/10 p-3 text-sm">
+            <div>
+              <div className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+                FIFA World Cup {data.worldCup.season}
+              </div>
+              <div className="text-base font-semibold text-foreground">
+                {data.worldCup.label}
+              </div>
+              <div className="text-xs text-muted-foreground">
+                {data.worldCup.simulations.toLocaleString()} simulations • {data.worldCup.bracketSource.replaceAll('_', ' ')}
+              </div>
+            </div>
+            <div className="text-xs text-muted-foreground">
+              Updated {formatUpdatedAt(data.worldCup.updatedAt)}
+            </div>
+          </div>
+
+          <p className="rounded-lg bg-foreground/5 p-2 text-xs text-muted-foreground">
+            World Cup values are 1X2 match probabilities and tournament advancement odds. They are model forecasts, not betting advice.
+          </p>
+
+          {topWorldCupTeams.length > 0 && (
+            <div className="rounded-xl border bg-card/60 p-3">
+              <div className="mb-3 text-sm font-semibold text-foreground">Champion Odds</div>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {topWorldCupTeams.map((team, index) => (
+                  <div key={team.team} className="flex items-center justify-between rounded-lg bg-foreground/5 px-3 py-2 text-xs">
+                    <div className="flex min-w-0 items-center gap-2">
+                      <span className="w-5 shrink-0 text-muted-foreground">{index + 1}</span>
+                      <span className="truncate font-semibold text-foreground">{team.team}</span>
+                      {team.groupName && (
+                        <span className="shrink-0 text-[10px] uppercase text-muted-foreground">
+                          Group {team.groupName}
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-right font-semibold text-foreground">
+                      {formatPercent(team.championProb)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {sortedWorldCupMatches.length === 0 ? (
+            <div className="rounded-xl border border-dashed py-8 text-center text-sm text-muted-foreground">
+              World Cup board not loaded yet. Sync predictions after the tournament data refresh.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+              {sortedWorldCupMatches.slice(0, 12).map((match) => {
+                const mostLikely = [
+                  { label: match.homeTeam, probability: match.homeWinProb },
+                  { label: 'Draw', probability: match.drawProb },
+                  { label: match.awayTeam, probability: match.awayWinProb }
+                ].sort((a, b) => b.probability - a.probability)[0]
+
+                return (
+                  <div
+                    key={match.matchId}
+                    className="flex flex-col rounded-xl border bg-card/60 p-3 hover:border-accent/60"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                          {match.groupName ? `Group ${match.groupName}` : formatStage(match.stage)}
+                        </div>
+                        <div className="mt-1 flex flex-wrap items-center gap-1 text-sm font-semibold text-foreground">
+                          <span>{match.homeTeam}</span>
+                          <span className="text-muted-foreground">vs</span>
+                          <span>{match.awayTeam}</span>
+                        </div>
+                      </div>
+                      <span className="shrink-0 rounded-full bg-foreground/10 px-2 py-1 text-[10px] font-semibold uppercase text-muted-foreground">
+                        {match.status ?? 'scheduled'}
+                      </span>
+                    </div>
+                    {match.kickoffUtc && (
+                      <div className="mt-1 text-[11px] text-muted-foreground">
+                        {formatTipoff(match.kickoffUtc)}
+                      </div>
+                    )}
+                    <div className="mt-3 grid grid-cols-3 gap-2 text-center text-xs">
+                      <div className="rounded-lg bg-foreground/5 p-2">
+                        <div className="truncate text-muted-foreground">{match.homeTeam}</div>
+                        <div className="font-semibold text-foreground">{formatPercent(match.homeWinProb)}</div>
+                      </div>
+                      <div className="rounded-lg bg-foreground/5 p-2">
+                        <div className="text-muted-foreground">Draw</div>
+                        <div className="font-semibold text-foreground">{formatPercent(match.drawProb)}</div>
+                      </div>
+                      <div className="rounded-lg bg-foreground/5 p-2">
+                        <div className="truncate text-muted-foreground">{match.awayTeam}</div>
+                        <div className="font-semibold text-foreground">{formatPercent(match.awayWinProb)}</div>
+                      </div>
+                    </div>
+                    <div className="mt-3 rounded-lg bg-foreground/5 p-2 text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Most likely</span>
+                        <span className="font-semibold text-foreground">
+                          {mostLikely.label} {formatPercent(mostLikely.probability)}
+                        </span>
+                      </div>
+                      {match.projectedHomeGoals != null && match.projectedAwayGoals != null && (
+                        <div className="mt-1 flex justify-between">
+                          <span className="text-muted-foreground">Projected goals</span>
+                          <span className="font-semibold text-foreground">
+                            {match.projectedHomeGoals.toFixed(1)} - {match.projectedAwayGoals.toFixed(1)}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    {match.actualHomeScore != null && match.actualAwayScore != null && (
+                      <div className="mt-2 text-xs font-semibold text-foreground">
+                        Final: {match.homeTeam} {match.actualHomeScore} - {match.awayTeam} {match.actualAwayScore}
+                      </div>
+                    )}
+                    <div className="mt-auto pt-3 text-[10px] uppercase text-muted-foreground">
+                      Update {formatUpdatedAt(match.predictionUpdated)} • {match.modelVersion}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+
+          {Object.keys(data.worldCup.groupRankProbabilities).length > 0 && (
+            <div className="rounded-xl border bg-card/60 p-3">
+              <div className="mb-3 text-sm font-semibold text-foreground">Group Winner Probabilities</div>
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                {Object.entries(data.worldCup.groupRankProbabilities).map(([group, rows]) => (
+                  <div key={group} className="rounded-lg bg-foreground/5 p-3">
+                    <div className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                      Group {group}
+                    </div>
+                    <div className="space-y-1">
+                      {rows.slice(0, 4).map((row) => (
+                        <div key={row.team} className="flex justify-between gap-3 text-xs">
+                          <span className="truncate text-foreground">{row.team}</span>
+                          <span className="shrink-0 font-semibold text-foreground">
+                            {formatPercent(row.rank1)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

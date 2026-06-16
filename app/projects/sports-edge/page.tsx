@@ -14,7 +14,7 @@ export default function SportsEdgePage() {
     return (
         <ProjectLayout
             title="Sports Edge"
-            description="A production sports modeling pipeline with BigQuery as source-of-truth, Supabase serving, and documented outputs across NBA, NFL, MLB, PGA, and CBB workflows."
+            description="A production sports modeling pipeline with BigQuery as source-of-truth, Supabase serving, and documented outputs across NBA, NFL, MLB, World Cup, PGA, and CBB workflows."
             tags={['Python', 'BigQuery', 'GCP', 'Next.js', 'LightGBM', 'Supabase']}
             repoUrl="https://github.com/dmboynton56/sports-edge"
             metrics={metrics?.metrics}
@@ -35,7 +35,7 @@ export default function SportsEdgePage() {
             heroImage={
                 <div className="relative w-full h-full flex items-center justify-center bg-zinc-950 rounded-xl overflow-hidden border border-zinc-800">
                     {/* Visual representation of the live card */}
-                    <div className="scale-75 origin-center w-full max-w-md">
+                    <div className="h-full w-full max-w-md overflow-y-auto p-2" style={{ overscrollBehavior: 'contain' }}>
                         <SportsEdgeCard />
                     </div>
                 </div>
