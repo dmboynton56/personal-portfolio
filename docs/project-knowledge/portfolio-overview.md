@@ -1,6 +1,6 @@
 ---
 project: cross-project
-last_verified: 2026-05-20
+last_verified: 2026-06-26
 role: canonical_site_inventory
 ---
 
@@ -14,7 +14,18 @@ For **numeric claims, production schedules, and "observed vs planned" metrics**,
 
 ## Flagship projects (deep-dive case study pages)
 
-These have dedicated `/projects/...` pages, interactive previews on the homepage where noted, and richer documentation under `docs/project-knowledge/`.
+These have dedicated `/projects/...` pages, interactive previews on the homepage where noted, and richer documentation under `docs/project-knowledge/`. Homepage order: Sports Edge first, then NBA HOF, LLM Advisor, and this portfolio site last among flagships.
+
+### Sports Edge (`sports-edge`)
+
+- **Homepage title:** Sports Edge: Multi-League Sports Modeling
+- **Deep dive:** `/projects/sports-edge`
+- **Live ops dashboard:** https://sports-edge.drewboynton.com
+- **Summary:** Production sports modeling stack for NBA, NFL, MLB, PGA, CBB, and World Cup. BigQuery holds source-of-truth data; Python pipelines score games and sync to Supabase for the ops dashboard and portfolio embeds. Model spreads and win probabilities are compared to sportsbook lines to surface edges.
+- **Technologies:** Python, Scikit-learn, LightGBM, Supabase, Next.js, Sports Analytics
+- **Proof points:** Ops dashboard at sports-edge.drewboynton.com; BigQuery source of truth + Supabase serving; automated daily/weekly pipeline across six leagues
+- **GitHub:** https://github.com/dmboynton56/sports-edge
+- **Interactive on homepage:** yes (live card preview — first flagship slot)
 
 ### NBA Hall of Fame Predictor (`nba-hof-predictor`)
 
@@ -25,16 +36,6 @@ These have dedicated `/projects/...` pages, interactive previews on the homepage
 - **Proof points:** 5,250+ historical careers; interactive probability search; feature-level reasoning per prediction
 - **Interactive on homepage:** yes (player lookup embed)
 
-### Sports Edge (`sports-edge`)
-
-- **Homepage title:** Sports Edge: NFL/NBA Betting Analysis
-- **Deep dive:** `/projects/sports-edge`
-- **Summary:** ML pipeline for model spreads and home win probabilities for NFL/NBA games, compared to sportsbook lines to surface edges. Real-time odds integration, feature engineering (rest, form, opponent strength), automated daily predictions.
-- **Technologies:** Python, Scikit-learn, LightGBM, Supabase, Next.js, Sports Analytics
-- **Proof points:** BigQuery source of truth + Supabase serving; automated daily/weekly pipeline; live portfolio card with sportsbook deltas
-- **GitHub:** https://github.com/dmboynton56/sports-edge
-- **Interactive on homepage:** yes (live card preview)
-
 ### LLM Advisor (`llm-advisor`)
 
 - **Homepage title:** LLM Advisor: Agentic Trading System
@@ -44,6 +45,14 @@ These have dedicated `/projects/...` pages, interactive previews on the homepage
 - **Proof points:** ICTML premarket fold-in in progress; hybrid ML + LLM decision stack; risk controls tied to execution rules
 - **GitHub:** https://github.com/dmboynton56/llm-advisor
 - **Interactive on homepage:** no (screenshots / metrics on deep dive)
+
+### My Personal Portfolio Website (`personal-portfolio`)
+
+- **Homepage title:** My Personal Portfolio Website
+- **Deep dive:** `/projects/personal-portfolio`
+- **Summary:** This site — TypeScript and Next.js up front, Supabase and BigQuery underneath. Pulls live sportsbook edges from Sports Edge and trading snapshots from LLM Advisor onto the homepage, plus a Gemini chatbot (Vertex AI, RAG over site content).
+- **Technologies:** TypeScript, Next.js, React, Tailwind, Supabase, BigQuery, Gemini / Vertex AI, RAG
+- **Interactive on homepage:** yes (card-only; no device preview frame)
 
 ## Additional projects (carousel only)
 
@@ -73,6 +82,7 @@ Shown on the homepage **without** a separate `/projects/*` deep dive in this rep
 
 ## Notes for assistants
 
-- **Listing "what's in the portfolio"** should include **all three flagships** and **all four additional** projects unless the user asks for a subset.
+- **Listing "what's in the portfolio"** should include **all four flagships** and **all four additional** projects unless the user asks for a subset.
+- **Sports Edge is the first homepage flagship** and the recommended starting point for production ML evaluation.
 - **ICTML** may redirect to LLM Advisor (`/projects/ictml` → `/projects/llm-advisor`).
 - **Methodology, limitations, metrics, and architecture** for flagships: use `project-knowledge/sports-edge/`, `llm-advisor/`, `nba-hof` paths and model cards—not this overview alone.

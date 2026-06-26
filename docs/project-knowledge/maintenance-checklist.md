@@ -1,6 +1,6 @@
 ---
 project: cross-project
-last_verified: 2026-04-07
+last_verified: 2026-06-26
 source_paths:
   - /home/dmboynton/projects/personal-portfolio/docs/project-knowledge/evidence-register.md
   - /home/dmboynton/projects/llm-advisor
@@ -16,7 +16,8 @@ Run this checklist once per month, or immediately after major pipeline/config ch
 ## Step 1: Refresh evidence inputs
 
 - Re-read `llm-advisor` runtime config (`src/core/config.py`) and threshold config (`config/thresholds.py`).
-- Re-read `sports-edge` workflow and latest output artifacts (daily workflow + meta/dashboard JSON files).
+- **Sports Edge metrics/freshness:** automated sync (`scripts/sync-sports-edge-docs.mjs` + `.github/workflows/sync-sports-edge-docs.yml`) updates `sync-state.md`, evidence-register derived rows, and `project_metrics_fallback.json` from upstream artifacts. Human review still required for architecture and new claims.
+- For manual spot-checks: re-read `sports-edge` workflow and latest output artifacts (daily workflow + meta/dashboard JSON files).
 - Record any changed values in `docs/project-knowledge/evidence-register.md`.
 
 ## Step 2: Validate deep-dive claims

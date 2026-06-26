@@ -12,7 +12,8 @@
     "build:warehouse-schema": "node scripts/build-warehouse-schema.mjs",
     "build:rag-embeddings": "node scripts/build-rag-embeddings.mjs",
     "build:changelog": "node scripts/build-changelog.mjs",
-    "refresh-project-metrics": "node scripts/refresh-project-metrics.mjs"
+    "refresh-project-metrics": "node scripts/refresh-project-metrics.mjs",
+    "sync:sports-edge-docs": "node scripts/sync-sports-edge-docs.mjs"
   },
   "dependencies": {
     "@google-cloud/bigquery": "^8.1.1",

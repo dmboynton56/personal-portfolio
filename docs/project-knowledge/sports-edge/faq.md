@@ -1,6 +1,6 @@
 ---
 project: sports-edge
-last_verified: 2026-04-07
+last_verified: 2026-06-26
 source_paths:
   - /home/dmboynton/projects/sports-edge/README.md
   - /home/dmboynton/projects/sports-edge/.github/workflows/daily-refresh.yml
@@ -10,13 +10,17 @@ source_paths:
 
 # Sports Edge FAQ
 
+## Where is the live ops dashboard?
+
+**https://sports-edge.drewboynton.com** — a separate subdomain from the main portfolio (drewboynton.com). The portfolio homepage embeds a live preview card; the deep dive at `/projects/sports-edge` links to the full dashboard.
+
 ## Does Sports Edge only cover NFL and NBA?
 
-No. NFL/NBA are core production flows, but the repository also contains active PGA and CBB pipelines, docs, and artifacts.
+No. The active production scope includes NBA, NFL, MLB, PGA, CBB, and World Cup. NFL/NBA were the original core flows; other leagues have dedicated pipelines, docs, and dashboard sections.
 
 ## Where do production-facing numbers come from?
 
-BigQuery-backed pipelines and exported artifacts (plus Supabase-serving sync), not from static marketing copy.
+BigQuery-backed pipelines and exported artifacts (plus Supabase-serving sync), not from static marketing copy. See `sync-state.md` for machine-synced freshness snapshots.
 
 ## How often does the pipeline refresh?
 
@@ -28,7 +32,7 @@ Any number taken from planning docs/notebook commentary without a dated executio
 
 ## Why can two docs seem to describe different scope?
 
-Root summaries focus on NFL/NBA, while domain docs under `data-core/docs` detail PGA/CBB additions and specialized workflows.
+Older summaries may emphasize NFL/NBA; canonical scope is six leagues (see `overview.md`). Domain docs under `data-core/docs` detail PGA/CBB/World Cup specialized workflows.
 
 ## What evidence is required before publishing a new metric?
 

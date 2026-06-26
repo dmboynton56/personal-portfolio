@@ -1,6 +1,6 @@
 # Evidence Register: Project Deep Dives
 
-Last verified: 2026-04-07
+Last verified: 2026-06-26
 
 ## Purpose
 
@@ -41,10 +41,18 @@ Each line item is tagged as:
 | observed | NBA production model version | v3 | `sports-edge/README.md` and workflow commands | Used in `refresh_nba`. |
 | observed | NFL production model version | v1 | `sports-edge/README.md` and workflow commands | Used in `refresh_nfl`. |
 | observed | Pipeline architecture | BigQuery source-of-truth + Supabase serving cache | `sports-edge/README.md` | Core serving/data flow statement. |
-| observed | PGA simulation sample size | 50,000 sims | `sports-edge/data-core/notebooks/cache/masters_2026_predictions.meta.json` | Tournament simulation volume. |
-| observed | PGA field size in artifact | 80 players | `sports-edge/data-core/notebooks/cache/masters_2026_predictions.meta.json` | Current field bundle size. |
-| observed | PGA artifact as-of date | 2026-04-07 | `sports-edge/data-core/notebooks/cache/masters_2026_predictions.meta.json` | Snapshot freshness reference. |
-| observed | Latest result start used in PGA run | 2026-04-02 | `sports-edge/data-core/notebooks/cache/masters_2026_predictions.meta.json` | Upstream results window anchor. |
+| observed | PGA simulation sample size | 20,000 sims (U.S. Open 2026) | `sports-edge/data-core/notebooks/cache/us_open_2026_predictions.meta.json` | Tournament simulation volume for current event. |
+| observed | PGA field size in artifact | 156 players | `sports-edge/data-core/notebooks/cache/us_open_2026_predictions.meta.json` | U.S. Open 2026 field bundle. |
+| observed | PGA artifact as-of date | 2026-06-18 | `sports-edge/data-core/notebooks/cache/us_open_2026_predictions.meta.json` | Snapshot freshness reference. |
+| observed | Ops dashboard URL | https://sports-edge.drewboynton.com | `personal-portfolio/components/WorkSection.tsx`, `sports-edge/README.md` | Standalone subdomain; portfolio embeds live card. |
+| observed | World Cup model version | world-cup-v0-live-2026-06-15 | Supabase serving + `sports-edge/overview.md` verification | 72 match predictions, 48 team rows, 50,000 sims. |
+| observed | Performance history export | `web/public/data/performance_history.json` | `sports-edge/web/public/data/performance_history.json` | Cross-league model versions and sample sizes. |
+
+<!-- BEGIN SYNC:sports-edge-derived -->
+| derived | Performance history generatedAt | 2026-06-02T16:10:04.518745+00:00 | sports-edge/web/public/data/performance_history.json | Synced 2026-06-26. |
+| derived | Latest PGA meta artifact | us_open_2026_predictions.meta.json | sports-edge/data-core/notebooks/cache/us_open_2026_predictions.meta.json | 20000 sims, 156 players, as-of 2026-06-18. |
+| derived | Current PGA dashboard event | U.S. Open Championship (completed) | sports-edge/web/public/data/pga_tournaments/current.json | generatedAt 2026-06-23T23:55:03.286936+00:00. |
+<!-- END SYNC:sports-edge-derived -->
 | observed | CBB simulation framing | 2,278 possible matchups, 10,000+ sims target | `sports-edge/data-core/docs/SPORTS_EDGE_CBBMM_PLAN.md` | Planning benchmark for bracket simulation depth. |
 | observed | CBB client-side base probability kernel | logistic seed model | `sports-edge/data-core/docs/CBBMM_CONTEXT.md` | Baseline simulation logic in docs. |
 | observed | Web PGA export path | `web/public/data/pga_masters_dashboard.json` | `sports-edge/data-core/docs/PGA_REFRESH_PIPELINE.md` | Frontend bundle source for PGA outputs. |

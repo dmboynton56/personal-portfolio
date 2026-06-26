@@ -1,6 +1,6 @@
 ---
 project: sports-edge
-last_verified: 2026-04-07
+last_verified: 2026-06-26
 source_paths:
   - /home/dmboynton/projects/sports-edge/README.md
   - /home/dmboynton/projects/sports-edge/.github/workflows/daily-refresh.yml
@@ -31,6 +31,19 @@ It centralizes ingestion, feature engineering, prediction, and serving so model 
 2. Feature snapshots are built for target leagues.
 3. Inference jobs generate model outputs.
 4. Outputs are synced to serving layers and dashboard artifacts.
+
+## Operations dashboard
+
+Sports Edge ships a standalone ops dashboard at **https://sports-edge.drewboynton.com** (subdomain; the main portfolio lives at drewboynton.com).
+
+The dashboard surfaces:
+
+- NBA, NFL, and MLB game edges vs sportsbook lines
+- PGA tournament simulations and leaderboards
+- CBB bracket tooling
+- World Cup group and knockout probabilities
+
+The portfolio homepage embeds a live Sports Edge card (first flagship slot) that reads the same Supabase serving tables via `/api/sports-edges`. The deep-dive page at `/projects/sports-edge` includes the card plus a scoped chat assistant.
 
 ## World Cup extension
 

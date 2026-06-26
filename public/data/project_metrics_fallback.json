@@ -2,31 +2,100 @@
     "personal-portfolio": {
         "generatedAt": "2026-06-08T00:00:00.000000+00:00",
         "metrics": [
-            { "label": "RAG Index", "value": "1,200+ chunks", "iconName": "database", "trend": "neutral" },
-            { "label": "Build Mode", "value": "Static + ISR", "iconName": "workflow", "trend": "neutral" },
-            { "label": "Data Sources", "value": "Sports Edge • LLM Advisor", "iconName": "activity", "trend": "neutral" },
-            { "label": "Chatbot Stack", "value": "Gemini + Vertex AI", "iconName": "brainCircuit", "trend": "neutral" }
+            {
+                "label": "RAG Index",
+                "value": "1,200+ chunks",
+                "iconName": "database",
+                "trend": "neutral"
+            },
+            {
+                "label": "Build Mode",
+                "value": "Static + ISR",
+                "iconName": "workflow",
+                "trend": "neutral"
+            },
+            {
+                "label": "Data Sources",
+                "value": "Sports Edge • LLM Advisor",
+                "iconName": "activity",
+                "trend": "neutral"
+            },
+            {
+                "label": "Chatbot Stack",
+                "value": "Gemini + Vertex AI",
+                "iconName": "brainCircuit",
+                "trend": "neutral"
+            }
         ]
     },
     "sports-edge": {
-        "generatedAt": "2026-04-07T17:16:30.644158+00:00",
+        "generatedAt": "2026-06-26T14:55:08.681Z",
         "metrics": [
-            { "label": "PGA Simulations", "value": "50,000", "iconName": "activity" },
-            { "label": "Masters Field", "value": "80 players", "iconName": "database" },
-            { "label": "Refresh Cadence", "value": "13:00 UTC daily", "iconName": "clock" },
-            { "label": "Coverage", "value": "NBA • NFL • PGA • CBB", "iconName": "workflow" }
+            {
+                "label": "League Coverage",
+                "value": "NBA • NFL • MLB • PGA • CBB • WC",
+                "iconName": "workflow"
+            },
+            {
+                "label": "Ops Dashboard",
+                "value": "sports-edge.drewboynton.com",
+                "iconName": "activity"
+            },
+            {
+                "label": "U.S. PGA",
+                "value": "156 players • 20,000 sims",
+                "iconName": "database"
+            },
+            {
+                "label": "Refresh Cadence",
+                "value": "13:00 UTC daily",
+                "iconName": "clock"
+            }
         ]
     },
     "nba-hof": [
-        { "label": "Feature Basis", "value": "Career + Peak", "iconName": "barChart" },
-        { "label": "Player Histories", "value": "5,250+", "iconName": "database" },
-        { "label": "Lookup Experience", "value": "Interactive", "iconName": "search" },
-        { "label": "Model Family", "value": "XGBoost", "iconName": "cpu" }
+        {
+            "label": "Feature Basis",
+            "value": "Career + Peak",
+            "iconName": "barChart"
+        },
+        {
+            "label": "Player Histories",
+            "value": "5,250+",
+            "iconName": "database"
+        },
+        {
+            "label": "Lookup Experience",
+            "value": "Interactive",
+            "iconName": "search"
+        },
+        {
+            "label": "Model Family",
+            "value": "XGBoost",
+            "iconName": "cpu"
+        }
     ],
     "ictml": [
-        { "label": "Daily Bias Accuracy", "value": "84.4%", "iconName": "lineChart", "trend": "up" },
-        { "label": "Symbols", "value": "QQQ • SPY • IWM", "iconName": "brainCircuit" },
-        { "label": "Inference Window", "value": "9:30-12:00 EST", "iconName": "clock" },
-        { "label": "Pipeline Mode", "value": "Daily Automated", "iconName": "workflow" }
+        {
+            "label": "Daily Bias Accuracy",
+            "value": "84.4%",
+            "iconName": "lineChart",
+            "trend": "up"
+        },
+        {
+            "label": "Symbols",
+            "value": "QQQ • SPY • IWM",
+            "iconName": "brainCircuit"
+        },
+        {
+            "label": "Inference Window",
+            "value": "9:30-12:00 EST",
+            "iconName": "clock"
+        },
+        {
+            "label": "Pipeline Mode",
+            "value": "Daily Automated",
+            "iconName": "workflow"
+        }
     ]
 }

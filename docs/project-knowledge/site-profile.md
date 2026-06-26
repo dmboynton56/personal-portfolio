@@ -1,6 +1,6 @@
 ---
 project: cross-project
-last_verified: 2026-05-20
+last_verified: 2026-06-26
 role: canonical_site_profile
 ---
 
@@ -24,7 +24,7 @@ I am a software and machine learning engineer focused on building systems that h
 
 Most of my recent projects are end-to-end pipelines: data ingestion, feature generation, model scoring, API layers, and frontend experiences that expose model outputs in a usable way. I regularly work with Python, TypeScript, BigQuery, Supabase/Postgres, and cloud-based AI tooling.
 
-This portfolio highlights projects where I can demonstrate measurable outcomes, architectural decisions, and operational tradeoffs. If you are evaluating for DS/ML/SWE roles, the flagship systems are the best place to start.
+This portfolio highlights projects where I can demonstrate measurable outcomes, architectural decisions, and operational tradeoffs. If you are evaluating for DS/ML/SWE roles, **Sports Edge** (homepage first flagship + ops dashboard) is the best place to start.
 
 ## Contact (public — same as homepage `#contact`)
 
@@ -39,12 +39,12 @@ When someone asks how to reach Drew, for hiring, or for links, give **all** of t
 
 The contact section on the homepage also invites collaboration on opportunities.
 
-## Flagship GitHub repos (public)
+## Flagship GitHub repos and live surfaces (public)
 
-| Project | Repo |
-| --- | --- |
-| Sports Edge | https://github.com/dmboynton56/sports-edge |
-| LLM Advisor | https://github.com/dmboynton56/llm-advisor |
+| Project | Repo | Live |
+| --- | --- | --- |
+| Sports Edge | https://github.com/dmboynton56/sports-edge | https://sports-edge.drewboynton.com (ops dashboard; separate subdomain from drewboynton.com) |
+| LLM Advisor | https://github.com/dmboynton56/llm-advisor | — |
 
 NBA Hall of Fame predictor deep dive is documented on-site; check the project page for repo links if listed there.
 

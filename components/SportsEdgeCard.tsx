@@ -306,7 +306,7 @@ export default function SportsEdgeCard({ enabled = true }: SportsEdgeCardProps) 
       <div className="rounded-2xl border border-border p-4 bg-muted/5">
         <div className="mb-2 text-sm font-medium text-muted-foreground">Sports Edge</div>
         <p className="text-center py-10 text-sm text-muted-foreground px-4">
-          Scroll this project into view to load NFL/NBA model edges.
+          Scroll this project into view to load live model edges.
         </p>
       </div>
     )

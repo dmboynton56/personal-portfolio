@@ -95,18 +95,24 @@ interface PlayerPrediction {
 
 const mockProjects: Project[] = [
   {
-    id: 'personal-portfolio',
-    title: 'My Personal Portfolio Website',
+    id: 'sports-edge',
+    title: 'Sports Edge: Multi-League Sports Modeling 🏈',
     description:
-      'What started as a portfolio site grew into its own project - TypeScript and Next.js up front, Supabase and BigQuery underneath. It pulls live sportsbook edges from Sports Edge and trading snapshots from LLM Advisor onto the homepage, and includes a Gemini chatbot (Vertex AI, RAG over this site\'s content) that can answer questions about my work and the data behind what you\'re looking at.',
+      'Production sports modeling stack covering NBA, NFL, MLB, PGA, CBB, and World Cup. BigQuery holds source-of-truth data; Python pipelines score games and sync to Supabase for the ops dashboard and this portfolio. Compare model spreads and win probabilities against sportsbook lines to surface edges.',
     category: 'flagship',
     type: 'desktop',
-    image: '/images/projects/personal-portfolio-hero.png',
-    images: ['/images/projects/personal-portfolio-hero.png'],
-    technologies: ['TypeScript', 'Next.js', 'React', 'Tailwind', 'Supabase', 'BigQuery', 'Gemini / Vertex AI', 'RAG'],
+    image: '/images/projects/project3-1.JPG',
+    images: ['/images/projects/project3-1.JPG', '/images/projects/project3-2.JPG'],
+    technologies: ['Python', 'Scikit-learn', 'LightGBM', 'Supabase', 'Next.js', 'Sports Analytics'],
+    proofPoints: [
+      'Ops dashboard at sports-edge.drewboynton.com',
+      'BigQuery source of truth + Supabase serving layer',
+      'Automated daily/weekly prediction pipeline across six leagues'
+    ],
     isInteractive: true,
-    caseStudyUrl: '/projects/personal-portfolio',
-    cardOnly: true
+    caseStudyUrl: '/projects/sports-edge',
+    liveUrl: 'https://sports-edge.drewboynton.com',
+    liveUrlLabel: 'Ops Dashboard',
   },
   {
     id: 'nba-hof-predictor',
@@ -133,26 +139,6 @@ const mockProjects: Project[] = [
     caseStudyUrl: '/projects/nba-hof'
   },
   {
-    id: 'sports-edge',
-    title: 'Sports Edge: NFL/NBA Betting Analysis 🏈',
-    description:
-      'Machine learning pipeline that computes model spreads and home win probabilities for NFL/NBA games, compares against sportsbook lines, and identifies betting edges. Features real-time odds integration, feature engineering (rest days, form metrics, opponent strength), and automated daily predictions.',
-    category: 'flagship',
-    type: 'desktop',
-    image: '/images/projects/project3-1.JPG',
-    images: ['/images/projects/project3-1.JPG', '/images/projects/project3-2.JPG'],
-    technologies: ['Python', 'Scikit-learn', 'LightGBM', 'Supabase', 'Next.js', 'Sports Analytics'],
-    proofPoints: [
-      'BigQuery as source of truth + Supabase serving layer',
-      'Automated daily/weekly prediction pipeline',
-      'Live portfolio card pulling sportsbook deltas'
-    ],
-    isInteractive: true,
-    caseStudyUrl: '/projects/sports-edge',
-    liveUrl: 'https://sports-edge.drewboynton.com',
-    liveUrlLabel: 'Ops Dashboard',
-  },
-  {
     id: 'llm-advisor',
     title: 'LLM Advisor: Agentic Trading System 🤖',
     description:
@@ -168,6 +154,20 @@ const mockProjects: Project[] = [
     ],
     isInteractive: false,
     caseStudyUrl: '/projects/llm-advisor'
+  },
+  {
+    id: 'personal-portfolio',
+    title: 'My Personal Portfolio Website',
+    description:
+      'What started as a portfolio site grew into its own project - TypeScript and Next.js up front, Supabase and BigQuery underneath. It pulls live sportsbook edges from Sports Edge and trading snapshots from LLM Advisor onto the homepage, and includes a Gemini chatbot (Vertex AI, RAG over this site\'s content) that can answer questions about my work and the data behind what you\'re looking at.',
+    category: 'flagship',
+    type: 'desktop',
+    image: '/images/projects/personal-portfolio-hero.png',
+    images: ['/images/projects/personal-portfolio-hero.png'],
+    technologies: ['TypeScript', 'Next.js', 'React', 'Tailwind', 'Supabase', 'BigQuery', 'Gemini / Vertex AI', 'RAG'],
+    isInteractive: true,
+    caseStudyUrl: '/projects/personal-portfolio',
+    cardOnly: true
   },
   {
     id: 'mancala-ai',
@@ -708,7 +708,7 @@ export function WorkSection() {
                   {project.isInteractive && project.id === 'sports-edge' && (
                     <div className="mt-8 relative max-w-2xl mx-auto text-center">
                       <p className="text-center text-sm text-muted-foreground">
-                        Live NFL/NBA game predictions vs sportsbook lines • Examine the spreads in the screen above to see model analysis
+                        Live multi-league model edges vs sportsbook lines • Examine the spreads in the screen above or open the ops dashboard
                       </p>
                     </div>
                   )}

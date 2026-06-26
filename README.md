@@ -109,7 +109,15 @@ npm run build:rag-embeddings
 
 The embedding script writes `public/data/rag_embeddings.json`. That file is intentionally ignored because it is large and generated from docs. Runtime retrieval uses cosine similarity when the file exists and falls back to token overlap if the file is missing or the embedding request fails.
 
-**After you add or edit files under `docs/`** (for example [`docs/project-knowledge/portfolio-overview.md`](docs/project-knowledge/portfolio-overview.md)), re-run **`build:rag-manifest`** and **`build:rag-embeddings`** so default-scope chat and project-scoped RAG both see the new chunks. The default portfolio chat scope includes all of `docs/project-knowledge/`, `docs/model-cards/`, `docs/project-postmortems/`, and the shared root `.txt` references in `docs/`.
+**After you add or edit files under `docs/`** (for example [`docs/project-knowledge/portfolio-overview.md`](docs/project-knowledge/portfolio-overview.md)), embedding rebuild is **automated on push to `main`** via [`.github/workflows/rebuild-rag-embeddings.yml`](.github/workflows/rebuild-rag-embeddings.yml). For local testing only, you can run `npm run build:rag-manifest` and `npm run build:rag-embeddings` manually. The default portfolio chat scope includes all of `docs/project-knowledge/`, `docs/model-cards/`, `docs/project-postmortems/`, and the shared root `.txt` references in `docs/`.
+
+## Sports Edge doc sync
+
+Sports Edge metrics and freshness docs are auto-synced from upstream dashboard artifacts via [`.github/workflows/sync-sports-edge-docs.yml`](.github/workflows/sync-sports-edge-docs.yml). The sync runs on `repository_dispatch` from the sports-edge repo (after daily/PGA/World Cup refreshes), on a daily cron, or manually. Run locally with:
+
+```bash
+node scripts/sync-sports-edge-docs.mjs
+```
 
 ## Contact
 

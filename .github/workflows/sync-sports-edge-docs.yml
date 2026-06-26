@@ -1,0 +1,85 @@
+name: sync-sports-edge-docs
+
+# Syncs Sports Edge freshness docs and KPI fallback from upstream dashboard
+# artifacts. Auto-commits to main when upstream data differs.
+#
+# Triggers:
+#   - repository_dispatch from sports-edge repo (after daily/PGA/World Cup refresh)
+#   - daily cron as safety net (1h after sports-edge daily refresh)
+#   - manual workflow_dispatch
+
+"on":
+  repository_dispatch:
+    types: [sports-edge-refresh]
+  workflow_dispatch:
+  schedule:
+    - cron: '0 14 * * *'
+
+concurrency:
+  group: sync-sports-edge-docs
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sync Sports Edge docs
+        run: npm run sync:sports-edge-docs
+        env:
+          SYNC_SOURCE: ${{ github.event.client_payload.source || 'cron' }}
+          SYNC_RUN_ID: ${{ github.event.client_payload.run_id || github.run_id }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+
+      - name: Check for changes
+        id: diff
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            git diff --name-only
+          fi
+
+      - name: Auto-commit synced docs
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add docs/project-knowledge/sports-edge/sync-state.md \
+                  docs/project-knowledge/evidence-register.md \
+                  public/data/project_metrics_fallback.json
+
+          DOCS_CHANGED=false
+          if ! git diff --cached --quiet docs/; then
+            DOCS_CHANGED=true
+          fi
+
+          SOURCE="${{ github.event.client_payload.source || 'cron' }}"
+          RUN_ID="${{ github.event.client_payload.run_id || github.run_id }}"
+
+          if [ "$DOCS_CHANGED" = "true" ]; then
+            git commit -m "chore(sports-edge): sync docs from upstream (source=${SOURCE}, run=${RUN_ID})"
+          else
+            git commit -m "chore(sports-edge): sync metrics fallback from upstream [skip ci] (source=${SOURCE}, run=${RUN_ID})"
+          fi
+
+          git push origin main

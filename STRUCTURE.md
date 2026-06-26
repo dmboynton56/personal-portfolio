@@ -58,11 +58,17 @@ ICTML is now represented as part of the LLM Advisor story, and the
 ## Documentation Flow
 
 Project chat answers are grounded by files under `docs/`. After changing those
-files, rebuild:
+files on `main`, RAG embeddings rebuild automatically (see
+`.github/workflows/rebuild-rag-embeddings.yml`). Sports Edge freshness docs
+sync automatically from upstream artifacts (see
+`.github/workflows/sync-sports-edge-docs.yml`).
+
+For local testing only:
 
 ```bash
 npm run build:rag-manifest
 npm run build:rag-embeddings
+node scripts/sync-sports-edge-docs.mjs
 ```
 
 The manifest is committed at `public/data/rag_manifest.json`. The embedding

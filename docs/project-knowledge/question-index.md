@@ -1,6 +1,6 @@
 ---
 project: cross-project
-last_verified: 2026-05-20
+last_verified: 2026-06-26
 source_paths:
   - /home/dmboynton/projects/personal-portfolio/docs/project-knowledge/llm-advisor
   - /home/dmboynton/projects/personal-portfolio/docs/project-knowledge/sports-edge
@@ -42,6 +42,14 @@ Use:
 
 ## Sports Edge question routing
 
+## Where is the dashboard / live app / ops surface?
+
+Use:
+
+- `docs/project-knowledge/sports-edge/overview.md` (Operations dashboard section)
+- `docs/project-knowledge/sports-edge/faq.md`
+- `docs/project-knowledge/portfolio-overview.md` (Sports Edge liveUrl)
+
 ## What leagues and modules are currently covered?
 
 Use:
@@ -53,6 +61,7 @@ Use:
 
 Use:
 
+- `docs/project-knowledge/sports-edge/sync-state.md` (auto-synced live snapshot)
 - `docs/project-knowledge/sports-edge/metrics-and-results.md`
 - `docs/project-knowledge/evidence-register.md`
 
