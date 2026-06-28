@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-06-26T15:13:16.450Z",
+  "generatedAt": "2026-06-28T08:39:12.004Z",
   "provider": "vertex-ai",
   "model": "text-embedding-004",
   "taskType": "RETRIEVAL_DOCUMENT",
