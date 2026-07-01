@@ -1,9 +1,10 @@
 import Image from 'next/image'
 import { Logo } from './Logo'
+import { TechBadges } from './TechBadges'
 
 export function ProfileSection() {
   return (
-    <section id="home" className="flex flex-col items-center justify-center min-h-screen text-center px-4">
+    <section id="home" className="flex flex-1 flex-col items-center justify-center px-4 py-24 text-center md:py-28">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8 relative w-48 h-48 mx-auto">
           <Image
@@ -24,6 +25,7 @@ export function ProfileSection() {
           I build production-focused ML and data products end to end, from feature pipelines and model inference
           to APIs, frontend delivery, and automated monitoring.
         </p>
+        <TechBadges />
       </div>
     </section>
   )

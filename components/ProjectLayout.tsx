@@ -1,9 +1,9 @@
 import React from 'react'
 import { Header } from '@/components/Header'
-import { ArrowLeft, Github, ExternalLink, Calendar, BarChart2, Radio, Activity, Code } from 'lucide-react'
+import { ArrowLeft, Activity, Code } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
+import { ProjectActionButtons } from '@/components/ProjectActionButtons'
 import { ProjectMetric, MetricSource, getIcon } from '@/lib/metrics'
 import { track } from '@vercel/analytics'
 
@@ -67,6 +67,15 @@ export function ProjectLayout({
                             {description}
                         </p>
 
+                        <ProjectActionButtons
+                            liveUrl={liveUrl}
+                            liveUrlLabel={liveUrlLabel}
+                            repoUrl={repoUrl}
+                            className="mb-8"
+                            onLiveClick={() => track('view_live_clicked', { project: title })}
+                            onRepoClick={() => track('view_code_clicked', { project: title })}
+                        />
+
                         <div className="flex flex-wrap gap-3 mb-8">
                             {tags.map((tag) => (
                                 <span
@@ -76,25 +85,6 @@ export function ProjectLayout({
                                     {tag}
                                 </span>
                             ))}
-                        </div>
-
-                        <div className="flex flex-wrap gap-4">
-                            {liveUrl && (
-                                <Button asChild size="lg" className="shine-border group/btn" onClick={() => track('view_live_clicked', { project: title })}>
-                                    <a href={liveUrl} target="_blank" rel="noopener noreferrer" className="relative z-10 flex items-center justify-center text-foreground/80 group-hover/btn:text-foreground transition-colors">
-                                        <ExternalLink className="w-4 h-4 mr-2" />
-                                        {liveUrlLabel}
-                                    </a>
-                                </Button>
-                            )}
-                            {repoUrl && (
-                                <Button asChild variant="outline" size="lg" onClick={() => track('view_code_clicked', { project: title })}>
-                                    <a href={repoUrl} target="_blank" rel="noopener noreferrer">
-                                        <Github className="w-4 h-4 mr-2" />
-                                        View Code
-                                    </a>
-                                </Button>
-                            )}
                         </div>
                     </div>
 

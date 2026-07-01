@@ -3,12 +3,13 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { ExternalLink, Search, Send } from 'lucide-react'
+import { Search, Send } from 'lucide-react'
 import { DeviceFrameset } from 'react-device-frameset'
 import '@/styles/device-frames.css'
 import { BorderBeam } from '@/components/ui/border-beam'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { ProjectActionButtons } from '@/components/ProjectActionButtons'
 import { useVisibleProjects } from '@/hooks/useVisibleProjects'
 
 const ProjectCarousel = dynamic(
@@ -402,14 +403,8 @@ export function WorkSection() {
 
   return (
     <>
-      <section id="work" className="min-h-screen bg-background-alt py-24">
+      <section id="work-detail" className="min-h-screen bg-background-alt py-24 pt-12 md:pt-16">
         <div className="max-w-6xl mx-auto px-4 md:px-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-12">Selected Work</h2>
-          <p className="max-w-3xl text-lg text-muted-foreground mb-16">
-            Production-oriented machine learning and data systems are my core focus. These flagship projects represent the strongest
-            examples of modeling, automation, and full-stack delivery.
-          </p>
-
           <div className="space-y-64">
             {orderedProjects.map((project, index) => (
               <div
@@ -461,6 +456,14 @@ export function WorkSection() {
                             ))}
                           </ul>
                         )}
+
+                        <ProjectActionButtons
+                          caseStudyUrl={project.caseStudyUrl}
+                          liveUrl={project.liveUrl}
+                          liveUrlLabel={project.liveUrlLabel}
+                          className="mb-8"
+                        />
+
                         <div className="flex flex-wrap gap-2 mb-8">
                           {project.technologies.map((tech) => (
                             <span
@@ -474,34 +477,6 @@ export function WorkSection() {
                             </span>
                           ))}
                         </div>
-
-                        {(project.caseStudyUrl || project.liveUrl) && (
-                          <div className="flex flex-wrap gap-3">
-                            {project.caseStudyUrl && (
-                              <Button asChild className="shine-border w-full sm:w-auto group/btn">
-                                <a
-                                  href={project.caseStudyUrl}
-                                  className="relative z-10 flex items-center justify-center text-foreground/80 group-hover/btn:text-foreground transition-colors"
-                                >
-                                  View Deep Dive <div className="ml-2">→</div>
-                                </a>
-                              </Button>
-                            )}
-                            {project.liveUrl && (
-                              <Button asChild variant="outline" className="w-full sm:w-auto group/btn">
-                                <a
-                                  href={project.liveUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="relative z-10 flex items-center justify-center text-foreground/80 group-hover/btn:text-foreground transition-colors"
-                                >
-                                  <ExternalLink className="w-4 h-4 mr-2" />
-                                  {project.liveUrlLabel ?? 'View Live'}
-                                </a>
-                              </Button>
-                            )}
-                          </div>
-                        )}
                       </div>
                     </div>
                   </div>
