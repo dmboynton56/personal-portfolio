@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" fill="none">
+  <rect width="1280" height="800" fill="#09090b"/>
+  <rect x="90" y="100" width="230" height="90" rx="16" fill="#000000" fill-opacity="0.55" stroke="#818cf8" stroke-opacity="0.3"/>
+  <text x="110" y="135" fill="#71717a" font-family="system-ui,sans-serif" font-size="14" font-weight="600">LIVE JOBS</text>
+  <text x="110" y="170" fill="#818cf8" font-family="system-ui,sans-serif" font-size="28" font-weight="700">~7,000</text>
+  <rect x="950" y="120" width="240" height="90" rx="16" fill="#000000" fill-opacity="0.55" stroke="#22d3ee" stroke-opacity="0.3"/>
+  <text x="970" y="155" fill="#71717a" font-family="system-ui,sans-serif" font-size="14" font-weight="600">BOARDS</text>
+  <text x="970" y="190" fill="#22d3ee" font-family="system-ui,sans-serif" font-size="28" font-weight="700">70</text>
+  <rect x="80" y="340" width="240" height="90" rx="16" fill="#000000" fill-opacity="0.55" stroke="#34d399" stroke-opacity="0.3"/>
+  <text x="100" y="375" fill="#71717a" font-family="system-ui,sans-serif" font-size="14" font-weight="600">FIT DIMENSIONS</text>
+  <text x="100" y="410" fill="#34d399" font-family="system-ui,sans-serif" font-size="28" font-weight="700">8</text>
+  <rect x="960" y="360" width="250" height="90" rx="16" fill="#000000" fill-opacity="0.55" stroke="#fbbf24" stroke-opacity="0.3"/>
+  <text x="980" y="395" fill="#71717a" font-family="system-ui,sans-serif" font-size="14" font-weight="600">VECTOR SEARCH</text>
+  <text x="980" y="430" fill="#fbbf24" font-family="system-ui,sans-serif" font-size="28" font-weight="700">&lt;10ms</text>
+  <text x="1100" y="760" fill="#52525b" font-family="system-ui,sans-serif" font-size="12">MatchPoint</text>
+</svg>

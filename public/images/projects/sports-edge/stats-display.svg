@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" fill="none">
+  <rect width="1280" height="800" fill="#09090b"/>
+  <rect x="80" y="100" width="200" height="90" rx="16" fill="#000000" fill-opacity="0.55" stroke="#22d3ee" stroke-opacity="0.3"/>
+  <text x="100" y="135" fill="#71717a" font-family="system-ui,sans-serif" font-size="14" font-weight="600">LEAGUES</text>
+  <text x="100" y="170" fill="#22d3ee" font-family="system-ui,sans-serif" font-size="28" font-weight="700">6</text>
+  <rect x="980" y="120" width="220" height="90" rx="16" fill="#000000" fill-opacity="0.55" stroke="#34d399" stroke-opacity="0.3"/>
+  <text x="1000" y="155" fill="#71717a" font-family="system-ui,sans-serif" font-size="14" font-weight="600">NBA ATS</text>
+  <text x="1000" y="190" fill="#34d399" font-family="system-ui,sans-serif" font-size="28" font-weight="700">54.1%</text>
+  <rect x="60" y="340" width="240" height="90" rx="16" fill="#000000" fill-opacity="0.55" stroke="#34d399" stroke-opacity="0.3"/>
+  <text x="80" y="375" fill="#71717a" font-family="system-ui,sans-serif" font-size="14" font-weight="600">FLAT ROI</text>
+  <text x="80" y="410" fill="#34d399" font-family="system-ui,sans-serif" font-size="28" font-weight="700">+3.2%</text>
+  <rect x="960" y="360" width="240" height="90" rx="16" fill="#000000" fill-opacity="0.55" stroke="#a78bfa" stroke-opacity="0.3"/>
+  <text x="980" y="395" fill="#71717a" font-family="system-ui,sans-serif" font-size="14" font-weight="600">PIPELINE</text>
+  <text x="980" y="430" fill="#a78bfa" font-family="system-ui,sans-serif" font-size="28" font-weight="700">13:00 UTC</text>
+  <text x="1100" y="760" fill="#52525b" font-family="system-ui,sans-serif" font-size="12">Sports Edge</text>
+</svg>

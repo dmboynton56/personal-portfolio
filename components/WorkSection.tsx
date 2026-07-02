@@ -3,6 +3,7 @@
 import { useRef, useEffect, useState, useCallback } from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Search, Send } from 'lucide-react'
 import { DeviceFrameset } from 'react-device-frameset'
 import '@/styles/device-frames.css'
@@ -22,10 +23,8 @@ const NBAHofDisplay = dynamic(
   () => import('./NBAHofDisplay').then((mod) => ({ default: mod.NBAHofDisplay })),
   { ssr: false }
 )
-const SportsEdgeDisplay = dynamic(
-  () => import('./SportsEdgeDisplay').then((mod) => ({ default: mod.SportsEdgeDisplay })),
-  { ssr: false }
-)
+
+const STATS_SCREEN_PROJECT_IDS = new Set(['sports-edge', 'llm-advisor', 'matchpoint'])
 
 /** Responsive hint for lazy previews and carousel-friendly fills */
 const PROJECT_IMAGE_SIZES = '(max-width: 768px) min(100vw, 896px), min(896px, 75vw)'
@@ -102,9 +101,9 @@ const mockProjects: Project[] = [
       'Production sports modeling stack covering NBA, NFL, MLB, PGA, CBB, and World Cup. BigQuery holds source-of-truth data; Python pipelines score games and sync to Supabase for the ops dashboard and this portfolio. Compare model spreads and win probabilities against sportsbook lines to surface edges.',
     category: 'flagship',
     type: 'desktop',
-    image: '/images/projects/sports-edge/sports-edge-ops-dashboard.png',
+    image: '/images/projects/sports-edge/dashboard-screenshot.png',
     images: [
-      '/images/projects/sports-edge/sports-edge-ops-dashboard.png',
+      '/images/projects/sports-edge/dashboard-screenshot.png',
       '/images/projects/sports-edge/sports-edge-week-outputs.png',
       '/images/projects/sports-edge/model_spreads_vs_book.png',
     ],
@@ -114,10 +113,60 @@ const mockProjects: Project[] = [
       'BigQuery source of truth + Supabase serving layer',
       'Automated daily/weekly prediction pipeline across six leagues'
     ],
-    isInteractive: true,
+    isInteractive: false,
     caseStudyUrl: '/projects/sports-edge',
     liveUrl: 'https://sports-edge.drewboynton.com',
     liveUrlLabel: 'Ops Dashboard',
+  },
+  {
+    id: 'llm-advisor',
+    title: 'LLM Advisor: Agentic Trading System 🤖',
+    description:
+      'Autonomous trading agent that uses Gemini to analyze market context, adjust mean-reversion thresholds, and execute paper options with guardrails. Premarket bias from ICTML folds into one trading-advisor story.',
+    category: 'flagship',
+    type: 'desktop',
+    image: '/images/projects/llm-advisor/dashboard-screenshot.png',
+    images: [
+      '/images/projects/llm-advisor/dashboard-screenshot.png',
+      '/images/projects/llm-advisor/spy-feature-importances.png',
+      '/images/projects/llm-advisor/qqq-feature-importances.png',
+      '/images/projects/llm-advisor/iwm-feature-importances.png',
+    ],
+    technologies: ['Python', 'Gemini API', 'Alpaca', 'Pandas', 'Backtesting'],
+    proofPoints: [
+      'Paper options on 7–14 DTE with MR/TC setup types',
+      'Hybrid ML + LLM validation funnel',
+      'Risk controls tied to execution rules'
+    ],
+    isInteractive: false,
+    caseStudyUrl: '/projects/llm-advisor',
+    liveUrl: 'https://llm-advisor.drewboynton.com',
+    liveUrlLabel: 'Ops Dashboard',
+  },
+  {
+    id: 'matchpoint',
+    title: 'MatchPoint: AI Job Matcher 🎯',
+    description:
+      'AI job matcher: daily ingestion from 70 Greenhouse boards, two-stage embedding + LLM matching against your resume.',
+    category: 'flagship',
+    type: 'desktop',
+    image: '/images/projects/matchpoint/dashboard-screenshot.png',
+    images: [
+      '/images/projects/matchpoint/dashboard-screenshot.png',
+      '/images/projects/matchpoint/upload-flow.png',
+      '/images/projects/matchpoint/match-detail.png',
+      '/images/projects/matchpoint/architecture.png',
+    ],
+    technologies: ['React 19', 'FastAPI', 'OpenAI', 'Turso', 'Supabase', 'Vercel'],
+    proofPoints: [
+      '5,867 live jobs corpus refreshed daily',
+      '8-dimension LLM fit scoring with grounded highlights',
+      'Sub-10ms vector search via precomputed embedding matrix'
+    ],
+    isInteractive: false,
+    caseStudyUrl: '/projects/matchpoint',
+    liveUrl: 'https://matchpoint-web-gamma.vercel.app',
+    liveUrlLabel: 'Try MatchPoint',
   },
   {
     id: 'nba-hof-predictor',
@@ -144,27 +193,10 @@ const mockProjects: Project[] = [
     caseStudyUrl: '/projects/nba-hof'
   },
   {
-    id: 'llm-advisor',
-    title: 'LLM Advisor: Agentic Trading System 🤖',
-    description:
-      'Autonomous trading agent that uses Gemini to analyze market context, adjust mean-reversion thresholds, and execute with guardrails. The premarket bias work from ICTML is being folded into this system so the portfolio tells one trading-advisor story.',
-    category: 'flagship',
-    type: 'desktop',
-    image: '/images/projects/llm-advisor-dashboard.png',
-    technologies: ['Python', 'Gemini API', 'Alpaca', 'Pandas', 'Backtesting'],
-    proofPoints: [
-      'ICTML premarket bias fold-in in progress',
-      'Hybrid ML + LLM trading decision stack',
-      'Risk controls tied to execution rules'
-    ],
-    isInteractive: false,
-    caseStudyUrl: '/projects/llm-advisor'
-  },
-  {
     id: 'personal-portfolio',
     title: 'My Personal Portfolio Website',
     description:
-      'What started as a portfolio site grew into its own project - TypeScript and Next.js up front, Supabase and BigQuery underneath. It pulls live sportsbook edges from Sports Edge and trading snapshots from LLM Advisor onto the homepage, and includes a Gemini chatbot (Vertex AI, RAG over this site\'s content) that can answer questions about my work and the data behind what you\'re looking at.',
+      'What started as a portfolio site grew into its own project - TypeScript and Next.js up front, Supabase and BigQuery underneath. Flagship projects use stats-screen laptop displays and link out to live ops dashboards; includes a Gemini chatbot (Vertex AI, RAG over this site\'s content).',
     category: 'flagship',
     type: 'desktop',
     image: '/images/projects/personal-portfolio-hero.png',
@@ -181,10 +213,10 @@ const mockProjects: Project[] = [
       'Intelligent Mancala game implementing minimax algorithm with alpha-beta pruning optimization. The AI evaluates game states 5 moves ahead, achieving 70-80% win rate against random opponents with 10x performance improvement through pruning. Features Monte Carlo simulation analysis for strategic validation.',
     category: 'additional',
     type: 'desktop',
-    image: '/images/projects/mancala-output.png',
+    image: '/images/projects/Mancala-Output.png',
     images: [
-      '/images/projects/mancala-output.png',
-      '/images/projects/mancala-workflow.JPG',
+      '/images/projects/Mancala-Output.png',
+      '/images/projects/Mancala-Workflow.JPG',
       '/images/projects/Mancala-4.JPG',
       '/images/projects/Mancala-1.JPG',
       '/images/projects/Mancala-2.JPG',
@@ -378,7 +410,31 @@ export function WorkSection() {
     setNbaIsLoading(false)
   }
 
-  const sportsEdgeEnabled = visibleProjectIds.has('sports-edge')
+  const renderStatsScreen = (project: Project) => (
+    <Link
+      href={project.caseStudyUrl!}
+      aria-label={`View ${project.title} case study`}
+      className="relative flex h-full w-full cursor-pointer items-center justify-center transition-transform hover:scale-[1.02] group"
+    >
+      <DevicePreview className={DESKTOP_DEVICE_PREVIEW_CLASS}>
+        <DeviceFrameset device="MacBook Pro" color="silver">
+          <div className="relative h-[800px] w-[1280px] overflow-hidden bg-background">
+            <div className="absolute inset-[8px] overflow-hidden">
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                sizes={PROJECT_IMAGE_SIZES}
+                className="object-cover"
+              />
+            </div>
+          </div>
+          <div className="bottom-bar" />
+        </DeviceFrameset>
+      </DevicePreview>
+      <div className="pointer-events-none absolute inset-0 rounded-xl bg-background/10 opacity-0 transition-opacity group-hover:opacity-100" />
+    </Link>
+  )
 
   const renderInteractivePlaceholder = (project: Project) => (
     <div
@@ -530,65 +586,12 @@ export function WorkSection() {
                       ) : (
                         renderInteractivePlaceholder(project)
                       )
-                    ) : project.isInteractive && project.id === 'sports-edge' ? (
-                      visibleProjectIds.has('sports-edge') ? (
-                        <div
-                          onClick={(event) => event.stopPropagation()}
-                          onPointerDown={(event) => event.stopPropagation()}
-                          className="relative transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group"
-                        >
-                          <DevicePreview className={DESKTOP_DEVICE_PREVIEW_CLASS}>
-                            <DeviceFrameset device="MacBook Pro" color="silver">
-                              <div className="relative w-[1280px] h-[800px] bg-background">
-                                <div className="absolute inset-[8px] overflow-hidden">
-                                  <SportsEdgeDisplay enabled={sportsEdgeEnabled} />
-                                </div>
-                              </div>
-                              <div className="bottom-bar" />
-                            </DeviceFrameset>
-                          </DevicePreview>
-                          <div className="pointer-events-none absolute inset-0 bg-background/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl" />
-                        </div>
+                    ) : STATS_SCREEN_PROJECT_IDS.has(project.id) ? (
+                      visibleProjectIds.has(project.id) ? (
+                        renderStatsScreen(project)
                       ) : (
                         renderInteractivePlaceholder(project)
                       )
-                    ) : project.id === 'llm-advisor' ? (
-                      <div className="relative transition-transform hover:scale-[1.02] flex items-center justify-center w-full h-full group">
-                        <DevicePreview className={DESKTOP_DEVICE_PREVIEW_CLASS}>
-                          <DeviceFrameset device="MacBook Pro" color="silver">
-                            <div className="relative w-[1280px] h-[800px] overflow-hidden bg-zinc-950">
-                              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.24),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(16,185,129,0.18),transparent_34%)]" />
-                              <div className="absolute inset-0 grid grid-cols-12 grid-rows-6 gap-4 p-12 opacity-35">
-                                {Array.from({ length: 24 }).map((_, tileIndex) => (
-                                  <div key={tileIndex} className="rounded-xl border border-white/10 bg-white/[0.03]" />
-                                ))}
-                              </div>
-                              <div className="relative z-10 flex h-full items-center justify-center p-20">
-                                <div className="max-w-3xl rounded-3xl border border-white/12 bg-black/55 p-12 text-center shadow-2xl backdrop-blur">
-                                  <div className="mx-auto mb-6 inline-flex rounded-full border border-amber-400/40 bg-amber-400/10 px-4 py-2 text-sm font-semibold uppercase tracking-[0.25em] text-amber-200">
-                                    Work in progress
-                                  </div>
-                                  <h4 className="mb-5 text-5xl font-bold text-white">LLM Advisor rebuild underway</h4>
-                                  <p className="mx-auto max-w-2xl text-xl leading-relaxed text-zinc-300">
-                                    Folding ICTML premarket bias into the live advisor stack, then shipping one dashboard for signals,
-                                    guardrails, backtests, and execution telemetry.
-                                  </p>
-                                  <div className="mt-10 grid grid-cols-3 gap-4 text-left">
-                                    {['Premarket bias', 'LLM thresholds', 'Execution metrics'].map((label) => (
-                                      <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
-                                        <div className="mb-3 h-2 w-16 rounded-full bg-accent" />
-                                        <div className="text-lg font-semibold text-white">{label}</div>
-                                        <div className="mt-2 text-sm text-zinc-400">Coming into one project surface</div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="bottom-bar" />
-                          </DeviceFrameset>
-                        </DevicePreview>
-                      </div>
                     ) : (
                       <div
                         onClick={() => handleImageClick(project)}
@@ -684,18 +687,15 @@ export function WorkSection() {
                     </div>
                   )}
 
-                  {project.isInteractive && project.id === 'sports-edge' && (
+                  {STATS_SCREEN_PROJECT_IDS.has(project.id) && (
                     <div className="mt-8 relative max-w-2xl mx-auto text-center">
                       <p className="text-center text-sm text-muted-foreground">
-                        Live multi-league model edges vs sportsbook lines • Examine the spreads in the screen above or open the ops dashboard
-                      </p>
-                    </div>
-                  )}
-
-                  {project.id === 'llm-advisor' && (
-                    <div className="mt-8 relative max-w-2xl mx-auto text-center">
-                      <p className="text-center text-sm text-muted-foreground">
-                        ICTML is being folded into this project. Public dashboard polish is in progress while the signal and execution layers consolidate.
+                        {project.id === 'sports-edge' &&
+                          'Telemetry stats on the laptop — click through for the pipeline story or open the ops dashboard for live predictions.'}
+                        {project.id === 'llm-advisor' &&
+                          'Paper-trading ops dashboard at llm-advisor.drewboynton.com — click the laptop for the deep dive.'}
+                        {project.id === 'matchpoint' &&
+                          'Click the laptop for architecture and matching details, or try the live app.'}
                       </p>
                     </div>
                   )}

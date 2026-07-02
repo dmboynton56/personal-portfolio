@@ -4,8 +4,10 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { ProjectLayout } from '@/components/ProjectLayout'
 import { ProjectChat } from '@/components/chat/ProjectChat'
 import Image from 'next/image'
+import Link from 'next/link'
 import {
   Activity,
+  ArrowUpRight,
   BarChart,
   Bot,
   Brain,
@@ -283,6 +285,8 @@ export default function LlmAdvisorPage() {
       description="An autonomous trading system that combines STDEV mean-reversion signals with Gemini market-analysis overlays and strict execution risk controls."
       tags={['Python', 'Gemini API', 'Alpaca', 'Pandas', 'Backtesting']}
       repoUrl="https://github.com/dmboynton56/llm-advisor"
+      liveUrl="https://llm-advisor.drewboynton.com"
+      liveUrlLabel="Ops Dashboard"
       metrics={topMetrics}
       metricsSource={metricsData?.source}
       metricsGeneratedAt={metricsMeta?.updatedAt ?? metricsData?.generatedAt}
@@ -339,6 +343,22 @@ export default function LlmAdvisorPage() {
 
       <section className="space-y-6">
         <h2 className="text-3xl font-bold">Live Monitoring Dashboard</h2>
+        <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-6">
+          <h3 className="text-xl font-bold mb-2">Live ops dashboard</h3>
+          <p className="text-muted-foreground mb-4">
+            Account equity, daily PnL, trade breakdowns by symbol and setup type, and the execution funnel
+            live at the standalone ops dashboard — not only on this portfolio page.
+          </p>
+          <Link
+            href="https://llm-advisor.drewboynton.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-5 py-2.5 font-semibold text-white transition-colors hover:bg-emerald-400"
+          >
+            Open the live ops dashboard
+            <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </div>
         <p className="text-lg text-muted-foreground">
           This dashboard is fed by the telemetry API. Production serves Supabase telemetry only, while local file fallback is reserved for non-production debugging.
         </p>

@@ -39,6 +39,8 @@ export function NavigationOverlay({ isOpen, onClose }: NavigationOverlayProps) {
 
   const liveProjectLinks = [
     { name: 'Sports Edge Dashboard', href: 'https://sports-edge.drewboynton.com' },
+    { name: 'LLM Advisor Dashboard', href: 'https://llm-advisor.drewboynton.com' },
+    { name: 'MatchPoint', href: 'https://matchpoint-web-gamma.vercel.app' },
   ]
 
   const socialLinks = [

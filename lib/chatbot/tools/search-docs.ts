@@ -269,6 +269,14 @@ const sourceMatchesScope = (
     )
   }
 
+  if (project === 'matchpoint') {
+    if (source === 'docs/project-knowledge/evidence-register.md') {
+      return normalizedContent.includes('matchpoint')
+    }
+
+    return source.startsWith('docs/project-knowledge/matchpoint/')
+  }
+
   return (
     source.startsWith('docs/project-knowledge/') ||
     source.startsWith('docs/model-cards/') ||
@@ -321,7 +329,7 @@ const isSiteProfileQuery = (query: string) =>
   /\bboynton\b/i.test(query)
 
 const isProjectCatalogQuery = (query: string) =>
-  /\b(sports edge|llm advisor|nba|hall of fame|hof|mancala|simple fitness|housecluster|heatmap|ictml|flagship|carousel|project)\b/i.test(
+  /\b(sports edge|llm advisor|matchpoint|nba|hall of fame|hof|mancala|simple fitness|housecluster|heatmap|ictml|flagship|carousel|project)\b/i.test(
     query
   )
 
@@ -332,6 +340,7 @@ const sourceBoost = (source: string, query: string) => {
     if (source.startsWith('docs/project-knowledge/sports-edge/')) return -4
     if (source.startsWith('docs/project-knowledge/llm-advisor/')) return -3
     if (source.startsWith('docs/project-knowledge/nba-hof')) return -3
+    if (source.startsWith('docs/project-knowledge/matchpoint/')) return -3
   }
   if (isPortfolioOverviewQuery(query) || isProjectCatalogQuery(query)) {
     if (source === 'docs/project-knowledge/portfolio-overview.md') return 8

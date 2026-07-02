@@ -1,4 +1,4 @@
-export type ChatScope = 'default' | 'sports-edge' | 'llm-advisor' | 'nba-hof'
+export type ChatScope = 'default' | 'sports-edge' | 'llm-advisor' | 'nba-hof' | 'matchpoint'
 
 export type ChatToolName = 'search_docs' | 'query_warehouse' | 'get_model_metrics'
 

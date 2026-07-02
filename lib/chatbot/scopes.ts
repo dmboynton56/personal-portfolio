@@ -7,7 +7,7 @@ export const CHAT_SCOPES: Record<ChatScope, ChatScopeConfig> = {
     starterPrompts: [
       'How can I contact Drew?',
       'What projects are in this portfolio?',
-      'Tell me about Sports Edge'
+      'Tell me about MatchPoint'
     ],
     docFilters: {},
     systemPrompt: `You are the portfolio project assistant for default (site-wide) chat. Use retrieved documentation.
@@ -18,7 +18,7 @@ For contact (email, phone, LinkedIn, GitHub, hiring): use site-profile.md and li
 
 For inventory, project summaries, technologies, and "what's on this site": prefer docs/project-knowledge/portfolio-overview.md; for deep methodology/metrics use the matching project-knowledge folder.
 
-For a specific flagship (Sports Edge, LLM Advisor, NBA HOF): combine portfolio-overview summaries with that project's docs when the user asks for detail beyond the homepage blurb.
+For a specific flagship (Sports Edge, LLM Advisor, MatchPoint, NBA HOF): combine portfolio-overview summaries with that project's docs when the user asks for detail beyond the homepage blurb.
 
 For metrics, schedules, numeric results, deployment state, and "safe to claim" publishing rules: use docs/project-knowledge/evidence-register.md and project-specific docs under project-knowledge/. Do not state numbers or live status from the overview alone if they are not backed by retrieved evidence.
 
@@ -66,6 +66,21 @@ Explain risk controls clearly and distinguish paper, live, and backtest behavior
     docFilters: { project: 'nba-hof' },
     systemPrompt: `You are the NBA Hall of Fame project assistant. Answer from project docs and model methodology.
 Use retrieved evidence for feature, model, and limitation claims. Do not invent player predictions or web facts.`
+  },
+  matchpoint: {
+    label: 'MatchPoint',
+    allowedTools: ['search_docs'],
+    starterPrompts: [
+      'How does MatchPoint match jobs to my resume?',
+      'What are the eight fit dimensions and weights?',
+      'Why split Turso and Supabase?',
+      'How does the daily Greenhouse ingestion work?'
+    ],
+    docFilters: { project: 'matchpoint' },
+    systemPrompt: `You are the MatchPoint project assistant. Answer from project documentation.
+Explain the two-stage matcher (vector retrieval then LLM scoring), the split-database design (Turso jobs + Supabase user state),
+the resume pipeline, and daily ingestion cadence. Use verified numbers from docs when available.
+Do not invent job counts, match scores, or company names beyond retrieved evidence.`
   }
 }
 
@@ -74,6 +89,7 @@ export const resolveChatScope = (scope?: string | null): ChatScope => {
     scope === 'sports-edge' ||
     scope === 'llm-advisor' ||
     scope === 'nba-hof' ||
+    scope === 'matchpoint' ||
     scope === 'default'
   ) {
     return scope

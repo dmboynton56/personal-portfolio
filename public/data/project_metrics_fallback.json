@@ -97,5 +97,55 @@
             "value": "Daily Automated",
             "iconName": "workflow"
         }
-    ]
+    ],
+    "llm-advisor": {
+        "generatedAt": "2026-07-02T00:00:00.000Z",
+        "metrics": [
+            {
+                "label": "Paper PnL",
+                "value": "Live telemetry",
+                "iconName": "trendingUp"
+            },
+            {
+                "label": "Options DTE",
+                "value": "7–14",
+                "iconName": "clock"
+            },
+            {
+                "label": "Setup types",
+                "value": "MR • TC",
+                "iconName": "workflow"
+            },
+            {
+                "label": "Validation",
+                "value": "LLM + guardrails",
+                "iconName": "shield"
+            }
+        ]
+    },
+    "matchpoint": {
+        "generatedAt": "2026-07-02T19:50:00.000Z",
+        "metrics": [
+            {
+                "label": "Live jobs",
+                "value": "5,867",
+                "iconName": "database"
+            },
+            {
+                "label": "Greenhouse boards",
+                "value": "70",
+                "iconName": "workflow"
+            },
+            {
+                "label": "Fit dimensions",
+                "value": "8 weighted",
+                "iconName": "brainCircuit"
+            },
+            {
+                "label": "Match limit",
+                "value": "10 auth / 3 visitor",
+                "iconName": "activity"
+            }
+        ]
+    }
 }

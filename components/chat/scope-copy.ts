@@ -39,6 +39,13 @@ const COPY: Record<ChatScope, ScopeUICopy> = {
       'Ask how the Hall of Fame model works, which features matter, or what the limitations are. I answer from project docs.',
     placeholder: 'Ask about the model, features, or limitations',
   },
+  matchpoint: {
+    title: 'MatchPoint Chat',
+    subtitle: 'Documentation-backed answers on ingestion, matching, and architecture.',
+    welcomeMessage:
+      'Ask about the two-stage matcher, fit dimensions, resume pipeline, or split-database design. I answer from project docs.',
+    placeholder: 'Ask about matching, ingestion, or architecture',
+  },
 }
 
 export function getScopeUICopy(scope: ChatScope): ScopeUICopy {

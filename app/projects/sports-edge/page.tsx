@@ -1,11 +1,12 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
 import { ProjectLayout } from '@/components/ProjectLayout'
-import SportsEdgeCard from '@/components/SportsEdgeCard'
 import { ProjectChat } from '@/components/chat/ProjectChat'
 import { AtsSummaryCard } from '@/components/sports-edge/AtsSummaryCard'
-import { Activity, Database, Server, TrendingUp, Cpu, LineChart } from 'lucide-react'
+import { Activity, Database, Server, TrendingUp, Cpu, LineChart, ArrowUpRight } from 'lucide-react'
 import { useProjectMetrics } from '@/hooks/useProjectMetrics'
 
 export default function SportsEdgePage() {
@@ -36,13 +37,34 @@ export default function SportsEdgePage() {
             }
             heroImage={
                 <div className="relative w-full h-full flex items-center justify-center bg-zinc-950 rounded-xl overflow-hidden border border-zinc-800">
-                    {/* Visual representation of the live card */}
-                    <div className="h-full w-full max-w-md overflow-y-auto p-2" style={{ overscrollBehavior: 'contain' }}>
-                        <SportsEdgeCard />
-                    </div>
+                    <Image
+                        src="/images/projects/sports-edge/sports-edge-ops-dashboard.png"
+                        alt="Sports Edge ops dashboard"
+                        fill
+                        className="object-contain p-2"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                    />
                 </div>
             }
         >
+            <section className="space-y-4">
+                <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-6">
+                    <h2 className="text-2xl font-bold mb-2">Live ops dashboard</h2>
+                    <p className="text-muted-foreground mb-4">
+                        Per-game predictions, cross-league results, success rates, and data-quality views
+                        live at the standalone ops dashboard — not on this portfolio page.
+                    </p>
+                    <Link
+                        href="https://sports-edge.drewboynton.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-5 py-2.5 font-semibold text-white transition-colors hover:bg-emerald-400"
+                    >
+                        Open the live ops dashboard
+                        <ArrowUpRight className="h-4 w-4" />
+                    </Link>
+                </div>
+            </section>
             {/* Architecture Section */}
             <section className="space-y-6">
                 <h2 className="text-3xl font-bold">System Architecture</h2>
@@ -155,9 +177,10 @@ steps:
             </section>
 
             <section className="space-y-6">
-                <h2 className="text-3xl font-bold">Live Results</h2>
+                <h2 className="text-3xl font-bold">Season metrics</h2>
                 <p className="text-lg text-muted-foreground">
-                    The first Week-2 result path is live: graded games and latest model predictions are joined from Supabase to compute ATS record and flat-unit ROI.
+                    High-level ATS record and flat-unit ROI from graded games. For per-game edges and league
+                    breakdowns, use the ops dashboard.
                 </p>
                 <AtsSummaryCard league="NBA" />
             </section>

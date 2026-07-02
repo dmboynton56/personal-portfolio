@@ -1,6 +1,6 @@
 ---
 project: cross-project
-last_verified: 2026-06-26
+last_verified: 2026-07-02
 role: canonical_site_inventory
 ---
 
@@ -14,18 +14,44 @@ For **numeric claims, production schedules, and "observed vs planned" metrics**,
 
 ## Flagship projects (deep-dive case study pages)
 
-These have dedicated `/projects/...` pages, interactive previews on the homepage where noted, and richer documentation under `docs/project-knowledge/`. Homepage order: Sports Edge first, then NBA HOF, LLM Advisor, and this portfolio site last among flagships.
+These have dedicated `/projects/...` pages, laptop previews on the homepage where noted, and richer documentation under `docs/project-knowledge/`.
+
+**Homepage order (2026-07):** Sports Edge → LLM Advisor → MatchPoint → NBA HOF → Personal Portfolio (card-only, last).
+
+**Hero quick links (3 cards):** Sports Edge, LLM Advisor, MatchPoint.
 
 ### Sports Edge (`sports-edge`)
 
 - **Homepage title:** Sports Edge: Multi-League Sports Modeling
 - **Deep dive:** `/projects/sports-edge`
 - **Live ops dashboard:** https://sports-edge.drewboynton.com
-- **Summary:** Production sports modeling stack for NBA, NFL, MLB, PGA, CBB, and World Cup. BigQuery holds source-of-truth data; Python pipelines score games and sync to Supabase for the ops dashboard and portfolio embeds. Model spreads and win probabilities are compared to sportsbook lines to surface edges.
+- **Summary:** Production sports modeling stack for NBA, NFL, MLB, PGA, CBB, and World Cup. BigQuery holds source-of-truth data; Python pipelines score games and sync to Supabase. The ops dashboard is the primary surface for live predictions and results; the portfolio shows telemetry stats and the pipeline story.
 - **Technologies:** Python, Scikit-learn, LightGBM, Supabase, Next.js, Sports Analytics
-- **Proof points:** Ops dashboard at sports-edge.drewboynton.com; BigQuery source of truth + Supabase serving; automated daily/weekly pipeline across six leagues
+- **Proof points:** Ops dashboard at sports-edge.drewboynton.com; BigQuery source of truth + Supabase serving; automated daily pipeline across six leagues
 - **GitHub:** https://github.com/dmboynton56/sports-edge
-- **Interactive on homepage:** yes (live card preview — first flagship slot)
+- **Homepage laptop:** stats-screen display (click through to deep dive)
+
+### LLM Advisor (`llm-advisor`)
+
+- **Homepage title:** LLM Advisor: Agentic Trading System
+- **Deep dive:** `/projects/llm-advisor` (ICTML redirects here)
+- **Live ops dashboard:** https://llm-advisor.drewboynton.com
+- **Summary:** Autonomous trading agent using Gemini for market context, mean-reversion threshold adjustment, and paper options execution with guardrails. ICTML premarket bias folds into this single trading-advisor story.
+- **Technologies:** Python, Gemini API, Alpaca, Pandas, Backtesting
+- **Proof points:** Paper options on 7–14 DTE; hybrid ML + LLM validation funnel; risk controls tied to execution rules
+- **GitHub:** https://github.com/dmboynton56/llm-advisor
+- **Homepage laptop:** dashboard screenshot (click through to deep dive)
+
+### MatchPoint (`matchpoint`) — NEW
+
+- **Homepage title:** MatchPoint: AI Job Matcher
+- **Deep dive:** `/projects/matchpoint`
+- **Live app:** https://matchpoint-web-gamma.vercel.app
+- **Summary:** AI job matcher with daily ingestion from 70 Greenhouse boards, two-stage embedding + LLM matching against your resume. Turso holds the jobs corpus; Supabase holds user state.
+- **Technologies:** React 19, FastAPI, OpenAI, Turso, Supabase, Vercel
+- **Proof points:** 5,867 live jobs (as of 2026-07-02); 8-dimension LLM fit scoring; sub-10ms vector search via precomputed matrix
+- **GitHub:** https://github.com/dmboynton56/matchpoint
+- **Homepage laptop:** stats-screen display (click through to deep dive)
 
 ### NBA Hall of Fame Predictor (`nba-hof-predictor`)
 
@@ -36,23 +62,13 @@ These have dedicated `/projects/...` pages, interactive previews on the homepage
 - **Proof points:** 5,250+ historical careers; interactive probability search; feature-level reasoning per prediction
 - **Interactive on homepage:** yes (player lookup embed)
 
-### LLM Advisor (`llm-advisor`)
-
-- **Homepage title:** LLM Advisor: Agentic Trading System
-- **Deep dive:** `/projects/llm-advisor` (ICTML redirects here)
-- **Summary:** Autonomous trading agent using Gemini for market context, mean-reversion threshold adjustment, and guarded execution. ICTML premarket bias work is being folded into this single trading-advisor story.
-- **Technologies:** Python, Gemini API, Alpaca, Pandas, Backtesting
-- **Proof points:** ICTML premarket fold-in in progress; hybrid ML + LLM decision stack; risk controls tied to execution rules
-- **GitHub:** https://github.com/dmboynton56/llm-advisor
-- **Interactive on homepage:** no (screenshots / metrics on deep dive)
-
 ### My Personal Portfolio Website (`personal-portfolio`)
 
 - **Homepage title:** My Personal Portfolio Website
 - **Deep dive:** `/projects/personal-portfolio`
-- **Summary:** This site — TypeScript and Next.js up front, Supabase and BigQuery underneath. Pulls live sportsbook edges from Sports Edge and trading snapshots from LLM Advisor onto the homepage, plus a Gemini chatbot (Vertex AI, RAG over site content).
+- **Summary:** This site — TypeScript and Next.js up front, Supabase and BigQuery underneath. Flagship projects use stats-screen laptop displays; deep dives link out to live ops dashboards where applicable. Includes a Gemini chatbot (Vertex AI, RAG over site content).
 - **Technologies:** TypeScript, Next.js, React, Tailwind, Supabase, BigQuery, Gemini / Vertex AI, RAG
-- **Interactive on homepage:** yes (card-only; no device preview frame)
+- **Interactive on homepage:** card-only; no device preview frame
 
 ## Additional projects (carousel only)
 
@@ -80,9 +96,16 @@ Shown on the homepage **without** a separate `/projects/*` deep dive in this rep
 - **Technologies:** Xcode, Swift, CoreData
 - **Device frame on homepage:** mobile layout
 
+## Serving-layer handoff (2026-07)
+
+- **Sports Edge:** live per-game predictions and results live at https://sports-edge.drewboynton.com. Portfolio deep dive keeps architecture, season-level ATS/ROI, and links out prominently.
+- **LLM Advisor:** account PnL, trade breakdowns, and execution funnel at https://llm-advisor.drewboynton.com. Portfolio deep dive keeps high-level telemetry and links out prominently.
+- **MatchPoint:** portfolio links to the live web app; deep dive covers architecture and matching design.
+
 ## Notes for assistants
 
-- **Listing "what's in the portfolio"** should include **all four flagships** and **all four additional** projects unless the user asks for a subset.
-- **Sports Edge is the first homepage flagship** and the recommended starting point for production ML evaluation.
+- **Listing "what's in the portfolio"** should include **all five flagships** and **all four additional** projects unless the user asks for a subset.
+- **Homepage flagship order:** sports-edge, llm-advisor, matchpoint, nba-hof, personal-portfolio (card-only last).
+- **Hero quick links:** sports-edge, llm-advisor, matchpoint only.
 - **ICTML** may redirect to LLM Advisor (`/projects/ictml` → `/projects/llm-advisor`).
-- **Methodology, limitations, metrics, and architecture** for flagships: use `project-knowledge/sports-edge/`, `llm-advisor/`, `nba-hof` paths and model cards—not this overview alone.
+- **Methodology, limitations, metrics, and architecture** for flagships: use `project-knowledge/sports-edge/`, `llm-advisor/`, `matchpoint/`, `nba-hof` paths and model cards—not this overview alone.
