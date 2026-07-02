@@ -12,7 +12,7 @@ export const flagshipProjectLinks: FlagshipProjectLink[] = [
     id: 'sports-edge',
     title: 'Sports Edge: Multi-League Sports Modeling',
     shortTitle: 'Sports Edge',
-    image: '/images/projects/project3-1.JPG',
+    image: '/images/projects/sports-edge/sports-edge-ops-dashboard.png',
     caseStudyUrl: '/projects/sports-edge',
   },
   {

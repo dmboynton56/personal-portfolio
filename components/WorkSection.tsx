@@ -102,8 +102,12 @@ const mockProjects: Project[] = [
       'Production sports modeling stack covering NBA, NFL, MLB, PGA, CBB, and World Cup. BigQuery holds source-of-truth data; Python pipelines score games and sync to Supabase for the ops dashboard and this portfolio. Compare model spreads and win probabilities against sportsbook lines to surface edges.',
     category: 'flagship',
     type: 'desktop',
-    image: '/images/projects/project3-1.JPG',
-    images: ['/images/projects/project3-1.JPG', '/images/projects/project3-2.JPG'],
+    image: '/images/projects/sports-edge/sports-edge-ops-dashboard.png',
+    images: [
+      '/images/projects/sports-edge/sports-edge-ops-dashboard.png',
+      '/images/projects/sports-edge/sports-edge-week-outputs.png',
+      '/images/projects/sports-edge/model_spreads_vs_book.png',
+    ],
     technologies: ['Python', 'Scikit-learn', 'LightGBM', 'Supabase', 'Next.js', 'Sports Analytics'],
     proofPoints: [
       'Ops dashboard at sports-edge.drewboynton.com',

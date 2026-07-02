@@ -17,6 +17,7 @@ export function SportsEdgeDisplay({ enabled = true }: SportsEdgeDisplayProps) {
   }
 
   const images = [
+    '/images/projects/sports-edge/sports-edge-ops-dashboard.png',
     '/images/projects/sports-edge/sports-edge-week-outputs.png',
     '/images/projects/sports-edge/model_spreads_vs_book.png',
     '/images/projects/sports-edge/sports_edge_model_predictions_shap.png',
