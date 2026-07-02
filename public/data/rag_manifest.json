@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-06-28T08:39:05.280Z",
+  "generatedAt": "2026-07-02T20:36:57.969Z",
   "chunks": [
     {
       "id": "docs/data-dictionary.txt#0",
@@ -673,6 +673,66 @@
       "charCount": 294
     },
     {
+      "id": "docs/project-knowledge/matchpoint/architecture.md#0",
+      "source": "docs/project-knowledge/matchpoint/architecture.md",
+      "charCount": 183
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/architecture.md#1",
+      "source": "docs/project-knowledge/matchpoint/architecture.md",
+      "charCount": 1043
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/architecture.md#2",
+      "source": "docs/project-knowledge/matchpoint/architecture.md",
+      "charCount": 830
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/architecture.md#3",
+      "source": "docs/project-knowledge/matchpoint/architecture.md",
+      "charCount": 492
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/architecture.md#4",
+      "source": "docs/project-knowledge/matchpoint/architecture.md",
+      "charCount": 270
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/architecture.md#5",
+      "source": "docs/project-knowledge/matchpoint/architecture.md",
+      "charCount": 228
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/overview.md#0",
+      "source": "docs/project-knowledge/matchpoint/overview.md",
+      "charCount": 550
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/overview.md#1",
+      "source": "docs/project-knowledge/matchpoint/overview.md",
+      "charCount": 168
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/overview.md#2",
+      "source": "docs/project-knowledge/matchpoint/overview.md",
+      "charCount": 1653
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/overview.md#3",
+      "source": "docs/project-knowledge/matchpoint/overview.md",
+      "charCount": 151
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/overview.md#4",
+      "source": "docs/project-knowledge/matchpoint/overview.md",
+      "charCount": 237
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/overview.md#5",
+      "source": "docs/project-knowledge/matchpoint/overview.md",
+      "charCount": 311
+    },
+    {
       "id": "docs/project-knowledge/portfolio-overview.md#0",
       "source": "docs/project-knowledge/portfolio-overview.md",
       "charCount": 703
@@ -680,7 +740,7 @@
     {
       "id": "docs/project-knowledge/portfolio-overview.md#1",
       "source": "docs/project-knowledge/portfolio-overview.md",
-      "charCount": 3134
+      "charCount": 3982
     },
     {
       "id": "docs/project-knowledge/portfolio-overview.md#2",
@@ -690,7 +750,12 @@
     {
       "id": "docs/project-knowledge/portfolio-overview.md#3",
       "source": "docs/project-knowledge/portfolio-overview.md",
-      "charCount": 559
+      "charCount": 517
+    },
+    {
+      "id": "docs/project-knowledge/portfolio-overview.md#4",
+      "source": "docs/project-knowledge/portfolio-overview.md",
+      "charCount": 642
     },
     {
       "id": "docs/project-knowledge/question-index.md#0",
