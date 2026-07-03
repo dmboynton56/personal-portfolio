@@ -75,11 +75,12 @@ Use:
 
 ## Cross-project routing
 
-## Who is Drew Boynton / about the site owner / background / contact?
+## Who is Drew Boynton / about the site owner / background / contact / resume?
 
 Use:
 
 - `docs/project-knowledge/site-profile.md` (canonical homepage + about + **email, phone, LinkedIn, GitHub**)
+- `docs/project-knowledge/drew-resume.md` (direct public resume PDF link)
 
 Optional:
 
@@ -90,6 +91,13 @@ Optional:
 Use:
 
 - `docs/project-knowledge/site-profile.md` section **Contact (public)**
+
+## Can I view, download, open, or get Drew's resume / CV / PDF?
+
+Use:
+
+- `docs/project-knowledge/drew-resume.md`
+- `docs/project-knowledge/site-profile.md` section **Resume**
 
 ## What is [project name] / tell me about Sports Edge / Mancala / etc.?
 

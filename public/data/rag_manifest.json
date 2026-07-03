@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-02T20:36:57.969Z",
+  "generatedAt": "2026-07-03T19:56:44.101Z",
   "chunks": [
     {
       "id": "docs/data-dictionary.txt#0",
@@ -378,6 +378,16 @@
       "charCount": 308
     },
     {
+      "id": "docs/project-knowledge/drew-resume.md#0",
+      "source": "docs/project-knowledge/drew-resume.md",
+      "charCount": 278
+    },
+    {
+      "id": "docs/project-knowledge/drew-resume.md#1",
+      "source": "docs/project-knowledge/drew-resume.md",
+      "charCount": 359
+    },
+    {
       "id": "docs/project-knowledge/drew-story.md#0",
       "source": "docs/project-knowledge/drew-story.md",
       "charCount": 163
@@ -425,7 +435,7 @@
     {
       "id": "docs/project-knowledge/evidence-register.md#3",
       "source": "docs/project-knowledge/evidence-register.md",
-      "charCount": 3559
+      "charCount": 3557
     },
     {
       "id": "docs/project-knowledge/evidence-register.md#4",
@@ -820,7 +830,7 @@
     {
       "id": "docs/project-knowledge/question-index.md#12",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 294
+      "charCount": 377
     },
     {
       "id": "docs/project-knowledge/question-index.md#13",
@@ -830,27 +840,32 @@
     {
       "id": "docs/project-knowledge/question-index.md#14",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 265
+      "charCount": 174
     },
     {
       "id": "docs/project-knowledge/question-index.md#15",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 216
+      "charCount": 265
     },
     {
       "id": "docs/project-knowledge/question-index.md#16",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 109
+      "charCount": 216
     },
     {
       "id": "docs/project-knowledge/question-index.md#17",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 109
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#18",
       "source": "docs/project-knowledge/question-index.md",
       "charCount": 95
     },
     {
       "id": "docs/project-knowledge/site-profile.md#0",
       "source": "docs/project-knowledge/site-profile.md",
-      "charCount": 313
+      "charCount": 343
     },
     {
       "id": "docs/project-knowledge/site-profile.md#1",
@@ -870,15 +885,20 @@
     {
       "id": "docs/project-knowledge/site-profile.md#4",
       "source": "docs/project-knowledge/site-profile.md",
-      "charCount": 466
+      "charCount": 522
     },
     {
       "id": "docs/project-knowledge/site-profile.md#5",
       "source": "docs/project-knowledge/site-profile.md",
-      "charCount": 435
+      "charCount": 178
     },
     {
       "id": "docs/project-knowledge/site-profile.md#6",
+      "source": "docs/project-knowledge/site-profile.md",
+      "charCount": 435
+    },
+    {
+      "id": "docs/project-knowledge/site-profile.md#7",
       "source": "docs/project-knowledge/site-profile.md",
       "charCount": 389
     },
@@ -1185,7 +1205,7 @@
     {
       "id": "docs/project-knowledge/sports-edge/sync-state.md#1",
       "source": "docs/project-knowledge/sports-edge/sync-state.md",
-      "charCount": 144
+      "charCount": 171
     },
     {
       "id": "docs/project-knowledge/sports-edge/sync-state.md#2",
@@ -1195,7 +1215,7 @@
     {
       "id": "docs/project-knowledge/sports-edge/sync-state.md#3",
       "source": "docs/project-knowledge/sports-edge/sync-state.md",
-      "charCount": 143
+      "charCount": 141
     },
     {
       "id": "docs/project-knowledge/sports-edge/sync-state.md#4",

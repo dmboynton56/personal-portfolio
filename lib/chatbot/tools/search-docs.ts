@@ -69,6 +69,10 @@ const stopWords = new Set([
 let docsCache: DocChunk[] | null = null
 let embeddingDocsCache: EmbeddedDocChunk[] | null | undefined
 const queryEmbeddingCache = new Map<string, { embedding: number[]; expiresAt: number }>()
+const siteOwnerSources = new Set([
+  'docs/project-knowledge/site-profile.md',
+  'docs/project-knowledge/drew-resume.md'
+])
 
 const tokenize = (text: string) =>
   text
@@ -226,6 +230,8 @@ const sourceMatchesScope = (
 ) => {
   const normalizedContent = content.toLowerCase()
 
+  if (siteOwnerSources.has(source)) return true
+
   if (project === 'sports-edge') {
     if (source === 'docs/project-knowledge/evidence-register.md') {
       return normalizedContent.includes('sports edge') || normalizedContent.includes('sports-edge')
@@ -322,11 +328,16 @@ const isPortfolioOverviewQuery = (query: string) =>
   /\bwhat\b.*\b(include|projects?|showcase|built|offer|have)\b/i.test(query)
 
 const isSiteProfileQuery = (query: string) =>
-  /\b(who is|who's|about (me|you|drew)|tell me about|background|bio|engineer|contact|reach|hire|hiring|email|e-mail|phone|linkedin|github|social)\b/i.test(
+  /\b(who is|who's|about (me|you|drew)|tell me about|background|bio|engineer|contact|reach|hire|hiring|email|e-mail|phone|linkedin|github|social|resume|résumé|cv)\b/i.test(
     query
   ) ||
   /\bdrew\b/i.test(query) ||
   /\bboynton\b/i.test(query)
+
+const isResumeQuery = (query: string) =>
+  /\b(resume|résumé|cv|curriculum vitae)\b/i.test(query) ||
+  /\b(download|view|open|get)\b.*\b(pdf|resume|résumé|cv)\b/i.test(query) ||
+  /\b(pdf)\b.*\b(download|view|open|get)\b/i.test(query)
 
 const isProjectCatalogQuery = (query: string) =>
   /\b(sports edge|llm advisor|matchpoint|nba|hall of fame|hof|mancala|simple fitness|housecluster|heatmap|ictml|flagship|carousel|project)\b/i.test(
@@ -334,8 +345,13 @@ const isProjectCatalogQuery = (query: string) =>
   )
 
 const sourceBoost = (source: string, query: string) => {
+  if (isResumeQuery(query)) {
+    if (source === 'docs/project-knowledge/drew-resume.md') return 12
+    if (source === 'docs/project-knowledge/site-profile.md') return 6
+  }
   if (isSiteProfileQuery(query)) {
     if (source === 'docs/project-knowledge/site-profile.md') return 10
+    if (source === 'docs/project-knowledge/drew-resume.md') return 4
     if (source === 'docs/project-knowledge/portfolio-overview.md') return 1
     if (source.startsWith('docs/project-knowledge/sports-edge/')) return -4
     if (source.startsWith('docs/project-knowledge/llm-advisor/')) return -3
@@ -403,12 +419,28 @@ const retrieveWithEmbeddings = async (
     .sort((a, b) => b.score - a.score)
     .slice(0, input.topK ?? 4)
 
-  return toOutput(
-    scored.map(({ chunk }) => ({
+  const embeddingChunks = scored.map(({ chunk }) => ({
       ...chunk,
       title: chunk.title || titleForChunk(chunk.source, chunk.content)
     }))
-  )
+  const lexicalChunks = (await retrieveWithTokenOverlap(input)).snippets.map((snippet) => ({
+    source: snippet.source,
+    title: snippet.title,
+    content: snippet.excerpt
+  }))
+
+  const orderedChunks = isResumeQuery(input.query)
+    ? [...lexicalChunks, ...embeddingChunks]
+    : [...embeddingChunks, ...lexicalChunks]
+  const seen = new Set<string>()
+  const mergedChunks = orderedChunks.filter((chunk) => {
+    const key = `${chunk.source}:${chunk.title}:${chunk.content}`
+    if (seen.has(key)) return false
+    seen.add(key)
+    return true
+  })
+
+  return toOutput(mergedChunks.slice(0, input.topK ?? 4))
 }
 
 export const searchDocs = async (

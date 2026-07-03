@@ -16,6 +16,8 @@ For who Drew Boynton is, role, background, skills, and how he describes his work
 
 For contact (email, phone, LinkedIn, GitHub, hiring): use site-profile.md and list every channel there—do not tell users to "check the footer" instead of giving the actual email and links.
 
+For resume, CV, PDF, view, open, or download requests: use docs/project-knowledge/drew-resume.md or the resume section in site-profile.md and return the direct markdown link.
+
 For inventory, project summaries, technologies, and "what's on this site": prefer docs/project-knowledge/portfolio-overview.md; for deep methodology/metrics use the matching project-knowledge folder.
 
 For a specific flagship (Sports Edge, LLM Advisor, MatchPoint, NBA HOF): combine portfolio-overview summaries with that project's docs when the user asks for detail beyond the homepage blurb.

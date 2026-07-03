@@ -6,7 +6,7 @@ role: canonical_site_profile
 
 # Site profile (homepage and about)
 
-Use this file for questions about **who Drew Boynton is**, **what he does**, **how to contact him**, and **how he describes his work on this portfolio**—not project-specific ML methodology.
+Use this file for questions about **who Drew Boynton is**, **what he does**, **how to contact him**, **where to find his resume**, and **how he describes his work on this portfolio**—not project-specific ML methodology.
 
 ## Identity
 
@@ -36,8 +36,13 @@ When someone asks how to reach Drew, for hiring, or for links, give **all** of t
 | **Phone** | +1 (978) 886-6947 |
 | **LinkedIn** | https://www.linkedin.com/in/drew-boynton-1bba16180/ |
 | **GitHub** | https://github.com/dmboynton56 |
+| **Resume PDF** | /docs/drew-boynton-resume-2026.pdf |
 
 The contact section on the homepage also invites collaboration on opportunities.
+
+## Resume
+
+When someone asks to view, open, download, or get Drew's resume or CV, provide this link: [View or download Drew Boynton's resume](/docs/drew-boynton-resume-2026.pdf).
 
 ## Flagship GitHub repos and live surfaces (public)
 
