@@ -49,7 +49,7 @@ Each line item is tagged as:
 | observed | Performance history export | `web/public/data/performance_history.json` | `sports-edge/web/public/data/performance_history.json` | Cross-league model versions and sample sizes. |
 
 <!-- BEGIN SYNC:sports-edge-derived -->
-| derived | Performance history generatedAt | 2026-06-02T16:10:04.518745+00:00 | sports-edge/web/public/data/performance_history.json | Synced 2026-07-05. |
+| derived | Performance history generatedAt | 2026-07-06T17:22:45.624026+00:00 | sports-edge/web/public/data/performance_history.json | Synced 2026-07-06. |
 | derived | Latest PGA meta artifact | us_open_2026_predictions.meta.json | sports-edge/data-core/notebooks/cache/us_open_2026_predictions.meta.json | 20000 sims, 156 players, as-of 2026-06-18. |
 | derived | Current PGA dashboard event | John Deere Classic (completed) | sports-edge/web/public/data/pga_tournaments/current.json | generatedAt 2026-07-05T23:09:16.830344+00:00. |
 <!-- END SYNC:sports-edge-derived -->
