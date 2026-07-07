@@ -29,7 +29,7 @@
         ]
     },
     "sports-edge": {
-        "generatedAt": "2026-07-06T17:23:56.156Z",
+        "generatedAt": "2026-07-07T15:46:17.829Z",
         "metrics": [
             {
                 "label": "League Coverage",
@@ -42,7 +42,7 @@
                 "iconName": "activity"
             },
             {
-                "label": "John PGA",
+                "label": "Genesis PGA",
                 "value": "156 players • 20,000 sims",
                 "iconName": "database"
             },
