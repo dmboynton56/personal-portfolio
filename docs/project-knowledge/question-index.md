@@ -1,9 +1,10 @@
 ---
 project: cross-project
-last_verified: 2026-06-26
+last_verified: 2026-07-10
 source_paths:
   - /home/dmboynton/projects/personal-portfolio/docs/project-knowledge/llm-advisor
   - /home/dmboynton/projects/personal-portfolio/docs/project-knowledge/sports-edge
+  - /home/dmboynton/projects/personal-portfolio/docs/project-knowledge/matchpoint
   - /home/dmboynton/projects/personal-portfolio/docs/project-knowledge/evidence-register.md
   - /home/dmboynton/projects/personal-portfolio/docs/project-knowledge/portfolio-overview.md
 ---
@@ -72,6 +73,54 @@ Use:
 - `docs/project-knowledge/sports-edge/data-sources-and-freshness.md`
 - `docs/project-knowledge/sports-edge/faq.md`
 - `docs/project-knowledge/evidence-register.md`
+
+## MatchPoint question routing
+
+## What is MatchPoint and what can users do with it?
+
+Use:
+
+- `docs/project-knowledge/matchpoint/overview.md`
+- `docs/project-knowledge/matchpoint/faq.md`
+- `docs/project-knowledge/portfolio-overview.md` for homepage placement and live app URL
+
+## How does MatchPoint match resumes to jobs?
+
+Use:
+
+- `docs/project-knowledge/matchpoint/overview.md` (How matching works, fit dimensions)
+- `docs/project-knowledge/matchpoint/architecture.md` (resume upload path, vector retrieval, LLM scorer)
+
+## What is the split-database design?
+
+Use:
+
+- `docs/project-knowledge/matchpoint/architecture.md` (Turso, Supabase, FK removal)
+- `docs/project-knowledge/matchpoint/overview.md` (Data stores)
+
+## How fresh is the job corpus and where do jobs come from?
+
+Use:
+
+- `docs/project-knowledge/matchpoint/overview.md` (Job data and freshness)
+- `docs/project-knowledge/matchpoint/architecture.md` (daily ingestion, vector matrix)
+- `docs/project-knowledge/matchpoint/faq.md`
+
+## Are favorites, applied jobs, and resume suggestions supported?
+
+Use:
+
+- `docs/project-knowledge/matchpoint/overview.md` (What users can do, resume suggestions)
+- `docs/project-knowledge/matchpoint/architecture.md` (saved/applied jobs, suggestions architecture)
+- `docs/project-knowledge/matchpoint/faq.md`
+
+## Is bullet coaching available?
+
+Use:
+
+- `docs/project-knowledge/matchpoint/overview.md` (Currently limited or hidden UI)
+- `docs/project-knowledge/matchpoint/architecture.md` (Bullet coach backend)
+- `docs/project-knowledge/matchpoint/faq.md`
 
 ## Cross-project routing
 

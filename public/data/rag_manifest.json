@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-05T08:38:47.628Z",
+  "generatedAt": "2026-07-10T16:25:28.255Z",
   "chunks": [
     {
       "id": "docs/data-dictionary.txt#0",
@@ -440,6 +440,11 @@
     {
       "id": "docs/project-knowledge/evidence-register.md#4",
       "source": "docs/project-knowledge/evidence-register.md",
+      "charCount": 3172
+    },
+    {
+      "id": "docs/project-knowledge/evidence-register.md#5",
+      "source": "docs/project-knowledge/evidence-register.md",
       "charCount": 286
     },
     {
@@ -685,62 +690,207 @@
     {
       "id": "docs/project-knowledge/matchpoint/architecture.md#0",
       "source": "docs/project-knowledge/matchpoint/architecture.md",
-      "charCount": 183
+      "charCount": 272
     },
     {
       "id": "docs/project-knowledge/matchpoint/architecture.md#1",
       "source": "docs/project-knowledge/matchpoint/architecture.md",
-      "charCount": 1043
+      "charCount": 1895
     },
     {
       "id": "docs/project-knowledge/matchpoint/architecture.md#2",
       "source": "docs/project-knowledge/matchpoint/architecture.md",
-      "charCount": 830
+      "charCount": 996
     },
     {
       "id": "docs/project-knowledge/matchpoint/architecture.md#3",
       "source": "docs/project-knowledge/matchpoint/architecture.md",
-      "charCount": 492
+      "charCount": 1341
     },
     {
       "id": "docs/project-knowledge/matchpoint/architecture.md#4",
       "source": "docs/project-knowledge/matchpoint/architecture.md",
-      "charCount": 270
+      "charCount": 498
     },
     {
       "id": "docs/project-knowledge/matchpoint/architecture.md#5",
       "source": "docs/project-knowledge/matchpoint/architecture.md",
-      "charCount": 228
+      "charCount": 984
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/architecture.md#6",
+      "source": "docs/project-knowledge/matchpoint/architecture.md",
+      "charCount": 1206
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/architecture.md#7",
+      "source": "docs/project-knowledge/matchpoint/architecture.md",
+      "charCount": 713
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/architecture.md#8",
+      "source": "docs/project-knowledge/matchpoint/architecture.md",
+      "charCount": 1341
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/architecture.md#9",
+      "source": "docs/project-knowledge/matchpoint/architecture.md",
+      "charCount": 660
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/architecture.md#10",
+      "source": "docs/project-knowledge/matchpoint/architecture.md",
+      "charCount": 385
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/architecture.md#11",
+      "source": "docs/project-knowledge/matchpoint/architecture.md",
+      "charCount": 888
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/architecture.md#12",
+      "source": "docs/project-knowledge/matchpoint/architecture.md",
+      "charCount": 959
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/architecture.md#13",
+      "source": "docs/project-knowledge/matchpoint/architecture.md",
+      "charCount": 461
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#0",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 165
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#1",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 365
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#2",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 258
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#3",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 280
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#4",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 322
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#5",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 384
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#6",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 271
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#7",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 360
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#8",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 275
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#9",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 326
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#10",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 364
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#11",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 242
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#12",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 324
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#13",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 383
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#14",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 295
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#15",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 253
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#16",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 311
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/faq.md#17",
+      "source": "docs/project-knowledge/matchpoint/faq.md",
+      "charCount": 456
     },
     {
       "id": "docs/project-knowledge/matchpoint/overview.md#0",
       "source": "docs/project-knowledge/matchpoint/overview.md",
-      "charCount": 550
+      "charCount": 928
     },
     {
       "id": "docs/project-knowledge/matchpoint/overview.md#1",
       "source": "docs/project-knowledge/matchpoint/overview.md",
-      "charCount": 168
+      "charCount": 288
     },
     {
       "id": "docs/project-knowledge/matchpoint/overview.md#2",
       "source": "docs/project-knowledge/matchpoint/overview.md",
-      "charCount": 1653
+      "charCount": 2510
     },
     {
       "id": "docs/project-knowledge/matchpoint/overview.md#3",
       "source": "docs/project-knowledge/matchpoint/overview.md",
-      "charCount": 151
+      "charCount": 863
     },
     {
       "id": "docs/project-knowledge/matchpoint/overview.md#4",
       "source": "docs/project-knowledge/matchpoint/overview.md",
-      "charCount": 237
+      "charCount": 680
     },
     {
       "id": "docs/project-knowledge/matchpoint/overview.md#5",
       "source": "docs/project-knowledge/matchpoint/overview.md",
-      "charCount": 311
+      "charCount": 935
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/overview.md#6",
+      "source": "docs/project-knowledge/matchpoint/overview.md",
+      "charCount": 1165
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/overview.md#7",
+      "source": "docs/project-knowledge/matchpoint/overview.md",
+      "charCount": 757
+    },
+    {
+      "id": "docs/project-knowledge/matchpoint/overview.md#8",
+      "source": "docs/project-knowledge/matchpoint/overview.md",
+      "charCount": 953
     },
     {
       "id": "docs/project-knowledge/portfolio-overview.md#0",
@@ -770,7 +920,7 @@
     {
       "id": "docs/project-knowledge/question-index.md#0",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 457
+      "charCount": 539
     },
     {
       "id": "docs/project-knowledge/question-index.md#1",
@@ -825,40 +975,75 @@
     {
       "id": "docs/project-knowledge/question-index.md#11",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 24
+      "charCount": 30
     },
     {
       "id": "docs/project-knowledge/question-index.md#12",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 377
+      "charCount": 243
     },
     {
       "id": "docs/project-knowledge/question-index.md#13",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 140
+      "charCount": 244
     },
     {
       "id": "docs/project-knowledge/question-index.md#14",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 174
+      "charCount": 192
     },
     {
       "id": "docs/project-knowledge/question-index.md#15",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 265
+      "charCount": 273
     },
     {
       "id": "docs/project-knowledge/question-index.md#16",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 216
+      "charCount": 308
     },
     {
       "id": "docs/project-knowledge/question-index.md#17",
       "source": "docs/project-knowledge/question-index.md",
-      "charCount": 109
+      "charCount": 244
     },
     {
       "id": "docs/project-knowledge/question-index.md#18",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 24
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#19",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 377
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#20",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 140
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#21",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 174
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#22",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 265
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#23",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 216
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#24",
+      "source": "docs/project-knowledge/question-index.md",
+      "charCount": 109
+    },
+    {
+      "id": "docs/project-knowledge/question-index.md#25",
       "source": "docs/project-knowledge/question-index.md",
       "charCount": 95
     },

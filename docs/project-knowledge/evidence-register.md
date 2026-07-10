@@ -1,6 +1,6 @@
 # Evidence Register: Project Deep Dives
 
-Last verified: 2026-06-26
+Last verified: 2026-07-10
 
 ## Purpose
 
@@ -59,6 +59,28 @@ Each line item is tagged as:
 | derived | Live model calibration quality | Brier/log-loss/ECE trends over time | `masters_2026_predictions.meta.json` metrics list + training outputs | Requires historical run logging aggregation. |
 | derived | Prediction freshness SLA | hours since last successful export | workflow run history + dashboard `generatedAt` | Needs runtime checks in monitoring layer. |
 | planned | Unified cross-league performance board | One dashboard for NBA/NFL/PGA/CBB KPIs | no single artifact today | Requires standardized metric export contracts. |
+
+## MatchPoint
+
+| Status | Metric | Value | Provenance | Notes |
+| --- | --- | --- | --- | --- |
+| observed | Portfolio metrics snapshot generatedAt | 2026-07-02T19:50:00.000Z | `personal-portfolio/public/data/project_metrics_fallback.json` | Snapshot timestamp for MatchPoint fallback metrics. |
+| observed | Live jobs snapshot | 5,867 | `personal-portfolio/public/data/project_metrics_fallback.json` | Treat as dated snapshot, not live guaranteed count. |
+| observed | Greenhouse board count | 70 | `matchpoint/backend/app/services/scraper100.py` and `personal-portfolio/public/data/project_metrics_fallback.json` | `COMPANIES` list contains 70 configured board slugs. |
+| observed | Jobs per board cap | 100 | `matchpoint/backend/app/services/scraper100.py` | `MAX_JOBS_PER_COMPANY = 100`. |
+| observed | Job ingestion schedule | 10:00 UTC daily | `matchpoint/.github/workflows/daily-pipeline.yml` | Workflow cron is `0 10 * * *`; also supports manual dispatch. |
+| observed | Stale job purge window | 7 days | `matchpoint/backend/app/services/run_pipeline.py` | `STALE_AFTER_DAYS = 7`; pipeline purges by `last_seen_at`. |
+| observed | Visitor match preview limit | 3 jobs | `matchpoint/backend/app/routes/resumes.py` | `VISITOR_JOB_LIMIT = 3`; visitor path returns `requires_signup: true`. |
+| observed | Authenticated match limit | 10 jobs | `matchpoint/backend/app/routes/resumes.py` | `AUTHENTICATED_JOB_LIMIT = 10`. |
+| observed | Vector retrieval candidate limit | 10 jobs | `matchpoint/backend/app/routes/resumes.py` | `VECTOR_RETRIEVAL_LIMIT = 10`; visitor path overrides to 3. |
+| observed | Embedding model and dimension | `text-embedding-3-small`, 1536 dimensions | `matchpoint/backend/app/services/embedding.py`, `matchpoint/backend/app/services/embedding_matrix.py` | Matrix validator hard-codes `EMBEDDING_DIM = 1536`. |
+| observed | Matrix artifact branch | `data-cache` | `matchpoint/backend/app/services/git_data_cache.py`, `matchpoint/backend/app/db/turso.py` | Matrix files are `matrix.npy` and `matrix_ids.json`; default read source is GitHub. |
+| observed | LLM scoring model default | `gpt-5.4-nano` | `matchpoint/backend/app/services/ranking.py` | Can be overridden with `OPENAI_SCORING_MODEL`. |
+| observed | Scoring fit dimensions | 8 weighted signals | `matchpoint/backend/app/services/ranking.py` | skills, experience, role, seniority, location, pay, preference, interview likelihood. |
+| observed | Fit score weights | 25%, 18%, 17%, 10%, 10%, 7.5%, 7.5%, 5% | `matchpoint/backend/app/services/ranking.py` | Weights in `MATCH_SCORE_WEIGHTS`. |
+| observed | Resume suggestions evidence window | top 20 matches | `matchpoint/backend/app/routes/suggestions.py` | `TOP_JOB_LIMIT = 20`, separate from matching retrieval limit. |
+| observed | Resume suggestions model default | `gpt-4o-mini` | `matchpoint/backend/app/services/suggestions.py` | Can be overridden with `OPENAI_SUGGESTIONS_MODEL`. |
+| observed | Bullet coach UI hidden | visible coach button/rewrite inputs commented out | `matchpoint/frontend/src/components/user/ResumeSuggestionsCard.tsx` | Backend route exists, but current visible frontend does not expose normal rewrite flow. |
 
 ## Publishing Rules
 
