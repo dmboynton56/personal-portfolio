@@ -29,7 +29,7 @@
         ]
     },
     "sports-edge": {
-        "generatedAt": "2026-07-27T16:41:39.926Z",
+        "generatedAt": "2026-07-29T15:10:02.906Z",
         "metrics": [
             {
                 "label": "League Coverage",
@@ -42,7 +42,7 @@
                 "iconName": "activity"
             },
             {
-                "label": "3M PGA",
+                "label": "Rocket PGA",
                 "value": "156 players • 20,000 sims",
                 "iconName": "database"
             },
