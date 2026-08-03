@@ -49,7 +49,7 @@ Each line item is tagged as:
 | observed | Performance history export | `web/public/data/performance_history.json` | `sports-edge/web/public/data/performance_history.json` | Cross-league model versions and sample sizes. |
 
 <!-- BEGIN SYNC:sports-edge-derived -->
-| derived | Performance history generatedAt | 2026-07-27T16:40:35.460269+00:00 | sports-edge/web/public/data/performance_history.json | Synced 2026-08-02. |
+| derived | Performance history generatedAt | 2026-08-03T16:47:50.029613+00:00 | sports-edge/web/public/data/performance_history.json | Synced 2026-08-03. |
 | derived | Latest PGA meta artifact | us_open_2026_predictions.meta.json | sports-edge/data-core/notebooks/cache/us_open_2026_predictions.meta.json | 20000 sims, 156 players, as-of 2026-06-18. |
 | derived | Current PGA dashboard event | Rocket Classic (completed) | sports-edge/web/public/data/pga_tournaments/current.json | generatedAt 2026-08-02T23:03:09.771353+00:00. |
 <!-- END SYNC:sports-edge-derived -->
