@@ -1,128 +1,47 @@
-# Drew Boynton's Portfolio Repository
+# Drew Boynton's Portfolio
 
-This repository contains the source code for my personal portfolio website. The site serves as a central hub to showcase my projects, skills, and experience in web development.
+This is the source for [drewboynton.com](https://www.drewboynton.com). I built
+it to share projects, but it has grown into a place to explain the systems
+behind them.
 
-## Overview
+## The journey
 
-The portfolio is designed to provide a glimpse into my capabilities as a developer, highlighting:
+The first version focused on the basics: a project list, responsive layouts,
+device mockups, themes, and a clean way to show front-end work. As the work
+became more data-heavy, the site changed with it. I added case-study pages,
+project metrics, live data displays, and links to the apps that run the
+projects.
 
-*   **Project Showcase:** Demonstrations of web applications and projects I have built, illustrating my technical skills and problem-solving abilities. I have a specific interest in Data Analysis/Manipulation and Machine Learning Model Implementations
-*   **Technical Skills:** Proficiency in modern web technologies, primarily focused on front-end development with frameworks like React and Next.js, along with responsive design principles and UI/UX considerations. I have also worked extensively in Python libraries like NumPy, Pandas, and SciKit.
-*   **Design Implementation:** Ability to translate design concepts into functional, aesthetically pleasing, and user-friendly web interfaces.
+The site now also has an evidence-first chat layer. It searches project docs
+and, where useful, reads approved metrics from BigQuery or Supabase. This lets
+visitors ask about a project without turning every case study into a technical
+manual.
 
-This project itself is an example of my work, built using Next.js, TypeScript, and Tailwind CSS, demonstrating attention to detail in UI development and modern web practices.
+Today, the portfolio is the presentation layer for projects such as Sports
+Edge, LLM Advisor, MatchPoint, and NBA HOF. It reads shared data and static
+artifacts. The other repos own their own pipelines and jobs.
 
-## Current repository role
+## What it is now
 
-This repo is the portfolio display and serving layer. It does not own the daily
-Sports Edge or LLM Advisor production pipelines:
+The portfolio is still a personal website, but it is also one of the projects.
+It is a place to make technical work clear in a few minutes, keep claims tied
+to evidence, and show the process behind the final result.
 
-- `sports-edge` writes sports games, odds, predictions, and final scores into
-  BigQuery and Supabase.
-- `llm-advisor` writes trading telemetry into BigQuery and Supabase after the
-  live loop/EOD workflows.
-- This site reads Supabase serving tables, static JSON bundles, and curated docs
-  to render project pages and scoped chat answers.
+### Built with
 
-The old standalone ICTML daily-bias automation has been removed from the
-portfolio. ICTML is now folded into the LLM Advisor project narrative, and
-`/projects/ictml` redirects to `/projects/llm-advisor`.
-
-Last terminal verification: 2026-05-23. BigQuery and Supabase were reachable
-from local credentials. Sports Edge data lived under BigQuery project
-`learned-pier-478122-p7` and Supabase serving tables; LLM Advisor telemetry was
-present in the Supabase `llm_advisor_*` tables.
-
-## Sports Edge data plumbing
-
-The Supabase schema + migrations that back the Sports Edge card live in `supabase/migrations/001_sports_edge_schema.sql`. Apply them with `supabase db push --file supabase/migrations/001_sports_edge_schema.sql` and make sure the following env vars are set in your deployment target:
-
-```
-SUPABASE_URL
-SUPABASE_SERVICE_ROLE_KEY
-NEXT_PUBLIC_SUPABASE_URL
-NEXT_PUBLIC_SUPABASE_ANON_KEY
-```
-
-Sports Edge odds, game, prediction, and final-score writes now run exclusively from the `sports-edge` repository workflows. This portfolio repo is a read-only consumer of the Supabase tables through `GET /api/sports-edges`; it does not expose a Sports Edge writer or cron POST endpoint.
-
-## Portfolio chat (scoped assistants + RAG)
-
-Evidence-first chat is available site-wide and on each flagship project page:
-
-| Surface | Scope | Tools |
-|---|---|---|
-| Homepage floating widget | `default` | `search_docs` (portfolio + project knowledge) |
-| `/projects/sports-edge` | `sports-edge` | `search_docs`, `query_warehouse` (BigQuery), `get_model_metrics` |
-| `/projects/llm-advisor` | `llm-advisor` | `search_docs`, `get_model_metrics` (Supabase telemetry) |
-| `/projects/nba-hof` | `nba-hof` | `search_docs` |
-
-- **Docs path:** embedding retrieval over `docs/` (cosine similarity when `rag_embeddings.json` exists; token overlap fallback).
-- **Data path:** warehouse SQL or canned metrics per scope; Gemini synthesizes from tool evidence only.
-- **Site-owner / contact / project list:** `docs/project-knowledge/site-profile.md` and `portfolio-overview.md` — keep in sync with homepage TSX when copy changes.
-
-Core files:
-
-- `app/api/chat/route.ts`, `lib/chatbot/scopes.ts`, `lib/chatbot/tools/*`
-- `components/chat/ChatPanel.tsx`, `ProjectChat.tsx`, `PortfolioChatWidget.tsx`
-- `lib/chat/markdown-links.ts` (clickable URLs in answers)
-
-Gemini (recommended for synthesis):
-
-```
-GCP_PROJECT_ID / VERTEX_AI_* (see .env.example)
-GOOGLE_APPLICATION_CREDENTIALS or GCP_SERVICE_ACCOUNT_JSON(_BASE64)
-```
-
-Legacy OpenAI env vars are not required; the route uses Gemini via `lib/chatbot/google.ts`.
-
-## Local Gemini + BigQuery Chat Testing
-
-To test `/api/chat` against your Google stack locally:
-
-1. Copy `.env.example` to `.env.local`.
-2. Set:
-   - `GCP_PROJECT_ID`
-   - `BIGQUERY_PROJECT_ID`
-   - `BIGQUERY_DATASET`
-   - `BIGQUERY_CHAT_VIEW`
-3. Provide credentials with one of:
-   - `GOOGLE_APPLICATION_CREDENTIALS` (file path), or
-   - `GCP_SERVICE_ACCOUNT_JSON`, or
-   - `GCP_SERVICE_ACCOUNT_JSON_BASE64`
-
-The route uses BigQuery for numeric stats questions (for example, home ATS counts) and local `/docs` retrieval for document-grounded responses with citations.
-
-## Chatbot RAG
-
-Generate the local doc manifest:
-
-```bash
-npm run build:rag-manifest
-```
-
-Generate embeddings with Vertex AI `text-embedding-004`:
-
-```bash
-npm run build:rag-embeddings
-```
-
-The embedding script writes `public/data/rag_embeddings.json`. That file is intentionally ignored because it is large and generated from docs. Runtime retrieval uses cosine similarity when the file exists and falls back to token overlap if the file is missing or the embedding request fails.
-
-**After you add or edit files under `docs/`** (for example [`docs/project-knowledge/portfolio-overview.md`](docs/project-knowledge/portfolio-overview.md)), embedding rebuild is **automated on push to `main`** via [`.github/workflows/rebuild-rag-embeddings.yml`](.github/workflows/rebuild-rag-embeddings.yml). For local testing only, you can run `npm run build:rag-manifest` and `npm run build:rag-embeddings` manually. The default portfolio chat scope includes all of `docs/project-knowledge/`, `docs/model-cards/`, `docs/project-postmortems/`, and the shared root `.txt` references in `docs/`.
-
-## Sports Edge doc sync
-
-Sports Edge metrics and freshness docs are auto-synced from upstream dashboard artifacts via [`.github/workflows/sync-sports-edge-docs.yml`](.github/workflows/sync-sports-edge-docs.yml). The sync runs on `repository_dispatch` from the sports-edge repo (after daily/PGA/World Cup refreshes), on a daily cron, or manually. Run locally with:
-
-```bash
-node scripts/sync-sports-edge-docs.mjs
-```
+- Next.js 14 and React
+- TypeScript
+- Tailwind CSS, Radix UI, and Framer Motion
+- Supabase for project metrics and serving data
+- BigQuery for selected project evidence
+- Google Gemini and Vertex AI for grounded chat
+- Vercel for deployment
 
 ## Contact
 
-If you'd like to discuss potential opportunities or collaborations, feel free to reach out:
+If you want to talk about data systems, machine learning, product engineering,
+or a collaboration:
 
-*   **Email:** dmboynton6@gmail.com
-*   **LinkedIn:** [Drew Boynton](https://www.linkedin.com/in/drew-boynton-1bba16180/)
-*   **GitHub:** [dmboynton56](https://github.com/dmboynton56)
+- Email: [dmboynton6@gmail.com](mailto:dmboynton6@gmail.com)
+- LinkedIn: [Drew Boynton](https://www.linkedin.com/in/drew-boynton-1bba16180/)
+- GitHub: [dmboynton56](https://github.com/dmboynton56)
