@@ -29,7 +29,7 @@
         ]
     },
     "sports-edge": {
-        "generatedAt": "2026-08-18T13:04:54.063Z",
+        "generatedAt": "2026-08-19T13:42:54.925Z",
         "metrics": [
             {
                 "label": "League Coverage",
@@ -42,7 +42,7 @@
                 "iconName": "activity"
             },
             {
-                "label": "FedEx PGA",
+                "label": "BMW PGA",
                 "value": "156 players • 20,000 sims",
                 "iconName": "database"
             },
