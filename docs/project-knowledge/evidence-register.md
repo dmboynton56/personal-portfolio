@@ -51,7 +51,7 @@ Each line item is tagged as:
 <!-- BEGIN SYNC:sports-edge-derived -->
 | derived | Performance history generatedAt | 2026-08-17T14:53:50.288207+00:00 | sports-edge/web/public/data/performance_history.json | Synced 2026-08-23. |
 | derived | Latest PGA meta artifact | us_open_2026_predictions.meta.json | sports-edge/data-core/notebooks/cache/us_open_2026_predictions.meta.json | 20000 sims, 156 players, as-of 2026-06-18. |
-| derived | Current PGA dashboard event | BMW Championship (completed) | sports-edge/web/public/data/pga_tournaments/current.json | generatedAt 2026-08-23T22:29:59.720608+00:00. |
+| derived | Current PGA dashboard event | BMW Championship (completed) | sports-edge/web/public/data/pga_tournaments/current.json | generatedAt 2026-08-23T23:28:46.226241+00:00. |
 <!-- END SYNC:sports-edge-derived -->
 | observed | CBB simulation framing | 2,278 possible matchups, 10,000+ sims target | `sports-edge/data-core/docs/SPORTS_EDGE_CBBMM_PLAN.md` | Planning benchmark for bracket simulation depth. |
 | observed | CBB client-side base probability kernel | logistic seed model | `sports-edge/data-core/docs/CBBMM_CONTEXT.md` | Baseline simulation logic in docs. |
