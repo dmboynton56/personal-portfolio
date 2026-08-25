@@ -341,10 +341,9 @@ export default function LlmAdvisorPage() {
         <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-6">
           <h3 className="text-xl font-bold mb-2">Live ops dashboard</h3>
           <p className="text-muted-foreground mb-4">
-            Paper equity ~$96,454 (-3.03% since 2026-07-06). Last heartbeat ~4h after US cash close. 
-            30d: 59.2% win rate, 49 closed trades, +$1,612 realized. Decision ledger shows Gemini vetoes 
-            with reasons (e.g. premarket_data_quality). Account PnL, trade breakdowns by symbol/setup, and 
-            execution funnel live at the standalone ops dashboard.
+            Paper equity, win rate, trade breakdowns by symbol/setup, decision ledger with Gemini vetoes,
+            and execution funnel (signals → validation → orders) live at the standalone ops dashboard.
+            Heartbeat monitoring shows real-time agent health and telemetry freshness.
           </p>
           <Link
             href="https://llm-advisor.drewboynton.com"

@@ -135,7 +135,7 @@ const mockProjects: Project[] = [
     technologies: ['Python', 'Gemini API', 'Alpaca', 'Pandas', 'Backtesting'],
     proofPoints: [
       'Live ops dashboard with decision ledger and Gemini veto logs',
-      'Paper-trading account: 59.2% win rate (30d), 49 closed trades',
+      'Paper equity, win rate, and trade outcomes tracked in real-time',
       'LLM adjusts thresholds; rules enforce risk limits'
     ],
     isInteractive: false,

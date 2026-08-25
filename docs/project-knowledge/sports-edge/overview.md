@@ -39,11 +39,13 @@ Sports Edge ships a standalone ops dashboard at **https://sports-edge.drewboynto
 The dashboard surfaces:
 
 - Graded predictions with data-quality monitoring
-- Fail-closed sportsbook price checks (e.g., current MLB HR board: 79 model candidates, 0 priced, all odds_status=missing_odds)
+- Fail-closed sportsbook price checks with real-time odds availability status
 - NBA, NFL, and MLB game predictions vs sportsbook lines
 - PGA tournament simulations and leaderboards
 - CBB bracket tooling
 - World Cup group and knockout probabilities
+
+Board health, candidate counts, and odds availability update in real-time as the serving pipeline and sportsbook data refresh.
 
 The portfolio homepage embeds a live Sports Edge card (first flagship slot) that reads the same Supabase serving tables via `/api/sports-edges`. The deep-dive page at `/projects/sports-edge` includes the card plus a scoped chat assistant.
 

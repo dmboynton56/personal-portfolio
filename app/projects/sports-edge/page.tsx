@@ -51,8 +51,8 @@ export default function SportsEdgePage() {
                     <h2 className="text-2xl font-bold mb-2">Live ops dashboard</h2>
                     <p className="text-muted-foreground mb-4">
                         Graded predictions, data-quality page, sportsbook price freshness, and cross-league results
-                        live at the standalone ops dashboard. Current MLB HR board: 43 model candidates, 0 priced 
-                        (all odds_status=missing_odds). Serving pipeline and Supabase work; OddsPapi had no fresh MLB HR markets.
+                        live at the standalone ops dashboard. Board health, current candidate counts, and odds availability
+                        status update in real-time as the serving pipeline and sportsbook data refresh.
                     </p>
                     <Link
                         href="https://sports-edge.drewboynton.com"
