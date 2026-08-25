@@ -38,7 +38,9 @@ Sports Edge ships a standalone ops dashboard at **https://sports-edge.drewboynto
 
 The dashboard surfaces:
 
-- NBA, NFL, and MLB game edges vs sportsbook lines
+- Graded predictions with data-quality monitoring
+- Fail-closed sportsbook price checks (e.g., current MLB HR board: 79 model candidates, 0 priced, all odds_status=missing_odds)
+- NBA, NFL, and MLB game predictions vs sportsbook lines
 - PGA tournament simulations and leaderboards
 - CBB bracket tooling
 - World Cup group and knockout probabilities

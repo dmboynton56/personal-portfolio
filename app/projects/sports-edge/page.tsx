@@ -15,7 +15,7 @@ export default function SportsEdgePage() {
     return (
         <ProjectLayout
             title="Sports Edge"
-            description="A production sports modeling pipeline with BigQuery as source-of-truth, Supabase serving, and documented outputs across NBA, NFL, MLB, World Cup, PGA, and CBB workflows."
+            description="Public ops dashboard with graded predictions, data-quality monitoring, and fail-closed sportsbook price checks. BigQuery warehouse, Cloud Run serving, GitHub Actions pipelines covering NBA, NFL, MLB, PGA, CBB, and World Cup."
             tags={['Python', 'BigQuery', 'GCP', 'Next.js', 'LightGBM', 'Supabase']}
             repoUrl="https://github.com/dmboynton56/sports-edge"
             liveUrl="https://sports-edge.drewboynton.com"
@@ -51,8 +51,9 @@ export default function SportsEdgePage() {
                 <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-6">
                     <h2 className="text-2xl font-bold mb-2">Live ops dashboard</h2>
                     <p className="text-muted-foreground mb-4">
-                        Per-game predictions, cross-league results, success rates, and data-quality views
-                        live at the standalone ops dashboard — not on this portfolio page.
+                        Graded predictions, data-quality page, sportsbook price freshness, and cross-league results
+                        live at the standalone ops dashboard. Current MLB HR board: 79 model candidates, 0 priced 
+                        (all odds_status=missing_odds). Serving pipeline and Supabase work; OddsPapi had no fresh MLB HR markets.
                     </p>
                     <Link
                         href="https://sports-edge.drewboynton.com"

@@ -25,20 +25,20 @@ These have dedicated `/projects/...` pages, laptop previews on the homepage wher
 - **Homepage title:** Sports Edge: Multi-League Sports Modeling
 - **Deep dive:** `/projects/sports-edge`
 - **Live ops dashboard:** https://sports-edge.drewboynton.com
-- **Summary:** Production sports modeling stack for NBA, NFL, MLB, PGA, CBB, and World Cup. BigQuery holds source-of-truth data; Python pipelines score games and sync to Supabase. The ops dashboard is the primary surface for live predictions and results; the portfolio shows telemetry stats and the pipeline story.
+- **Summary:** Public ops dashboard with graded predictions, data-quality monitoring, and fail-closed sportsbook price checks. BigQuery warehouse, Cloud Run serving, GitHub Actions pipelines. Covers NBA, NFL, MLB, PGA, CBB, and World Cup modeling workflows. Current MLB HR board: 79 model candidates, 0 priced (all odds_status=missing_odds). Serving pipeline and Supabase work; OddsPapi had no fresh MLB HR markets.
 - **Technologies:** Python, Scikit-learn, LightGBM, Supabase, Next.js, Sports Analytics
-- **Proof points:** Ops dashboard at sports-edge.drewboynton.com; BigQuery source of truth + Supabase serving; automated daily pipeline across six leagues
+- **Proof points:** Public ops dashboard with graded predictions and data quality monitoring; BigQuery warehouse + Supabase serving + Cloud Run APIs; daily automated pipelines across NBA, NFL, MLB, PGA, CBB, World Cup
 - **GitHub:** https://github.com/dmboynton56/sports-edge
 - **Homepage laptop:** stats-screen display (click through to deep dive)
 
 ### LLM Advisor (`llm-advisor`)
 
-- **Homepage title:** LLM Advisor: Agentic Trading System
+- **Homepage title:** LLM Advisor: Paper-Trading Ops Dashboard
 - **Deep dive:** `/projects/llm-advisor` (ICTML redirects here)
 - **Live ops dashboard:** https://llm-advisor.drewboynton.com
-- **Summary:** Autonomous trading agent using Gemini for market context, mean-reversion threshold adjustment, and paper options execution with guardrails. ICTML premarket bias folds into this single trading-advisor story.
+- **Summary:** Paper-trading ops dashboard with live decision ledger, win-rate tracking, and Gemini veto logs. LLM adds context and adjusts thresholds; rules keep control. Alpaca paper account, Supabase telemetry, real-time heartbeat monitoring. Paper equity ~$96,454 (-3.03% since 2026-07-06). Last heartbeat ~4h after US cash close. 30d: 59.2% win rate, 49 closed trades, +$1,612 realized. Decision ledger shows Gemini vetoes with reasons (e.g. premarket_data_quality).
 - **Technologies:** Python, Gemini API, Alpaca, Pandas, Backtesting
-- **Proof points:** Paper options on 7–14 DTE; hybrid ML + LLM validation funnel; risk controls tied to execution rules
+- **Proof points:** Live ops dashboard with decision ledger and Gemini veto logs; paper-trading account: 59.2% win rate (30d), 49 closed trades; LLM adjusts thresholds, rules enforce risk limits
 - **GitHub:** https://github.com/dmboynton56/llm-advisor
 - **Homepage laptop:** dashboard screenshot (click through to deep dive)
 
@@ -96,10 +96,10 @@ Shown on the homepage **without** a separate `/projects/*` deep dive in this rep
 - **Technologies:** Xcode, Swift, CoreData
 - **Device frame on homepage:** mobile layout
 
-## Serving-layer handoff (2026-07)
+## Serving-layer handoff (2026-08)
 
-- **Sports Edge:** live per-game predictions and results live at https://sports-edge.drewboynton.com. Portfolio deep dive keeps architecture, season-level ATS/ROI, and links out prominently.
-- **LLM Advisor:** account PnL, trade breakdowns, and execution funnel at https://llm-advisor.drewboynton.com. Portfolio deep dive keeps high-level telemetry and links out prominently.
+- **Sports Edge:** Graded predictions, data-quality page, sportsbook price freshness, and cross-league results live at https://sports-edge.drewboynton.com. Portfolio deep dive keeps architecture, season-level ATS/ROI, and links out prominently.
+- **LLM Advisor:** Paper equity, decision ledger with Gemini veto logs, trade breakdowns, and execution funnel at https://llm-advisor.drewboynton.com. Portfolio deep dive keeps high-level telemetry and links out prominently.
 - **MatchPoint:** portfolio links to the live web app; deep dive covers architecture and matching design.
 
 ## Notes for assistants

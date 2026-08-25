@@ -282,7 +282,7 @@ export default function LlmAdvisorPage() {
   return (
     <ProjectLayout
       title="LLM Advisor"
-      description="An autonomous trading system that combines STDEV mean-reversion signals with Gemini market-analysis overlays and strict execution risk controls."
+      description="Paper-trading ops dashboard with live decision ledger, win-rate tracking, and Gemini veto logs. LLM adds context and adjusts thresholds; rules keep control. Alpaca paper account, Supabase telemetry, real-time heartbeat monitoring."
       tags={['Python', 'Gemini API', 'Alpaca', 'Pandas', 'Backtesting']}
       repoUrl="https://github.com/dmboynton56/llm-advisor"
       liveUrl="https://llm-advisor.drewboynton.com"
@@ -315,27 +315,27 @@ export default function LlmAdvisorPage() {
       }
     >
       <section className="space-y-6">
-        <h2 className="text-3xl font-bold">Agentic Workflow</h2>
+        <h2 className="text-3xl font-bold">System Design</h2>
         <div className="grid md:grid-cols-2 gap-6">
           <div className="bg-card border border-border p-6 rounded-xl space-y-4">
             <div className="flex items-center gap-3">
               <Brain className="w-6 h-6 text-purple-500" />
-              <h3 className="text-xl font-semibold">1. Sentiment Analysis</h3>
+              <h3 className="text-xl font-semibold">1. LLM Context Layer</h3>
             </div>
             <p className="text-muted-foreground">
-              Every 15 minutes (runtime default), the loop runs market analysis with <strong>Gemini 3 Flash</strong>.
-              It returns threshold multipliers and confidence signals that adjust technical gates without bypassing hard risk limits.
+              Gemini runs market analysis periodically (every 15 minutes by default) and returns threshold multipliers 
+              and confidence signals. The LLM adds context but does not bypass hard risk limits.
             </p>
           </div>
 
           <div className="bg-card border border-border p-6 rounded-xl space-y-4">
             <div className="flex items-center gap-3">
               <Terminal className="w-6 h-6 text-emerald-500" />
-              <h3 className="text-xl font-semibold">2. Statistical Execution</h3>
+              <h3 className="text-xl font-semibold">2. Rule-Bound Execution</h3>
             </div>
             <p className="text-muted-foreground">
               The execution engine computes rolling mu/sigma/z-score states and evaluates MR/TC setups
-              against configured thresholds before sending bracketed orders through Alpaca.
+              against configured thresholds before sending bracketed orders through Alpaca paper account.
             </p>
           </div>
         </div>
@@ -346,8 +346,10 @@ export default function LlmAdvisorPage() {
         <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-6">
           <h3 className="text-xl font-bold mb-2">Live ops dashboard</h3>
           <p className="text-muted-foreground mb-4">
-            Account equity, daily PnL, trade breakdowns by symbol and setup type, and the execution funnel
-            live at the standalone ops dashboard — not only on this portfolio page.
+            Paper equity ~$96,454 (-3.03% since 2026-07-06). Last heartbeat ~4h after US cash close. 
+            30d: 59.2% win rate, 49 closed trades, +$1,612 realized. Decision ledger shows Gemini vetoes 
+            with reasons (e.g. premarket_data_quality). Account PnL, trade breakdowns by symbol/setup, and 
+            execution funnel live at the standalone ops dashboard.
           </p>
           <Link
             href="https://llm-advisor.drewboynton.com"
