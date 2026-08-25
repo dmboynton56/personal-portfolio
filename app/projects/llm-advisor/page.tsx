@@ -287,11 +287,6 @@ export default function LlmAdvisorPage() {
       repoUrl="https://github.com/dmboynton56/llm-advisor"
       liveUrl="https://llm-advisor.drewboynton.com"
       liveUrlLabel="Ops Dashboard"
-      metrics={topMetrics}
-      metricsSource={metricsData?.source}
-      metricsGeneratedAt={metricsMeta?.updatedAt ?? metricsData?.generatedAt}
-      isLoadingMetrics={isLoading}
-      metricsError={loadError}
       belowHero={
         <section className="space-y-6">
           <h2 className="text-3xl font-bold">Ask the Data</h2>
