@@ -5,7 +5,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ProjectLayout } from '@/components/ProjectLayout'
 import { ProjectChat } from '@/components/chat/ProjectChat'
-import { AtsSummaryCard } from '@/components/sports-edge/AtsSummaryCard'
 import { Activity, Database, Server, TrendingUp, Cpu, LineChart, ArrowUpRight } from 'lucide-react'
 import { useProjectMetrics } from '@/hooks/useProjectMetrics'
 
@@ -15,7 +14,7 @@ export default function SportsEdgePage() {
     return (
         <ProjectLayout
             title="Sports Edge"
-            description="A production sports modeling pipeline with BigQuery as source-of-truth, Supabase serving, and documented outputs across NBA, NFL, MLB, World Cup, PGA, and CBB workflows."
+            description="Public ops dashboard with graded predictions, data-quality monitoring, and fail-closed sportsbook price checks. BigQuery warehouse, Cloud Run serving, GitHub Actions pipelines covering NBA, NFL, MLB, PGA, CBB, and World Cup."
             tags={['Python', 'BigQuery', 'GCP', 'Next.js', 'LightGBM', 'Supabase']}
             repoUrl="https://github.com/dmboynton56/sports-edge"
             liveUrl="https://sports-edge.drewboynton.com"
@@ -51,8 +50,9 @@ export default function SportsEdgePage() {
                 <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-6">
                     <h2 className="text-2xl font-bold mb-2">Live ops dashboard</h2>
                     <p className="text-muted-foreground mb-4">
-                        Per-game predictions, cross-league results, success rates, and data-quality views
-                        live at the standalone ops dashboard — not on this portfolio page.
+                        Graded predictions, data-quality page, sportsbook price freshness, and cross-league results
+                        live at the standalone ops dashboard. Board health, current candidate counts, and odds availability
+                        status update in real-time as the serving pipeline and sportsbook data refresh.
                     </p>
                     <Link
                         href="https://sports-edge.drewboynton.com"
@@ -177,12 +177,23 @@ steps:
             </section>
 
             <section className="space-y-6">
-                <h2 className="text-3xl font-bold">Season metrics</h2>
-                <p className="text-lg text-muted-foreground">
-                    High-level ATS record and flat-unit ROI from graded games. For per-game edges and league
-                    breakdowns, use the ops dashboard.
-                </p>
-                <AtsSummaryCard league="NBA" />
+                <h2 className="text-3xl font-bold">Season Metrics</h2>
+                <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-6">
+                    <h3 className="text-xl font-bold mb-2">Live ATS tracking</h3>
+                    <p className="text-muted-foreground mb-4">
+                        High-level ATS record, flat-unit ROI, per-game edges, and league breakdowns live at the 
+                        standalone ops dashboard. This deep-dive page focuses on architecture and pipeline story.
+                    </p>
+                    <Link
+                        href="https://sports-edge.drewboynton.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-lg bg-emerald-500 px-5 py-2.5 font-semibold text-white transition-colors hover:bg-emerald-400"
+                    >
+                        View live season metrics
+                        <ArrowUpRight className="h-4 w-4" />
+                    </Link>
+                </div>
             </section>
 
             <section className="space-y-6">

@@ -98,7 +98,7 @@ const mockProjects: Project[] = [
     id: 'sports-edge',
     title: 'Sports Edge: Multi-League Sports Modeling 🏈',
     description:
-      'Production sports modeling stack covering NBA, NFL, MLB, PGA, CBB, and World Cup. BigQuery holds source-of-truth data; Python pipelines score games and sync to Supabase for the ops dashboard and this portfolio. Compare model spreads and win probabilities against sportsbook lines to surface edges.',
+      'Production ops dashboard with graded predictions, data-quality monitoring, and fail-closed sportsbook price checks. BigQuery warehouse, Cloud Run serving, GitHub Actions pipelines. Covers NBA, NFL, MLB, PGA, CBB, and World Cup modeling workflows.',
     category: 'flagship',
     type: 'desktop',
     image: '/images/projects/sports-edge/dashboard-screenshot.png',
@@ -109,9 +109,9 @@ const mockProjects: Project[] = [
     ],
     technologies: ['Python', 'Scikit-learn', 'LightGBM', 'Supabase', 'Next.js', 'Sports Analytics'],
     proofPoints: [
-      'Ops dashboard at sports-edge.drewboynton.com',
-      'BigQuery source of truth + Supabase serving layer',
-      'Automated daily/weekly prediction pipeline across six leagues'
+      'Public ops dashboard with graded predictions and data quality monitoring',
+      'BigQuery warehouse + Supabase serving + Cloud Run APIs',
+      'Daily automated pipelines across NBA, NFL, MLB, PGA, CBB, World Cup'
     ],
     isInteractive: false,
     caseStudyUrl: '/projects/sports-edge',
@@ -120,9 +120,9 @@ const mockProjects: Project[] = [
   },
   {
     id: 'llm-advisor',
-    title: 'LLM Advisor: Agentic Trading System 🤖',
+    title: 'LLM Advisor: Paper-Trading Ops Dashboard 🤖',
     description:
-      'Autonomous trading agent that uses Gemini to analyze market context, adjust mean-reversion thresholds, and execute paper options with guardrails. Premarket bias from ICTML folds into one trading-advisor story.',
+      'Paper-trading ops dashboard with live decision ledger, win-rate tracking, and Gemini veto logs. LLM adds context and adjusts thresholds; rules keep control. Alpaca paper account, Supabase telemetry, real-time heartbeat monitoring.',
     category: 'flagship',
     type: 'desktop',
     image: '/images/projects/llm-advisor/dashboard-screenshot.png',
@@ -134,9 +134,9 @@ const mockProjects: Project[] = [
     ],
     technologies: ['Python', 'Gemini API', 'Alpaca', 'Pandas', 'Backtesting'],
     proofPoints: [
-      'Paper options on 7–14 DTE with MR/TC setup types',
-      'Hybrid ML + LLM validation funnel',
-      'Risk controls tied to execution rules'
+      'Live ops dashboard with decision ledger and Gemini veto logs',
+      'Paper equity, win rate, and trade outcomes tracked in real-time',
+      'LLM adjusts thresholds; rules enforce risk limits'
     ],
     isInteractive: false,
     caseStudyUrl: '/projects/llm-advisor',
@@ -691,9 +691,9 @@ export function WorkSection() {
                     <div className="mt-8 relative max-w-2xl mx-auto text-center">
                       <p className="text-center text-sm text-muted-foreground">
                         {project.id === 'sports-edge' &&
-                          'Telemetry stats on the laptop — click through for the pipeline story or open the ops dashboard for live predictions.'}
+                          'Public graded predictions board and data-quality page — click the laptop for pipelines or open the ops dashboard.'}
                         {project.id === 'llm-advisor' &&
-                          'Paper-trading ops dashboard at llm-advisor.drewboynton.com — click the laptop for the deep dive.'}
+                          'Live paper-trading dashboard with decision ledger and Gemini veto logs — click the laptop for the deep dive.'}
                         {project.id === 'matchpoint' &&
                           'Click the laptop for architecture and matching details, or try the live app.'}
                       </p>
