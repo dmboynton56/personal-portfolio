@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-23T06:21:18.760Z",
+  "generatedAt": "2026-08-26T01:13:23.447Z",
   "chunks": [
     {
       "id": "docs/data-dictionary.txt#0",
@@ -435,7 +435,7 @@
     {
       "id": "docs/project-knowledge/evidence-register.md#3",
       "source": "docs/project-knowledge/evidence-register.md",
-      "charCount": 3555
+      "charCount": 3559
     },
     {
       "id": "docs/project-knowledge/evidence-register.md#4",
@@ -605,12 +605,12 @@
     {
       "id": "docs/project-knowledge/llm-advisor/overview.md#1",
       "source": "docs/project-knowledge/llm-advisor/overview.md",
-      "charCount": 314
+      "charCount": 487
     },
     {
       "id": "docs/project-knowledge/llm-advisor/overview.md#2",
       "source": "docs/project-knowledge/llm-advisor/overview.md",
-      "charCount": 271
+      "charCount": 339
     },
     {
       "id": "docs/project-knowledge/llm-advisor/overview.md#3",
@@ -900,7 +900,7 @@
     {
       "id": "docs/project-knowledge/portfolio-overview.md#1",
       "source": "docs/project-knowledge/portfolio-overview.md",
-      "charCount": 3982
+      "charCount": 4304
     },
     {
       "id": "docs/project-knowledge/portfolio-overview.md#2",
@@ -910,7 +910,7 @@
     {
       "id": "docs/project-knowledge/portfolio-overview.md#3",
       "source": "docs/project-knowledge/portfolio-overview.md",
-      "charCount": 517
+      "charCount": 677
     },
     {
       "id": "docs/project-knowledge/portfolio-overview.md#4",
@@ -1350,7 +1350,7 @@
     {
       "id": "docs/project-knowledge/sports-edge/overview.md#4",
       "source": "docs/project-knowledge/sports-edge/overview.md",
-      "charCount": 600
+      "charCount": 862
     },
     {
       "id": "docs/project-knowledge/sports-edge/overview.md#5",
@@ -1400,7 +1400,7 @@
     {
       "id": "docs/project-knowledge/sports-edge/sync-state.md#3",
       "source": "docs/project-knowledge/sports-edge/sync-state.md",
-      "charCount": 139
+      "charCount": 143
     },
     {
       "id": "docs/project-knowledge/sports-edge/sync-state.md#4",
