@@ -7,7 +7,7 @@
     "symbols": ["SPY"],
     "session_dates_et": ["2025-04-30", "2025-05-01", "2025-05-02"],
     "premarket_context": false,
-    "gemini_periodic_overlay": false,
+    "llm_periodic_overlay": false,
     "commands": [
       "python scripts/run_backtest.py --date 2025-04-30 --symbols SPY --fast 1",
       "python scripts/run_backtest.py --date 2025-05-01 --symbols SPY --fast 1",
@@ -16,7 +16,7 @@
     ],
     "caveats": [
       "Each day uses MockOrderManager with ~$100k starting equity and is replayed independently; total_pnl_sum is the sum of per-day P/L, not a compounded equity curve.",
-      "Without premarket artifacts, the loop disables news/bias context and does not run the production Gemini periodic overlay — this measures the STDEV execution core only.",
+      "Without premarket artifacts, the loop disables news/bias context and does not run the production LLM periodic overlay — this measures the STDEV execution core only.",
       "Past simulation does not imply future live performance."
     ]
   },
@@ -53,6 +53,6 @@
   },
   "linkedin_snippets": [
     "Replayed the STDEV day-trading engine on SPY for three historical sessions (2025-04-30 → 2025-05-02): 29 bracketed mock fills, combined daily P/L about +$628 on a fixed per-day bankroll (not compounded).",
-    "This batch isolates the technical MR/TC + risk stack — no premarket bias file and no in-session Gemini overlay, so it is an execution-core baseline rather than full production behavior."
+    "This batch isolates the technical MR/TC + risk stack — no premarket bias file and no in-session LLM overlay, so it is an execution-core baseline rather than full production behavior."
   ]
 }

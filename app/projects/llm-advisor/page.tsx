@@ -28,7 +28,7 @@ type LlmAdvisorBacktestSnapshot = {
     symbols: string[]
     session_dates_et: string[]
     premarket_context: boolean
-    gemini_periodic_overlay: boolean
+    llm_periodic_overlay: boolean
     commands: string[]
     caveats: string[]
   }
@@ -282,8 +282,8 @@ export default function LlmAdvisorPage() {
   return (
     <ProjectLayout
       title="LLM Advisor"
-      description="Paper-trading ops dashboard with live decision ledger, win-rate tracking, and Gemini veto logs. LLM adds context and adjusts thresholds; rules keep control. Alpaca paper account, Supabase telemetry, real-time heartbeat monitoring."
-      tags={['Python', 'Gemini API', 'Alpaca', 'Pandas', 'Backtesting']}
+      description="Paper-trading ops dashboard with live decision ledger, win-rate tracking, and LLM veto logs (OpenAI gpt-5.4-nano). LLM adds context and adjusts thresholds; rules keep control. Alpaca paper account, Supabase telemetry, real-time heartbeat monitoring."
+      tags={['Python', 'OpenAI API', 'Alpaca', 'Pandas', 'Backtesting']}
       repoUrl="https://github.com/dmboynton56/llm-advisor"
       liveUrl="https://llm-advisor.drewboynton.com"
       liveUrlLabel="Ops Dashboard"
@@ -318,7 +318,7 @@ export default function LlmAdvisorPage() {
               <h3 className="text-xl font-semibold">1. LLM Context Layer</h3>
             </div>
             <p className="text-muted-foreground">
-              Gemini runs market analysis periodically (every 15 minutes by default) and returns threshold multipliers 
+              OpenAI gpt-5.4-nano runs market analysis periodically (every 15 minutes by default) and returns threshold multipliers 
               and confidence signals. The LLM adds context but does not bypass hard risk limits.
             </p>
           </div>
@@ -341,7 +341,7 @@ export default function LlmAdvisorPage() {
         <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-6">
           <h3 className="text-xl font-bold mb-2">Live ops dashboard</h3>
           <p className="text-muted-foreground mb-4">
-            Paper equity, win rate, trade breakdowns by symbol/setup, decision ledger with Gemini vetoes,
+            Paper equity, win rate, trade breakdowns by symbol/setup, decision ledger with LLM vetoes,
             and execution funnel (signals → validation → orders) live at the standalone ops dashboard.
             Heartbeat monitoring shows real-time agent health and telemetry freshness.
           </p>
@@ -706,10 +706,10 @@ atr_percentile_cap = 85.0`}
                 </span>
                 <span
                   className={
-                    snapshot.experiment.gemini_periodic_overlay ? 'text-emerald-400' : 'text-muted-foreground'
+                    snapshot.experiment.llm_periodic_overlay ? 'text-emerald-400' : 'text-muted-foreground'
                   }
                 >
-                  Gemini overlay: {snapshot.experiment.gemini_periodic_overlay ? 'yes' : 'no'}
+                  LLM overlay: {snapshot.experiment.llm_periodic_overlay ? 'yes' : 'no'}
                 </span>
                 <span className="text-muted-foreground">
                   Generated {formatTimestamp(snapshot.generated_at)}

@@ -14,17 +14,17 @@ source_paths:
 LLM Advisor is a paper-trading system that combines:
 
 - technical STDEV signal logic (mu/sigma/z-score state),
-- periodic LLM market analysis (Gemini),
+- periodic LLM market analysis (OpenAI gpt-5.4-nano by default),
 - and rule-bound execution/risk controls.
 
-The live ops dashboard at **https://llm-advisor.drewboynton.com** shows paper equity, decision ledger with Gemini veto logs, trade breakdowns, and execution funnel. The runtime loop is implemented in `src/live/loop.py`, with defaults loaded from `src/core/config.py`.
+The live ops dashboard at **https://llm-advisor.drewboynton.com** shows paper equity, decision ledger with LLM veto logs, trade breakdowns, and execution funnel. The runtime loop is implemented in `src/live/loop.py`, with defaults loaded from `src/core/config.py`.
 
 ## What problem does it solve?
 
 It makes intraday execution more adaptive than a static rules-only strategy:
 
 - technical setup detection remains deterministic,
-- while qualitative market context from Gemini is converted into threshold multipliers and confidence overlays,
+- while qualitative market context from the LLM (OpenAI gpt-5.4-nano by default) is converted into threshold multipliers and confidence overlays,
 - but the LLM cannot bypass hard risk limits — rules keep control.
 
 ## Portfolio deep-dive: why it shows as work in progress / under construction
