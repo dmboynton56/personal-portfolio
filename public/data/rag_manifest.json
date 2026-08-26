@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-26T01:13:23.447Z",
+  "generatedAt": "2026-08-26T13:52:59.576Z",
   "chunks": [
     {
       "id": "docs/data-dictionary.txt#0",
@@ -550,7 +550,7 @@
     {
       "id": "docs/project-knowledge/llm-advisor/metrics-and-results.md#1",
       "source": "docs/project-knowledge/llm-advisor/metrics-and-results.md",
-      "charCount": 757
+      "charCount": 754
     },
     {
       "id": "docs/project-knowledge/llm-advisor/metrics-and-results.md#2",
@@ -605,12 +605,12 @@
     {
       "id": "docs/project-knowledge/llm-advisor/overview.md#1",
       "source": "docs/project-knowledge/llm-advisor/overview.md",
-      "charCount": 487
+      "charCount": 508
     },
     {
       "id": "docs/project-knowledge/llm-advisor/overview.md#2",
       "source": "docs/project-knowledge/llm-advisor/overview.md",
-      "charCount": 339
+      "charCount": 373
     },
     {
       "id": "docs/project-knowledge/llm-advisor/overview.md#3",
@@ -900,7 +900,7 @@
     {
       "id": "docs/project-knowledge/portfolio-overview.md#1",
       "source": "docs/project-knowledge/portfolio-overview.md",
-      "charCount": 4304
+      "charCount": 4317
     },
     {
       "id": "docs/project-knowledge/portfolio-overview.md#2",
@@ -910,7 +910,7 @@
     {
       "id": "docs/project-knowledge/portfolio-overview.md#3",
       "source": "docs/project-knowledge/portfolio-overview.md",
-      "charCount": 677
+      "charCount": 674
     },
     {
       "id": "docs/project-knowledge/portfolio-overview.md#4",
