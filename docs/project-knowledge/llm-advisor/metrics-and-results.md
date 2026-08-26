@@ -19,7 +19,7 @@ source_paths:
 - **Artifact:** `personal-portfolio/public/data/llm_advisor_backtest_snapshot.json`
 - **Window:** three NYSE sessions `2025-04-30`, `2025-05-01`, `2025-05-02` (ET calendar dates), symbol **SPY** only.
 - **Headline numbers:** `total_closed_trades = 29`, sum of per-day simulated P/L `total_pnl_sum ≈ +$628` across the three independent daily replays (see **caveats** in JSON — not compounded equity).
-- **Mode:** technical STDEV replay with **no** premarket context and **no** Gemini periodic overlay (production stack adds both).
+- **Mode:** technical STDEV replay with **no** premarket context and **no** LLM periodic overlay (production stack adds both).
 - **Repro:** commands listed under `experiment.commands` in the JSON.
 - **Caveats:** read `experiment.caveats` in the JSON before quoting externally (LinkedIn/portfolio).
 

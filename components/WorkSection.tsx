@@ -122,7 +122,7 @@ const mockProjects: Project[] = [
     id: 'llm-advisor',
     title: 'LLM Advisor: Paper-Trading Ops Dashboard 🤖',
     description:
-      'Paper-trading ops dashboard with live decision ledger, win-rate tracking, and Gemini veto logs. LLM adds context and adjusts thresholds; rules keep control. Alpaca paper account, Supabase telemetry, real-time heartbeat monitoring.',
+      'Paper-trading ops dashboard with live decision ledger, win-rate tracking, and LLM veto logs (OpenAI gpt-5.4-nano). LLM adds context and adjusts thresholds; rules keep control. Alpaca paper account, Supabase telemetry, real-time heartbeat monitoring.',
     category: 'flagship',
     type: 'desktop',
     image: '/images/projects/llm-advisor/dashboard-screenshot.png',
@@ -132,9 +132,9 @@ const mockProjects: Project[] = [
       '/images/projects/llm-advisor/qqq-feature-importances.png',
       '/images/projects/llm-advisor/iwm-feature-importances.png',
     ],
-    technologies: ['Python', 'Gemini API', 'Alpaca', 'Pandas', 'Backtesting'],
+    technologies: ['Python', 'OpenAI API', 'Alpaca', 'Pandas', 'Backtesting'],
     proofPoints: [
-      'Live ops dashboard with decision ledger and Gemini veto logs',
+      'Live ops dashboard with decision ledger and LLM veto logs',
       'Paper equity, win rate, and trade outcomes tracked in real-time',
       'LLM adjusts thresholds; rules enforce risk limits'
     ],
@@ -196,7 +196,7 @@ const mockProjects: Project[] = [
     id: 'personal-portfolio',
     title: 'My Personal Portfolio Website',
     description:
-      'What started as a portfolio site grew into its own project - TypeScript and Next.js up front, Supabase and BigQuery underneath. Flagship projects use stats-screen laptop displays and link out to live ops dashboards; includes a Gemini chatbot (Vertex AI, RAG over this site\'s content).',
+      'What started as a portfolio site grew into its own project - TypeScript and Next.js up front, Supabase and BigQuery underneath. Flagship projects use stats-screen laptop displays and link out to live ops dashboards; includes a Gemini-powered chatbot (Vertex AI, RAG over this site\'s content).',
     category: 'flagship',
     type: 'desktop',
     image: '/images/projects/personal-portfolio-hero.png',
@@ -693,7 +693,7 @@ export function WorkSection() {
                         {project.id === 'sports-edge' &&
                           'Public graded predictions board and data-quality page — click the laptop for pipelines or open the ops dashboard.'}
                         {project.id === 'llm-advisor' &&
-                          'Live paper-trading dashboard with decision ledger and Gemini veto logs — click the laptop for the deep dive.'}
+                          'Live paper-trading dashboard with decision ledger and LLM veto logs — click the laptop for the deep dive.'}
                         {project.id === 'matchpoint' &&
                           'Click the laptop for architecture and matching details, or try the live app.'}
                       </p>

@@ -36,9 +36,9 @@ These have dedicated `/projects/...` pages, laptop previews on the homepage wher
 - **Homepage title:** LLM Advisor: Paper-Trading Ops Dashboard
 - **Deep dive:** `/projects/llm-advisor` (ICTML redirects here)
 - **Live ops dashboard:** https://llm-advisor.drewboynton.com
-- **Summary:** Paper-trading ops dashboard with live decision ledger, win-rate tracking, and Gemini veto logs. LLM adds context and adjusts thresholds; rules keep control. Alpaca paper account, Supabase telemetry, real-time heartbeat monitoring. Paper equity, win rate, trade outcomes, and decision ledger with Gemini vetoes live at the ops dashboard.
-- **Technologies:** Python, Gemini API, Alpaca, Pandas, Backtesting
-- **Proof points:** Live ops dashboard with decision ledger and Gemini veto logs; paper equity, win rate, and trade outcomes tracked in real-time; LLM adjusts thresholds, rules enforce risk limits
+- **Summary:** Paper-trading ops dashboard with live decision ledger, win-rate tracking, and LLM veto logs (OpenAI gpt-5.4-nano). LLM adds context and adjusts thresholds; rules keep control. Alpaca paper account, Supabase telemetry, real-time heartbeat monitoring. Paper equity, win rate, trade outcomes, and decision ledger with LLM vetoes live at the ops dashboard.
+- **Technologies:** Python, OpenAI API, Alpaca, Pandas, Backtesting
+- **Proof points:** Live ops dashboard with decision ledger and LLM veto logs; paper equity, win rate, and trade outcomes tracked in real-time; LLM adjusts thresholds, rules enforce risk limits
 - **GitHub:** https://github.com/dmboynton56/llm-advisor
 - **Homepage laptop:** dashboard screenshot (click through to deep dive)
 
@@ -99,7 +99,7 @@ Shown on the homepage **without** a separate `/projects/*` deep dive in this rep
 ## Serving-layer handoff (2026-08)
 
 - **Sports Edge:** Graded predictions, data-quality page, sportsbook price freshness, board health, candidate counts, and cross-league results live at https://sports-edge.drewboynton.com. Portfolio deep dive keeps architecture, season-level ATS/ROI strategy, and links out prominently.
-- **LLM Advisor:** Paper equity, win rate, decision ledger with Gemini veto logs, trade breakdowns, execution funnel, and heartbeat monitoring at https://llm-advisor.drewboynton.com. Portfolio deep dive keeps system design and links out prominently.
+- **LLM Advisor:** Paper equity, win rate, decision ledger with LLM veto logs, trade breakdowns, execution funnel, and heartbeat monitoring at https://llm-advisor.drewboynton.com. Portfolio deep dive keeps system design and links out prominently.
 - **MatchPoint:** portfolio links to the live web app; deep dive covers architecture and matching design.
 
 ## Notes for assistants
