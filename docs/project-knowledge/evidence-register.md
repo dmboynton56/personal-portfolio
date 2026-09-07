@@ -49,7 +49,7 @@ Each line item is tagged as:
 | observed | Performance history export | `web/public/data/performance_history.json` | `sports-edge/web/public/data/performance_history.json` | Cross-league model versions and sample sizes. |
 
 <!-- BEGIN SYNC:sports-edge-derived -->
-| derived | Performance history generatedAt | 2026-08-31T20:16:22.223206+00:00 | sports-edge/web/public/data/performance_history.json | Synced 2026-09-01. |
+| derived | Performance history generatedAt | 2026-09-06T22:16:04.510802+00:00 | sports-edge/web/public/data/performance_history.json | Synced 2026-09-07. |
 | derived | Latest PGA meta artifact | us_open_2026_predictions.meta.json | sports-edge/data-core/notebooks/cache/us_open_2026_predictions.meta.json | 20000 sims, 156 players, as-of 2026-06-18. |
 | derived | Current PGA dashboard event | TOUR Championship (completed) | sports-edge/web/public/data/pga_tournaments/current.json | generatedAt 2026-09-01T17:08:12.769719+00:00. |
 <!-- END SYNC:sports-edge-derived -->
