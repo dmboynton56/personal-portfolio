@@ -1,19 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
 import { promises as fs, type Dirent } from 'fs'
 import path from 'path'
 import { randomUUID } from 'crypto'
 import { ApiEnvelope, STALE_THRESHOLDS, toApiMeta } from '@/lib/freshness'
+import { supabase } from '@/lib/supabase'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
-
-const supabaseUrl = process.env.SUPABASE_URL
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-const supabase =
-  supabaseUrl && supabaseServiceRoleKey
-    ? createClient(supabaseUrl, supabaseServiceRoleKey)
-    : null
 
 const cronSecret = process.env.LLM_ADVISOR_CRON_SECRET
 

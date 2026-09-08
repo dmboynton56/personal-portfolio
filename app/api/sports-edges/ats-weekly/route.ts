@@ -46,6 +46,12 @@ type AtsPayload = {
 
 const VALID_LEAGUES = new Set<League>(['NBA', 'NFL'])
 const WIN_PROFIT_AT_MINUS_110 = 100 / 110
+const ATS_CACHE_TTL_MS = 15 * 60 * 1000
+
+const responseCache = new Map<
+    string,
+    { expiresAt: number; response: ApiEnvelope<AtsPayload> }
+>()
 
 const inferCurrentSeason = (league: League) => {
     const now = new Date()
@@ -220,6 +226,15 @@ export async function GET(request: NextRequest) {
     const url = new URL(request.url)
     const league = parseLeague(url.searchParams.get('league'))
     const season = parseSeason(url.searchParams.get('season'), league)
+    const cacheKey = `${league}:${season}`
+    const cached = responseCache.get(cacheKey)
+    if (cached && cached.expiresAt > Date.now()) {
+        return NextResponse.json(cached.response, {
+            headers: {
+                'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=3600'
+            }
+        })
+    }
 
     if (!supabase) {
         const payload = emptyPayload(league, season)
@@ -230,7 +245,15 @@ export async function GET(request: NextRequest) {
             })
         }
 
-        return NextResponse.json(response)
+        responseCache.set(cacheKey, {
+            expiresAt: Date.now() + ATS_CACHE_TTL_MS,
+            response
+        })
+        return NextResponse.json(response, {
+            headers: {
+                'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=3600'
+            }
+        })
     }
 
     try {
@@ -290,7 +313,15 @@ export async function GET(request: NextRequest) {
             )
         }
 
-        return NextResponse.json(response)
+        responseCache.set(cacheKey, {
+            expiresAt: Date.now() + ATS_CACHE_TTL_MS,
+            response
+        })
+        return NextResponse.json(response, {
+            headers: {
+                'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=3600'
+            }
+        })
     } catch (error) {
         const errorId = `sports-edge-ats-${Date.now().toString(36)}`
         console.error(`[${errorId}] Failed to load Sports Edge ATS metrics`, error)
