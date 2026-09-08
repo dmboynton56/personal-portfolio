@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
 import {
   sportsEdgeMockData,
   SportsEdgePayload,
@@ -11,13 +10,7 @@ import {
   WorldCupTeamProbability
 } from '@/lib/sportsEdgeData'
 import { ApiEnvelope, ApiSource, STALE_THRESHOLDS, toApiMeta } from '@/lib/freshness'
-
-const supabaseUrl = process.env.SUPABASE_URL
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-const supabase =
-  supabaseUrl && supabaseServiceRoleKey
-    ? createClient(supabaseUrl, supabaseServiceRoleKey)
-    : null
+import { supabase } from '@/lib/supabase'
 
 const DEFAULT_LOOKBACK_DAYS = Number(
   process.env.SPORTS_EDGE_LOOKBACK_DAYS ?? 1
