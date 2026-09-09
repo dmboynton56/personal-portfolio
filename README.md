@@ -43,5 +43,4 @@ If you want to talk about data systems, machine learning, product engineering,
 or a collaboration:
 
 - Email: [dmboynton6@gmail.com](mailto:dmboynton6@gmail.com)
-- LinkedIn: [Drew Boynton](https://www.linkedin.com/in/drew-boynton-1bba16180/)
-- GitHub: [dmboynton56](https://github.com/dmboynton56)
+- LinkedIn: [Drew Boynton](https://www.linkedin.com/in/drewboynton/)
