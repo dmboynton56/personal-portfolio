@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-06T09:50:30.596Z",
+  "generatedAt": "2026-09-13T10:45:00.321Z",
   "chunks": [
     {
       "id": "docs/data-dictionary.txt#0",
@@ -1390,7 +1390,7 @@
     {
       "id": "docs/project-knowledge/sports-edge/sync-state.md#1",
       "source": "docs/project-knowledge/sports-edge/sync-state.md",
-      "charCount": 171
+      "charCount": 176
     },
     {
       "id": "docs/project-knowledge/sports-edge/sync-state.md#2",
@@ -1410,7 +1410,7 @@
     {
       "id": "docs/project-knowledge/sports-edge/sync-state.md#5",
       "source": "docs/project-knowledge/sports-edge/sync-state.md",
-      "charCount": 418
+      "charCount": 459
     },
     {
       "id": "docs/project-postmortems/sports-edge-weekly-template.txt#0",
