@@ -29,7 +29,7 @@
         ]
     },
     "sports-edge": {
-        "generatedAt": "2026-09-22T18:16:26.131Z",
+        "generatedAt": "2026-09-29T18:27:48.925Z",
         "metrics": [
             {
                 "label": "League Coverage",
@@ -42,7 +42,7 @@
                 "iconName": "activity"
             },
             {
-                "label": "Biltmore PGA",
+                "label": "Bank PGA",
                 "value": "156 players • 20,000 sims",
                 "iconName": "database"
             },
