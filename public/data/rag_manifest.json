@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-04T11:27:27.048Z",
+  "generatedAt": "2026-10-11T11:44:34.017Z",
   "chunks": [
     {
       "id": "docs/data-dictionary.txt#0",
@@ -435,7 +435,7 @@
     {
       "id": "docs/project-knowledge/evidence-register.md#3",
       "source": "docs/project-knowledge/evidence-register.md",
-      "charCount": 3564
+      "charCount": 3555
     },
     {
       "id": "docs/project-knowledge/evidence-register.md#4",
@@ -1400,7 +1400,7 @@
     {
       "id": "docs/project-knowledge/sports-edge/sync-state.md#3",
       "source": "docs/project-knowledge/sports-edge/sync-state.md",
-      "charCount": 148
+      "charCount": 139
     },
     {
       "id": "docs/project-knowledge/sports-edge/sync-state.md#4",
