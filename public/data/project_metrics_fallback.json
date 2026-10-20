@@ -29,7 +29,7 @@
         ]
     },
     "sports-edge": {
-        "generatedAt": "2026-10-13T20:22:04.073Z",
+        "generatedAt": "2026-10-20T17:45:12.608Z",
         "metrics": [
             {
                 "label": "League Coverage",
@@ -42,7 +42,7 @@
                 "iconName": "activity"
             },
             {
-                "label": "Baycurrent PGA",
+                "label": "Butterfield PGA",
                 "value": "156 players • 20,000 sims",
                 "iconName": "database"
             },
