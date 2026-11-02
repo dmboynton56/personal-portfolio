@@ -127,11 +127,12 @@ export const generateGeminiText = async ({
     body: JSON.stringify({
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
       generationConfig: { temperature, maxOutputTokens }
-    })
+    }),
+    signal: AbortSignal.timeout(15000)
   })
 
   if (!response.ok) {
-    console.error('Gemini generation error:', await response.text())
+    console.error('Gemini generation failed', { model: modelId, status: response.status })
     return null
   }
 

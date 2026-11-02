@@ -199,12 +199,13 @@ const embedQuery = async (message: string): Promise<number[]> => {
     },
     body: JSON.stringify({
       instances: [{ content: message, task_type: 'RETRIEVAL_QUERY' }]
-    })
+    }),
+    signal: AbortSignal.timeout(10000)
   })
 
   if (!response.ok) {
     throw new Error(
-      `Query embedding request failed (${response.status}): ${await response.text()}`
+      `Query embedding request failed (${response.status})`
     )
   }
 
@@ -328,7 +329,7 @@ const isPortfolioOverviewQuery = (query: string) =>
   /\bwhat\b.*\b(include|projects?|showcase|built|offer|have)\b/i.test(query)
 
 const isSiteProfileQuery = (query: string) =>
-  /\b(who is|who's|about (me|you|drew)|tell me about|background|bio|engineer|contact|reach|hire|hiring|email|e-mail|phone|linkedin|github|social|resume|résumé|cv)\b/i.test(
+  /\b(who is|who's|about (me|you|drew)|background|bio|engineer|contact|reach|hire|hiring|email|e-mail|phone|linkedin|github|social|resume|résumé|cv)\b/i.test(
     query
   ) ||
   /\bdrew\b/i.test(query) ||
@@ -344,7 +345,16 @@ const isProjectCatalogQuery = (query: string) =>
     query
   )
 
-const sourceBoost = (source: string, query: string) => {
+const sourceBoost = (source: string, query: string, title = '') => {
+  const projectNames = [
+    ['matchpoint', /\bmatchpoint\b/i],
+    ['sports-edge', /\bsports[ -]edge\b/i],
+    ['llm-advisor', /\bllm[ -]advisor\b/i],
+    ['nba-hof', /\bnba[ -]hof\b|\bhall of fame\b/i]
+  ] as const
+  if (projectNames.some(([slug, pattern]) =>
+    pattern.test(query) && source.includes(`/${slug}/`)
+  )) return 16 + (/^what is\b/i.test(title) ? 10 : /notes for assistants/i.test(title) ? -12 : 0)
   if (isResumeQuery(query)) {
     if (source === 'docs/project-knowledge/drew-resume.md') return 12
     if (source === 'docs/project-knowledge/site-profile.md') return 6
@@ -391,7 +401,7 @@ const retrieveWithTokenOverlap = async (
       for (const token of tokens) {
         if (chunk.tokens.has(token)) score += 1
       }
-      score += sourceBoost(chunk.source, input.query)
+      score += sourceBoost(chunk.source, input.query, chunk.title)
       return { chunk, score }
     })
     .filter((item) => item.score > 0)
@@ -413,7 +423,7 @@ const retrieveWithEmbeddings = async (
   const scored = chunks
     .map((chunk) => ({
       chunk,
-      score: cosineSimilarity(queryEmbedding, chunk.embedding) + sourceBoost(chunk.source, input.query) * 0.05
+      score: cosineSimilarity(queryEmbedding, chunk.embedding) + sourceBoost(chunk.source, input.query, chunk.title) * 0.05
     }))
     .filter((item) => item.score > 0)
     .sort((a, b) => b.score - a.score)
@@ -429,7 +439,7 @@ const retrieveWithEmbeddings = async (
     content: snippet.excerpt
   }))
 
-  const orderedChunks = isResumeQuery(input.query)
+  const orderedChunks = isResumeQuery(input.query) || isProjectCatalogQuery(input.query)
     ? [...lexicalChunks, ...embeddingChunks]
     : [...embeddingChunks, ...lexicalChunks]
   const seen = new Set<string>()
