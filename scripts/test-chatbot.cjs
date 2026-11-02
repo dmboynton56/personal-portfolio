@@ -66,6 +66,7 @@ async function main() {
     async query(options) {
       executions++
       assert.ok(options.maximumBytesBilled)
+      assert.match(options.query, /raw_schedules/)
       return [[{ average_home_score: 112 }]]
     }
   }
@@ -73,7 +74,12 @@ async function main() {
     '@google-cloud/bigquery': { BigQuery },
     '@/lib/chatbot/google': {
       getGoogleCredentials: async () => undefined,
-      generateGeminiText: async () => { generated++; return 'SELECT AVG(home_score) FROM `test.raw_schedules`' }
+      generateGeminiText: async () => {
+        generated++
+        return generated === 1
+          ? 'SELECT AVG(home_score) FROM `test.raw_nba_game_logs`'
+          : 'SELECT AVG(home_score) FROM `test.raw_schedules`'
+      }
     },
     '@/lib/chatbot/tools/search-docs': { searchDocs: async () => ({ snippets: [], citations: [] }) }
   })
