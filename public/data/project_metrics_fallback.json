@@ -29,7 +29,7 @@
         ]
     },
     "sports-edge": {
-        "generatedAt": "2026-11-02T01:28:18.549Z",
+        "generatedAt": "2026-11-03T20:05:31.671Z",
         "metrics": [
             {
                 "label": "League Coverage",
@@ -42,7 +42,7 @@
                 "iconName": "activity"
             },
             {
-                "label": "VidantaWorld PGA",
+                "label": "World PGA",
                 "value": "120 players • 50,000 sims",
                 "iconName": "database"
             },
