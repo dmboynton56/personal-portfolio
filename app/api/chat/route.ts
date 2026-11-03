@@ -350,7 +350,7 @@ RESPONSE RULES (data-backed: metrics and/or warehouse in evidence):
 1. Use only TOOL EVIDENCE for numbers and factual claims.
 2. Lead with the takeaway in plain language (what the numbers mean for the user). Do NOT use section labels like "Short answer:", "Evidence:", or "Caveat:".
 3. You may add one short sentence that figures come from saved telemetry or a warehouse query, with approximate timing from the evidence if present. Do not dump JSON, raw rows, or file paths — citations appear in the UI.
-4. If the metric or query came back empty, say that plainly in one sentence without dramatizing.
+4. If the metric or query came back empty, say that plainly in one sentence without dramatizing. A failed query is unavailable data, not an empty result: explicitly say the query could not be completed and never claim it returned no rows.
 5. Never show SQL unless the user explicitly asks for it.
 `.trim()
 
@@ -375,7 +375,7 @@ ${responseVoice === 'data' ? dataRules : narrativeRules}
       temperature: responseVoice === 'narrative' ? 0.35 : 0.25,
       maxOutputTokens: 1000
     })) ||
-    buildFallbackAnswer({
+    'AI generation is unavailable; here is the retrieved source summary.\n\n' + buildFallbackAnswer({
       docsResult,
       metricResult,
       warehouseResult,
@@ -387,8 +387,21 @@ ${responseVoice === 'data' ? dataRules : narrativeRules}
 
 export async function POST(request: NextRequest) {
   try {
-    const body = (await request.json()) as ChatRequestBody
-    const message = body.message?.trim()
+    let body: ChatRequestBody
+    try {
+      body = await request.json()
+    } catch {
+      return NextResponse.json({ error: 'Invalid JSON body.' }, { status: 400 })
+    }
+    if (!body || typeof body !== 'object' || typeof body.message !== 'string' ||
+      body.message.length > 4000 ||
+      (body.scope !== undefined && typeof body.scope !== 'string') ||
+      (body.history !== undefined && (!Array.isArray(body.history) || body.history.length > 20 ||
+        body.history.some(entry => !entry || !['user', 'assistant'].includes(entry.role) ||
+          typeof entry.content !== 'string' || entry.content.length > 4000)))) {
+      return NextResponse.json({ error: 'Invalid chat request.' }, { status: 400 })
+    }
+    const message = body.message.trim()
     if (!message) {
       return NextResponse.json(
         { error: 'A non-empty message is required.' },
@@ -484,7 +497,9 @@ export async function POST(request: NextRequest) {
       ? `This ${config.label} chat scope cannot use another project's docs, tools, or telemetry for that request.`
       : undefined
 
-    const answer = await generateAnswer({
+    const answer = warehouseResult?.message === 'The warehouse query failed to execute.'
+      ? 'I could not complete the warehouse query. Please try again or ask a narrower question.'
+      : await generateAnswer({
       message: mentionsOtherProject
         ? `${message}\n\nScope guard: This request appears to mention another project. Do not answer with out-of-scope data. State that this ${config.label} scope cannot use that other project's tools or telemetry.`
         : message,
@@ -506,7 +521,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(response)
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error'
-    return NextResponse.json({ error: message }, { status: 500 })
+    console.error('Chat request failed', { name: error instanceof Error ? error.name : 'UnknownError' })
+    return NextResponse.json({ error: 'Chat is temporarily unavailable. Please try again.' }, { status: 500 })
   }
 }

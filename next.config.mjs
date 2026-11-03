@@ -4,6 +4,9 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
   },
   experimental: {
+    outputFileTracingIncludes: {
+      '/api/chat': ['./docs/**/*', './public/data/rag_embeddings.json'],
+    },
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,

@@ -37,6 +37,15 @@ to evidence, and show the process behind the final result.
 - Google Gemini and Vertex AI for grounded chat
 - Vercel for deployment
 
+## Chat verification
+
+Chat uses Google Vertex AI, not the llm-advisor OpenAI account. Set
+`GCP_PROJECT_ID`, `GCP_LOCATION`, `GEMINI_MODEL_ID`, and Google credentials
+as described in `.env.example`. The generated RAG artifacts are tracked.
+Run `npm run test:chatbot`, `npm run lint`, and `npm run build` before shipping.
+Production findings and remaining deployment checks are recorded in
+[the verification report](docs/chatbot-verification.md).
+
 ## Contact
 
 If you want to talk about data systems, machine learning, product engineering,

@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test:chatbot": "node scripts/test-chatbot.cjs",
     "generate-favicon": "node scripts/generate-favicon.js",
     "build:rag-manifest": "node scripts/build-rag-manifest.mjs",
     "build:warehouse-schema": "node scripts/build-warehouse-schema.mjs",

@@ -97,7 +97,7 @@ const capRows = (sql: string) => {
   return `${sql}\nLIMIT 50`
 }
 
-const generateSportsEdgeSql = async (question: string): Promise<string | null> => {
+const generateSportsEdgeSql = async (question: string, correction = ''): Promise<string | null> => {
   const [schema, retrievedContext] = await Promise.all([
     loadWarehouseSchema(),
     retrieveWarehouseContext(question)
@@ -129,6 +129,9 @@ RULES:
 10. For spread-cover or ATS counts, join model_predictions with raw_schedules and use predicted_spread — never home_margin alone.
 11. If the question is a season ATS record summary, return "NONE" (use Supabase serving metrics instead).
 12. Limit non-aggregate result sets to at most 50 rows.
+13. Home/away scores live in raw_schedules. raw_nba_game_logs has points_scored/points_allowed, NOT home_score/away_score. Use only columns listed for the selected table.
+
+${correction}
 `
 
   const sql = await generateGeminiText({
@@ -158,7 +161,7 @@ export const queryWarehouse = async (
     }
   }
 
-  const sql = await generateSportsEdgeSql(input.question)
+  let sql = await generateSportsEdgeSql(input.question)
   if (!sql) {
     return {
       sql: null,
@@ -191,7 +194,20 @@ export const queryWarehouse = async (
   }
 
   try {
-    const [rows] = await bqClient.query({ query: sql, useLegacySql: false })
+    const options = { useLegacySql: false, maximumBytesBilled: '1000000000', jobTimeoutMs: 15000 }
+    try {
+      await bqClient.createQueryJob({ ...options, query: sql, dryRun: true })
+    } catch (error) {
+      // Only repair invalid SQL, never retry permissions, billing or quota failures.
+      if ((error as { code?: number }).code !== 400) throw error
+      const reason = error instanceof Error ? error.message.slice(0, 500) : 'Invalid query'
+      const repaired = await generateSportsEdgeSql(input.question,
+        `The previous SQL failed BigQuery validation: ${reason}\nPrevious SQL:\n${sql}\nCorrect it using the canonical schema.`)
+      if (!repaired) throw new Error('No valid warehouse query could be generated.')
+      sql = repaired
+      await bqClient.createQueryJob({ ...options, query: sql, dryRun: true })
+    }
+    const [rows] = await bqClient.query({ ...options, query: sql })
     const safeRows = Array.isArray(rows) ? rows.slice(0, 50) : []
     const generatedAt = new Date().toISOString()
 
@@ -212,7 +228,7 @@ export const queryWarehouse = async (
       message: safeRows.length ? undefined : 'The warehouse query returned no rows.'
     }
   } catch (error) {
-    console.error('BigQuery execution error:', error)
+    console.error('BigQuery execution failed', { code: (error as { code?: number }).code })
     return {
       sql,
       rows: [],
