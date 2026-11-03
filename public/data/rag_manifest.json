@@ -1,7 +1,27 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-01T12:13:05.872Z",
+  "generatedAt": "2026-11-03T16:58:58.764Z",
   "chunks": [
+    {
+      "id": "docs/chatbot-verification.md#0",
+      "source": "docs/chatbot-verification.md",
+      "charCount": 183
+    },
+    {
+      "id": "docs/chatbot-verification.md#1",
+      "source": "docs/chatbot-verification.md",
+      "charCount": 1140
+    },
+    {
+      "id": "docs/chatbot-verification.md#2",
+      "source": "docs/chatbot-verification.md",
+      "charCount": 1563
+    },
+    {
+      "id": "docs/chatbot-verification.md#3",
+      "source": "docs/chatbot-verification.md",
+      "charCount": 1678
+    },
     {
       "id": "docs/data-dictionary.txt#0",
       "source": "docs/data-dictionary.txt",
