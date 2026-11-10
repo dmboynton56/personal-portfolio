@@ -49,7 +49,7 @@ Each line item is tagged as:
 | observed | Performance history export | `web/public/data/performance_history.json` | `sports-edge/web/public/data/performance_history.json` | Cross-league model versions and sample sizes. |
 
 <!-- BEGIN SYNC:sports-edge-derived -->
-| derived | Performance history generatedAt | 2026-11-03T20:37:42.385112+00:00 | sports-edge/web/public/data/performance_history.json | Synced 2026-11-10. |
+| derived | Performance history generatedAt | 2026-11-10T21:00:29.178752+00:00 | sports-edge/web/public/data/performance_history.json | Synced 2026-11-10. |
 | derived | Latest PGA meta artifact | world_wide_technology_championship_2026_predictions.meta.json | sports-edge/data-core/notebooks/cache/world_wide_technology_championship_2026_predictions.meta.json | 50000 sims, 120 players, as-of 2026-11-05. |
 | derived | Current PGA dashboard event | Good Good Championship (pre_tournament) | sports-edge/web/public/data/pga_tournaments/current.json | generatedAt 2026-11-10T20:10:55.764345+00:00. |
 <!-- END SYNC:sports-edge-derived -->
