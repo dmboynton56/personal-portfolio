@@ -49,9 +49,9 @@ Each line item is tagged as:
 | observed | Performance history export | `web/public/data/performance_history.json` | `sports-edge/web/public/data/performance_history.json` | Cross-league model versions and sample sizes. |
 
 <!-- BEGIN SYNC:sports-edge-derived -->
-| derived | Performance history generatedAt | 2026-11-03T20:37:42.385112+00:00 | sports-edge/web/public/data/performance_history.json | Synced 2026-11-09. |
+| derived | Performance history generatedAt | 2026-11-03T20:37:42.385112+00:00 | sports-edge/web/public/data/performance_history.json | Synced 2026-11-10. |
 | derived | Latest PGA meta artifact | world_wide_technology_championship_2026_predictions.meta.json | sports-edge/data-core/notebooks/cache/world_wide_technology_championship_2026_predictions.meta.json | 50000 sims, 120 players, as-of 2026-11-05. |
-| derived | Current PGA dashboard event | World Wide Technology Championship (in_progress) | sports-edge/web/public/data/pga_tournaments/current.json | generatedAt 2026-11-08T21:55:45.740877+00:00. |
+| derived | Current PGA dashboard event | Good Good Championship (pre_tournament) | sports-edge/web/public/data/pga_tournaments/current.json | generatedAt 2026-11-10T20:10:55.764345+00:00. |
 <!-- END SYNC:sports-edge-derived -->
 | observed | CBB simulation framing | 2,278 possible matchups, 10,000+ sims target | `sports-edge/data-core/docs/SPORTS_EDGE_CBBMM_PLAN.md` | Planning benchmark for bracket simulation depth. |
 | observed | CBB client-side base probability kernel | logistic seed model | `sports-edge/data-core/docs/CBBMM_CONTEXT.md` | Baseline simulation logic in docs. |
