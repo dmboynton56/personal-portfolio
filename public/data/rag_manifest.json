@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-08T12:22:16.531Z",
+  "generatedAt": "2026-11-15T13:05:47.400Z",
   "chunks": [
     {
       "id": "docs/chatbot-verification.md#0",
@@ -455,7 +455,7 @@
     {
       "id": "docs/project-knowledge/evidence-register.md#3",
       "source": "docs/project-knowledge/evidence-register.md",
-      "charCount": 3627
+      "charCount": 3615
     },
     {
       "id": "docs/project-knowledge/evidence-register.md#4",
@@ -1420,7 +1420,7 @@
     {
       "id": "docs/project-knowledge/sports-edge/sync-state.md#3",
       "source": "docs/project-knowledge/sports-edge/sync-state.md",
-      "charCount": 157
+      "charCount": 145
     },
     {
       "id": "docs/project-knowledge/sports-edge/sync-state.md#4",
